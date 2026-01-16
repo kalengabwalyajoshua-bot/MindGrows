@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindGrow - Mega Upgrade</title>
+
+<!-- Base Styles -->
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+  body { background:#f5f5f5; }
+  .hidden { display:none; }
+  /* Top Bar */
+  #top-bar {
+    position: fixed; top:0; left:0; width:100%;
+    background: linear-gradient(135deg,#2e7d32,#66bb6a);
+    color:white; padding:10px 20px;
+    display:flex; justify-content:space-between; align-items:center;
+    box-shadow:0 5px 10px rgba(0,0,0,0.2); z-index:1000;
+  }
+  #top-bar #app-logo { font-weight:bold; font-size:20px; cursor:pointer; }
+  #top-bar #top-search {
+    padding:5px 12px; border-radius:15px; border:none; width:45%;
+  }
+  #top-bar #top-search::placeholder { color:#ddd; }
+  #top-bar .top-right { display:flex; align-items:center; gap:15px; }
+  #top-bar img.icon { width:30px; height:30px; cursor:pointer; border-radius:50%; }
+  #notif-count {
+    position:absolute; top:-5px; right:-5px;
+    background:red; color:white; border-radius:50%;
+    font-size:12px; width:18px; height:18px;
+    display:flex; justify-content:center; align-items:center;
+  }
+  /* Profile Dropdown */
+  #profile-dropdown {
+    display:none; position:absolute; right:0; top:35px;
+    background:white; color:black; border-radius:12px;
+    box-shadow:0 5px 10px rgba(0,0,0,0.2); padding:10px;
+    min-width:180px; z-index:1001;
+  }
+  #profile-dropdown p { margin:5px 0; font-size:14px; }
+  #profile-dropdown button {
+    width:100%; padding:5px; margin-top:5px; border:none;
+    border-radius:8px; background:#2e7d32; color:white; cursor:pointer;
+  }
+  /* Screens */
+  .screen { padding:80px 20px 20px 20px; min-height:calc(100vh - 80px); }
+  /* Buttons / Cards */
+  .menu-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:15px; }
+  .menu-card {
+    background:white; border-radius:12px; padding:20px;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:center; box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .menu-card:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+  .menu-card img { width:50px; height:50px; margin-bottom:10px; }
+  .menu-card span { font-weight:bold; text-align:center; color:#2e7d32; }
+  /* Forms */
+  .form-container { background:white; padding:20px; border-radius:12px; max-width:400px; margin:auto; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+  .form-container input, .form-container select { width:100%; padding:10px; margin:8px 0; border-radius:8px; border:1px solid #ccc; }
+  .form-container button { width:100%; padding:10px; margin-top:10px; border:none; border-radius:8px; background:#2e7d32; color:white; cursor:pointer; font-weight:bold; }
+  .form-container button:hover { background:#1b5e20; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="top-bar">
+  <div id="app-logo" onclick="goToScreen('main-menu')">MindGrow 🌱</div>
+  <input id="top-search" type="text" placeholder="Search users, groups, posts...">
+  <div class="top-right">
+    <div style="position:relative;">
+      <img src="https://img.icons8.com/fluency/30/000000/bell.png" class="icon" onclick="alert('Notifications coming soon!')">
+      <span id="notif-count">0</span>
+    </div>
+    <div style="position:relative;">
+      <img src="https://img.icons8.com/fluency/30/000000/user-male-circle.png" class="icon" onclick="toggleProfileDropdown()">
+      <div id="profile-dropdown">
+        <p id="profile-name">Name: </p>
+        <p id="profile-role">Role: </p>
+        <p id="profile-school">School: </p>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENS -->
+
+<!-- WELCOME SCREEN -->
+<div id="welcome-screen" class="screen">
+  <div style="text-align:center;">
+    <h1>Welcome to MindGrow 🌱</h1>
+    <p>Learn, Compete, and Grow with your school community!</p>
+    <button onclick="goToScreen('signup-screen')">Get Started</button>
+  </div>
+</div>
+
+<!-- SIGN UP SCREEN -->
+<div id="signup-screen" class="screen hidden">
+  <div class="form-container">
+    <h2>Sign Up</h2>
+    <input type="text" id="signup-name" placeholder="Full Name">
+    <input type="email" id="signup-email" placeholder="Email">
+    <input type="password" id="signup-password" placeholder="Password">
+    <input type="text" id="signup-school" placeholder="School Name">
+    <select id="signup-role">
+      <option value="student">Student</option>
+      <option value="teacher">Teacher</option>
+      <option value="hod">HOD</option>
+      <option value="headteacher">Headteacher</option>
+    </select>
+    <button onclick="signupUser()">Sign Up</button>
+  </div>
+</div>
+
+<!-- MAIN MENU SCREEN -->
+<div id="main-menu" class="screen hidden">
+  <h2>Main Menu</h2>
+  <div class="menu-grid" id="main-menu-grid">
+    <!-- Buttons/cards will be dynamically inserted here in next chunks -->
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+/* Navigation */
+function goToScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  document.getElementById(screenId).classList.remove('hidden');
+}
+
+/* Profile Dropdown */
+function toggleProfileDropdown() {
+  const dropdown = document.getElementById('profile-dropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+/* Signup Logic with School & Role Validation */
+function signupUser() {
+  const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const school = document.getElementById('signup-school').value.trim();
+  const role = document.getElementById('signup-role').value;
+
+  if(!name || !email || !password || !school) { alert('Please fill all fields'); return; }
+
+  let approved = (role === 'student'); // students auto-approved, others need admin approval
+  const user = {name,email,password,school,role,approved,bio:'',profilePic:'',points:0};
+  localStorage.setItem('mindgrowUser', JSON.stringify(user));
+  alert(`Signup successful! ${approved ? 'You can access the app now.' : 'Waiting for admin approval.'}`);
+  goToScreen('main-menu');
+  updateProfileInfo();
+}
+
+/* Profile Info Update */
+function updateProfileInfo() {
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  document.getElementById('profile-name').innerText = `Name: ${user.name||'N/A'}`;
+  document.getElementById('profile-role').innerText = `Role: ${user.role||'N/A'}`;
+  document.getElementById('profile-school').innerText = `School: ${user.school||'N/A'}`;
+}
+
+/* Logout */
+function logout() {
+  if(confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('mindgrowUser');
+    goToScreen('welcome-screen');
+  }
+}
+
+/* Notifications Placeholder */
+function updateNotifications() {
+  const messages = JSON.parse(localStorage.getItem('mindgrowMessages')||"[]");
+  const announcements = JSON.parse(localStorage.getItem('mindgrowAnnouncements')||"[]");
+  const count = messages.length + announcements.length;
+  document.getElementById('notif-count').innerText = count;
+}
+
+/* Initialize App */
+window.onload = () => {
+  updateProfileInfo();
+  updateNotifications();
+  goToScreen('welcome-screen');
+};
+</script>
+</body>
+</html>
+<!-- MAIN MENU BUTTONS (CHUNK 2) -->
+<script>
+const mainMenuGrid = document.getElementById('main-menu-grid');
+
+function createMenuButton(name, iconUrl, action, rolesAllowed=['student','teacher','hod','headteacher']) {
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(!rolesAllowed.includes(user.role)) return; // Hide button if role not allowed
+
+  const card = document.createElement('div');
+  card.className = 'menu-card';
+  card.innerHTML = `<img src="${iconUrl}" alt="${name}"><span>${name}</span>`;
+  card.onclick = action;
+  mainMenuGrid.appendChild(card);
+}
+
+/* MAIN MENU BUTTON ACTIONS */
+function openClubs() {
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(['hod','headteacher','teacher'].includes(user.role)) {
+    alert('Clubs: create or join');
+  } else {
+    alert('Students can only join clubs created by HODs/Teachers.');
+  }
+}
+
+function openVSMode() {
+  alert('VS Mode: challenge classmates!');
+}
+
+function openQuizzes() {
+  alert('Quizzes: answer questions and earn points!');
+}
+
+function openExercises() {
+  alert('Exercises: first correct answer earns more points!');
+}
+
+function openPDFReader() {
+  const pdfScreen = document.getElementById('pdf-screen');
+  if(!pdfScreen) {
+    alert('PDF Reader coming in next chunk...');
+    return;
+  }
+  goToScreen('pdf-screen');
+}
+
+function openMessages() {
+  alert('Messages / Study Groups: chat and share documents!');
+}
+
+function openAnnouncements() {
+  alert('Announcements: live & replay available!');
+}
+
+function openAISuggestions() {
+  alert('AI Suggestions: adaptive tips based on your activity!');
+}
+
+function openStreaks() {
+  alert('Streaks & Dashboard: track progress and points!');
+}
+
+function openDashboard() {
+  alert('Dashboard: overview of points, competitions, and stats!');
+}
+
+/* INSERT BUTTONS INTO MAIN MENU */
+function loadMainMenuButtons() {
+  mainMenuGrid.innerHTML = ''; // clear first
+  createMenuButton('Clubs', 'https://img.icons8.com/fluency/48/000000/groups.png', openClubs, ['teacher','hod','headteacher']);
+  createMenuButton('VS Mode', 'https://img.icons8.com/fluency/48/000000/tournament.png', openVSMode);
+  createMenuButton('Quizzes', 'https://img.icons8.com/fluency/48/000000/quiz.png', openQuizzes);
+  createMenuButton('Exercises', 'https://img.icons8.com/fluency/48/000000/checklist.png', openExercises);
+  createMenuButton('PDF Reader', 'https://img.icons8.com/fluency/48/000000/pdf.png', openPDFReader);
+  createMenuButton('Messages', 'https://img.icons8.com/fluency/48/000000/chat.png', openMessages);
+  createMenuButton('Announcements', 'https://img.icons8.com/fluency/48/000000/megaphone.png', openAnnouncements, ['teacher','hod','headteacher']);
+  createMenuButton('AI Suggestions', 'https://img.icons8.com/fluency/48/000000/artificial-intelligence.png', openAISuggestions);
+  createMenuButton('Streaks', 'https://img.icons8.com/fluency/48/000000/goal.png', openStreaks);
+  createMenuButton('Dashboard', 'https://img.icons8.com/fluency/48/000000/dashboard.png', openDashboard);
+}
+
+/* LOAD MAIN MENU ON APP INIT */
+window.addEventListener('load', () => {
+  loadMainMenuButtons();
+});
+</script>
+
+<!-- PLACEHOLDERS FOR NEXT FEATURES -->
+
+<!-- PDF SCREEN -->
+<div id="pdf-screen" class="screen hidden">
+  <h2>PDF Reader</h2>
+  <p>Upload and view PDFs here.</p>
+  <input type="file" id="pdf-upload" accept="application/pdf">
+  <iframe id="pdf-viewer" style="width:100%;height:70vh;border:1px solid #ccc;margin-top:10px;"></iframe>
+</div>
+
+<script>
+/* PDF READER LOGIC */
+document.getElementById('pdf-upload').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(file && file.type === 'application/pdf') {
+    const url = URL.createObjectURL(file);
+    document.getElementById('pdf-viewer').src = url;
+  } else {
+    alert('Please select a PDF file!');
+  }
+});
+</script>
+
+<!-- FEEDS / POSTS PLACEHOLDER -->
+<div id="feeds-screen" class="screen hidden">
+  <h2>Class / Public Feed</h2>
+  <div id="feeds-container" class="menu-grid">
+    <!-- Feed cards dynamically added in next chunks -->
+  </div>
+</div>
+
+<!-- STUDY CHAT GROUPS PLACEHOLDER -->
+<div id="groups-screen" class="screen hidden">
+  <h2>Study Chat Groups</h2>
+  <div id="groups-container" class="menu-grid">
+    <!-- Study groups cards added dynamically -->
+  </div>
+</div>
+
+<!-- COMPETITIONS PLACEHOLDER -->
+<div id="competitions-screen" class="screen hidden">
+  <h2>School Competitions</h2>
+  <div id="competitions-container" class="menu-grid">
+    <!-- Competitions cards dynamically added -->
+  </div>
+</div>
+
+<!-- ANNOUNCEMENTS PLACEHOLDER -->
+<div id="announcements-screen" class="screen hidden">
+  <h2>Announcements</h2>
+  <div id="announcements-container" class="menu-grid">
+    <!-- Live & replay announcements added dynamically -->
+  </div>
+</div>
+<script>
+/* ====== FEEDS / POSTS SYSTEM ====== */
+let feedPosts = JSON.parse(localStorage.getItem('mindgrowFeeds')||"[]");
+let pendingPosts = JSON.parse(localStorage.getItem('mindgrowPending')||"[]");
+
+function addFeedPost(content, type='class') {
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  const post = {
+    id: Date.now(),
+    author: user.name,
+    profilePic: user.profilePic || 'https://img.icons8.com/fluency/48/000000/user-male-circle.png',
+    content,
+    type,
+    likes:0,
+    comments:[],
+    approved: user.role==='teacher'||user.role==='hod'||user.role==='headteacher', // auto approve higher roles
+    date: new Date().toLocaleString()
+  };
+  if(post.approved) feedPosts.push(post); 
+  else pendingPosts.push(post);
+  localStorage.setItem('mindgrowFeeds', JSON.stringify(feedPosts));
+  localStorage.setItem('mindgrowPending', JSON.stringify(pendingPosts));
+  renderFeeds();
+}
+
+function renderFeeds() {
+  const container = document.getElementById('feeds-container');
+  if(!container) return;
+  container.innerHTML='';
+  feedPosts.forEach(post=>{
+    const card = document.createElement('div');
+    card.className='menu-card';
+    card.innerHTML = `
+      <img src="${post.profilePic}" alt="${post.author}">
+      <span><b>${post.author}</b> (${post.date})</span>
+      <p>${post.content}</p>
+      <div style="margin-top:8px; display:flex; justify-content:space-around;">
+        <button onclick="likePost(${post.id})">❤️ ${post.likes}</button>
+        <button onclick="commentPost(${post.id})">💬 ${post.comments.length}</button>
+        <button onclick="sharePost(${post.id})">🔗 Share</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function likePost(postId){
+  const post = feedPosts.find(p=>p.id===postId);
+  if(post){ post.likes++; localStorage.setItem('mindgrowFeeds', JSON.stringify(feedPosts)); renderFeeds();}
+}
+
+function commentPost(postId){
+  const comment = prompt('Enter your comment:');
+  if(comment){
+    const post = feedPosts.find(p=>p.id===postId);
+    post.comments.push(comment);
+    localStorage.setItem('mindgrowFeeds', JSON.stringify(feedPosts));
+    renderFeeds();
+  }
+}
+
+function sharePost(postId){
+  alert('Post shared!');
+}
+
+/* ====== STUDY CHAT GROUPS ====== */
+let studyGroups = JSON.parse(localStorage.getItem('mindgrowGroups')||"[]");
+
+function createGroup(name, description){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(!['teacher','hod','headteacher'].includes(user.role)){ alert('Only teachers/HOD/Headteacher can create groups'); return; }
+  const group = {
+    id: Date.now(),
+    name,
+    description,
+    members:[user.email],
+    messages:[]
+  };
+  studyGroups.push(group);
+  localStorage.setItem('mindgrowGroups', JSON.stringify(studyGroups));
+  renderGroups();
+}
+
+function renderGroups(){
+  const container = document.getElementById('groups-container');
+  if(!container) return;
+  container.innerHTML='';
+  studyGroups.forEach(group=>{
+    const card = document.createElement('div');
+    card.className='menu-card';
+    card.innerHTML = `
+      <img src="https://img.icons8.com/fluency/48/000000/group.png" alt="${group.name}">
+      <span>${group.name}</span>
+      <p>${group.description}</p>
+      <button onclick="openGroupChat(${group.id})">Open Chat</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function openGroupChat(groupId){
+  const group = studyGroups.find(g=>g.id===groupId);
+  if(!group) return;
+  let chat = prompt(`Group: ${group.name}\nType your message (or 'view' to see chat history):`);
+  if(chat==='view'){
+    alert(group.messages.map(m=>`${m.sender}: ${m.text}`).join('\n') || 'No messages yet');
+    return;
+  }
+  if(chat){
+    const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+    group.messages.push({sender:user.name,text:chat,date:new Date().toLocaleString()});
+    localStorage.setItem('mindgrowGroups', JSON.stringify(studyGroups));
+    alert('Message sent!');
+  }
+}
+
+/* ====== COMPETITIONS (SCHOOL-SPECIFIC) ====== */
+let competitions = JSON.parse(localStorage.getItem('mindgrowCompetitions')||"[]");
+
+function createCompetition(name){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(!['teacher','hod','headteacher'].includes(user.role)){ alert('Only teachers/HOD/Headteacher can create competitions'); return; }
+  const competition = {
+    id: Date.now(),
+    name,
+    school:user.school,
+    participants:[],
+    scores:[]
+  };
+  competitions.push(competition);
+  localStorage.setItem('mindgrowCompetitions', JSON.stringify(competitions));
+  renderCompetitions();
+}
+
+function renderCompetitions(){
+  const container = document.getElementById('competitions-container');
+  if(!container) return;
+  container.innerHTML='';
+  competitions.forEach(comp=>{
+    const card = document.createElement('div');
+    card.className='menu-card';
+    card.innerHTML=`
+      <img src="https://img.icons8.com/fluency/48/000000/trophy.png">
+      <span>${comp.name} (${comp.school})</span>
+      <button onclick="joinCompetition(${comp.id})">Join</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function joinCompetition(compId){
+  const comp = competitions.find(c=>c.id===compId);
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(comp.participants.includes(user.email)){ alert('Already joined'); return; }
+  if(comp.school!==user.school){ alert('Only students of this school can join'); return; }
+  comp.participants.push(user.email);
+  localStorage.setItem('mindgrowCompetitions', JSON.stringify(competitions));
+  alert(`Joined ${comp.name}`);
+}
+
+/* ====== ANNOUNCEMENTS (LIVE + REPLAY) ====== */
+let announcements = JSON.parse(localStorage.getItem('mindgrowAnnouncements')||"[]");
+
+function createAnnouncement(content){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  if(!['teacher','hod','headteacher'].includes(user.role)){ alert('Only higher roles can announce'); return; }
+  const ann = {
+    id: Date.now(),
+    author:user.name,
+    profilePic:user.profilePic||'https://img.icons8.com/fluency/48/000000/user-male-circle.png',
+    content,
+    date:new Date().toLocaleString()
+  };
+  announcements.push(ann);
+  localStorage.setItem('mindgrowAnnouncements', JSON.stringify(announcements));
+  renderAnnouncements();
+}
+
+function renderAnnouncements(){
+  const container = document.getElementById('announcements-container');
+  if(!container) return;
+  container.innerHTML='';
+  announcements.forEach(a=>{
+    const card=document.createElement('div');
+    card.className='menu-card';
+    card.innerHTML=`
+      <img src="${a.profilePic}" alt="${a.author}">
+      <span><b>${a.author}</b> (${a.date})</span>
+      <p>${a.content}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
+/* INITIALIZE PLACEHOLDERS */
+window.addEventListener('load',()=>{
+  renderFeeds();
+  renderGroups();
+  renderCompetitions();
+  renderAnnouncements();
+});
+</script>
+<!-- ====== QUIZZES & EXERCISES ====== -->
+<div id="quiz-screen" class="screen hidden">
+  <h2>Quizzes & Exercises</h2>
+  <div id="quiz-container" class="menu-grid"></div>
+</div>
+
+<script>
+let quizzes = [
+  {id:1,question:"What is 2+2?",options:["3","4","5"],answer:1},
+  {id:2,question:"Capital of Zambia?",options:["Lusaka","Ndola","Kitwe"],answer:0},
+  {id:3,question:"H2O is?",options:["Oxygen","Water","Hydrogen"],answer:1},
+  {id:4,question:"Speed of light approx?",options:["3x10^8 m/s","3x10^6 m/s","3x10^5 m/s"],answer:0},
+  {id:5,question:"Largest planet?",options:["Earth","Jupiter","Mars"],answer:1},
+  {id:6,question:"What is photosynthesis?",options:["Plant food","Sunlight","Water"],answer:0},
+  {id:7,question:"2^3=?",options:["5","6","8"],answer:2},
+  {id:8,question:"Who discovered gravity?",options:["Newton","Einstein","Tesla"],answer:0},
+  {id:9,question:"Chemical symbol for gold?",options:["Au","Ag","Fe"],answer:0},
+  {id:10,question:"Speed of sound?",options:["343 m/s","300 m/s","500 m/s"],answer:0}
+];
+
+let userPoints = JSON.parse(localStorage.getItem('mindgrowUserPoints')||"0");
+
+function loadQuizzes(){
+  const container = document.getElementById('quiz-container');
+  container.innerHTML='';
+  quizzes.forEach(q=>{
+    const card = document.createElement('div');
+    card.className='menu-card';
+    let optionsHtml = '';
+    q.options.forEach((opt,i)=>{
+      optionsHtml+=`<button onclick="submitAnswer(${q.id},${i})">${opt}</button>`;
+    });
+    card.innerHTML=`
+      <span><b>Q:</b> ${q.question}</span>
+      ${optionsHtml}
+    `;
+    container.appendChild(card);
+  });
+}
+
+function submitAnswer(qId,optIndex){
+  const quiz = quizzes.find(q=>q.id===qId);
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  let pointsEarned=0;
+  if(optIndex===quiz.answer){
+    alert('Correct! 🎉');
+    pointsEarned=10; // base points
+  } else { alert('Incorrect! ❌'); }
+  user.points = (user.points||0)+pointsEarned;
+  localStorage.setItem('mindgrowUser', JSON.stringify(user));
+  userPoints = user.points;
+  alert(`Points: ${pointsEarned} | Total: ${userPoints}`);
+}
+
+/* ====== STREAKS & DASHBOARD ====== */
+function showStreaks(){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  const streakScreen = document.getElementById('streaks-screen');
+  if(!streakScreen) return;
+  streakScreen.innerHTML=`
+    <h2>Streaks & Dashboard</h2>
+    <p>Total Points: ${user.points||0}</p>
+    <p>Current Streak: ${user.streak||0} days</p>
+  `;
+}
+
+/* ====== VS MODE PLACEHOLDER ====== */
+function openVSModeScreen(){
+  alert('VS Mode: challenge classmates online! Feature coming in next chunk with live multiplayer.');
+}
+
+/* ====== AI SUGGESTIONS PLACEHOLDER ====== */
+function showAISuggestions(){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  alert(`AI Suggestion: Keep up your streaks! Try the exercises today for ${Math.floor(Math.random()*10)+5} bonus points.`);
+}
+
+/* ====== REWARD COINS LOGIC ====== */
+function earnCoins(points){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  user.coins = (user.coins||0) + points;
+  localStorage.setItem('mindgrowUser', JSON.stringify(user));
+  alert(`You earned ${points} coins! Total Coins: ${user.coins}`);
+}
+
+/* ====== INITIALIZE QUIZZES / DASHBOARD ====== */
+window.addEventListener('load', ()=>{
+  loadQuizzes();
+  showStreaks();
+});
+</script>
+
+<!-- STREAKS SCREEN -->
+<div id="streaks-screen" class="screen hidden"></div>
+<!-- ====== PROFILE EDITING ====== -->
+<div id="profile-screen" class="screen hidden">
+  <h2>Edit Profile</h2>
+  <div class="form-container">
+    <label>Bio</label>
+    <textarea id="edit-bio" rows="3" placeholder="Tell us about yourself"></textarea>
+    <label>Profile Picture URL</label>
+    <input type="text" id="edit-profile-pic" placeholder="Enter image URL">
+    <button onclick="saveProfile()">Save Profile</button>
+  </div>
+</div>
+
+<script>
+function openProfileEditor(){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  document.getElementById('edit-bio').value = user.bio || '';
+  document.getElementById('edit-profile-pic').value = user.profilePic || '';
+  goToScreen('profile-screen');
+}
+
+function saveProfile(){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  user.bio = document.getElementById('edit-bio').value;
+  user.profilePic = document.getElementById('edit-profile-pic').value;
+  localStorage.setItem('mindgrowUser', JSON.stringify(user));
+  updateProfileInfo();
+  alert('Profile updated!');
+  goToScreen('main-menu');
+}
+</script>
+
+<!-- ====== SEARCH BAR AUTO-SUGGESTIONS ====== -->
+<script>
+const searchInput = document.getElementById('top-search');
+const suggestionBox = document.createElement('div');
+suggestionBox.style.position='absolute';
+suggestionBox.style.background='white';
+suggestionBox.style.border='1px solid #ccc';
+suggestionBox.style.width='45%';
+suggestionBox.style.maxHeight='200px';
+suggestionBox.style.overflowY='auto';
+suggestionBox.style.zIndex='1001';
+searchInput.parentNode.appendChild(suggestionBox);
+
+searchInput.addEventListener('input',()=>{
+  const query = searchInput.value.toLowerCase();
+  suggestionBox.innerHTML='';
+  if(!query) return;
+  // Search users
+  const users = [JSON.parse(localStorage.getItem('mindgrowUser')||"{}")]; // extend with all users later
+  users.forEach(u=>{
+    if(u.name && u.name.toLowerCase().includes(query)){
+      const item = document.createElement('div');
+      item.style.padding='5px';
+      item.style.cursor='pointer';
+      item.innerText = u.name;
+      item.onclick = ()=>{ alert(`View Profile: ${u.name}`); suggestionBox.innerHTML=''; };
+      suggestionBox.appendChild(item);
+    }
+  });
+});
+</script>
+
+<!-- ====== ROLE-BASED ACCESS POLISH ====== -->
+<script>
+function loadMainMenuButtonsPolish() {
+  mainMenuGrid.innerHTML='';
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  createMenuButton('Clubs','https://img.icons8.com/fluency/48/000000/groups.png',openClubs,['teacher','hod','headteacher']);
+  createMenuButton('VS Mode','https://img.icons8.com/fluency/48/000000/tournament.png',openVSMode);
+  createMenuButton('Quizzes','https://img.icons8.com/fluency/48/000000/quiz.png',openQuizzes);
+  createMenuButton('Exercises','https://img.icons8.com/fluency/48/000000/checklist.png',openExercises);
+  createMenuButton('PDF Reader','https://img.icons8.com/fluency/48/000000/pdf.png',openPDFReader);
+  createMenuButton('Messages','https://img.icons8.com/fluency/48/000000/chat.png',openMessages);
+  if(['teacher','hod','headteacher'].includes(user.role))
+    createMenuButton('Announcements','https://img.icons8.com/fluency/48/000000/megaphone.png',openAnnouncements);
+  createMenuButton('AI Suggestions','https://img.icons8.com/fluency/48/000000/artificial-intelligence.png',openAISuggestions);
+  createMenuButton('Streaks','https://img.icons8.com/fluency/48/000000/goal.png',showStreaks);
+  createMenuButton('Dashboard','https://img.icons8.com/fluency/48/000000/dashboard.png',()=>alert('Dashboard view coming soon'));
+}
+window.addEventListener('load',()=>{
+  loadMainMenuButtonsPolish();
+});
+</script>
+
+<!-- ====== TOP BAR POLISH ====== -->
+<style>
+#top-bar input:focus{ outline:none; box-shadow:0 0 5px #2e7d32; }
+.menu-card button{ background:#2e7d32; color:white; border:none; border-radius:6px; padding:5px; cursor:pointer; margin:2px; transition:0.2s; }
+.menu-card button:hover{ background:#1b5e20; }
+#feeds-container .menu-card, #groups-container .menu-card, #competitions-container .menu-card, #announcements-container .menu-card{ flex-direction:column; text-align:center; }
+</style>
+
+<script>
+/* Click outside to hide profile dropdown & search suggestions */
+document.addEventListener('click', function(event){
+  const profile = document.getElementById('profile-dropdown');
+  const searchBox = suggestionBox;
+  if(!profile.contains(event.target) && !event.target.classList.contains('icon')){
+    profile.style.display='none';
+  }
+  if(!searchInput.contains(event.target)){
+    searchBox.innerHTML='';
+  }
+});
+</script>
+<!-- ====== VS MODE / MULTIPLAYER CHALLENGES ====== -->
+<div id="vs-mode-screen" class="screen hidden">
+  <h2>VS Mode - Challenge Classmates</h2>
+  <div class="form-container">
+    <label>Select Classmate (Email)</label>
+    <input type="text" id="challenge-email" placeholder="Enter classmate email">
+    <label>Choose Challenge</label>
+    <select id="challenge-type">
+      <option value="quiz">Quiz</option>
+      <option value="exercise">Exercise</option>
+      <option value="pdf">PDF Reading Race</option>
+    </select>
+    <label>Coins to Stake</label>
+    <input type="number" id="challenge-coins" placeholder="Number of coins">
+    <button onclick="startChallenge()">Start Challenge</button>
+  </div>
+  <div id="challenge-log" style="margin-top:20px;"></div>
+</div>
+
+<script>
+let activeChallenges = [];
+
+function startChallenge(){
+  const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+  const targetEmail = document.getElementById('challenge-email').value.trim();
+  const type = document.getElementById('challenge-type').value;
+  const coins = parseInt(document.getElementById('challenge-coins').value);
+
+  if(!targetEmail || !type || !coins || coins <=0){
+    alert('Fill all fields correctly');
+    return;
+  }
+  if(user.coins < coins){ alert('Not enough coins'); return; }
+  if(targetEmail === user.email){ alert('Cannot challenge yourself'); return; }
+
+  // Deduct coins
+  user.coins -= coins;
+  localStorage.setItem('mindgrowUser', JSON.stringify(user));
+
+  // Create challenge
+  const challenge = {
+    id: Date.now(),
+    from:user.email,
+    to:targetEmail,
+    type,
+    coins,
+    status:'pending'
+  };
+  activeChallenges.push(challenge);
+  renderChallenges();
+  alert(`Challenge sent to ${targetEmail}!`);
+}
+
+function renderChallenges(){
+  const log = document.getElementById('challenge-log');
+  if(!log) return;
+  log.innerHTML='';
+  activeChallenges.forEach(c=>{
+    const div = document.createElement('div');
+    div.style.background='#fff'; div.style.padding='10px'; div.style.margin='5px'; div.style.borderRadius='8px'; div.style.boxShadow='0 2px 5px rgba(0,0,0,0.1)';
+    div.innerHTML=`From: ${c.from} | To: ${c.to} | Type: ${c.type} | Coins: ${c.coins} | Status: ${c.status}`;
+    log.appendChild(div);
+  });
+}
+
+/* ====== LIVE CHALLENGES / COINS REWARD ====== */
+function completeChallenge(challengeId, winnerEmail){
+  const challenge = activeChallenges.find(c=>c.id===challengeId);
+  if(!challenge) return;
+  challenge.status='completed';
+  if(challenge.from === winnerEmail){
+    const user = JSON.parse(localStorage.getItem('mindgrowUser')||"{}");
+    user.coins += challenge.coins*2;
+    localStorage.setItem('mindgrowUser', JSON.stringify(user));
+    alert(`You won! Coins earned: ${challenge.coins*2}`);
+  }
+  renderChallenges();
+}
+
+/* ====== ADD VS MODE BUTTON TO MAIN MENU ====== */
+function loadVSModeButton(){
+  createMenuButton('VS Mode','https://img.icons8.com/fluency/48/000000/tournament.png',()=>goToScreen('vs-mode-screen'));
+}
+window.addEventListener('load',()=>{
+  loadVSModeButton();
+});
+
+/* ====== FINAL TOUCHES ====== */
+function initializeApp(){
+  updateProfileInfo();
+  updateNotifications();
+  renderFeeds();
+  renderGroups();
+  renderCompetitions();
+  renderAnnouncements();
+  loadMainMenuButtonsPolish();
+  loadQuizzes();
+  showStreaks();
+}
+window.addEventListener('load',initializeApp);
+</script>
