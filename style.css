@@ -1,0 +1,145 @@
+/* ===== GENERAL BODY ===== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #a1ffce, #faffd1);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#app {
+  width: 95%;
+  max-width: 650px;
+}
+
+/* ===== SCREEN STYLES ===== */
+.screen {
+  display: none;
+  background-color: rgba(255, 255, 255, 0.97);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.screen.active { display: block; }
+
+/* ===== HEADINGS ===== */
+h1, h2 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* ===== INPUTS & SELECTS ===== */
+input, select {
+  width: 80%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 10px rgba(46,125,50,0.5);
+  outline: none;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #2e7d32, #66bb6a);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #1b5e20, #43a047);
+  transform: scale(1.05);
+}
+
+/* ===== MENU BUTTONS ===== */
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ===== PDF / QUIZ / MESSAGES / ANNOUNCEMENTS ===== */
+iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+  margin: 10px 0;
+}
+
+#quiz-container div {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+#quiz-container button {
+  margin: 5px;
+}
+
+#messages, #announcements {
+  max-height: 200px;
+  overflow-y: auto;
+  text-align: left;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f9f9f9;
+  margin: 10px 0;
+}
+
+#messages p, #announcements p {
+  margin: 5px 0;
+  padding: 5px 10px;
+  background: #dcedc8;
+  border-radius: 10px;
+}
+
+/* ===== AI SUGGESTIONS CARD ===== */
+#ai-tips {
+  background: #fff9c4;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #fbc02d;
+  text-align: left;
+  white-space: pre-line; /* preserves line breaks */
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 500px) {
+  input, select, button {
+    width: 90%;
+    font-size: 14px;
+  }
+  #quiz-container div {
+    font-size: 14px;
+  }
+}
