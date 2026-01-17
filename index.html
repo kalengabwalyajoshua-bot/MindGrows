@@ -1,140 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindGrow Ultimate</title>
-    <style>
-        /* Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { height: 100vh; overflow: hidden; background: linear-gradient(135deg, #c0e7ff, #f0faff); color: #ffffff; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindGrow Full Interactive</title>
+<style>
+/* Reset */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+body { min-height:100vh; overflow-y:auto; background: linear-gradient(180deg, #1e2a78, #4a4fcf); color:#fff; position:relative; }
 
-        /* Screens */
-        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.8s ease-in-out; overflow-y: auto; }
-        .hidden { opacity: 0; pointer-events: none; }
+/* Floating particles */
+.particle { position:absolute; border-radius:50%; opacity:0.7; background:linear-gradient(135deg,#ff6fff,#00fff0); pointer-events:none; animation:floatParticle linear infinite; }
+@keyframes floatParticle { 0%{transform:translateY(0) translateX(0);}50%{transform:translateY(-20px) translateX(15px);}100%{transform:translateY(0) translateX(0);} }
 
-        /* Welcome Screen */
-        .welcome-screen { text-align: center; z-index: 2; }
-        .floating-shapes .shape { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3); animation: float 6s ease-in-out infinite; }
-        .shape1 { width: 60px; height: 60px; top: 10%; left: 20%; animation-delay: 0s; }
-        .shape2 { width: 80px; height: 80px; top: 30%; left: 70%; animation-delay: 2s; }
-        .shape3 { width: 50px; height: 50px; top: 60%; left: 40%; animation-delay: 4s; }
-        .shape4 { width: 70px; height: 70px; top: 80%; left: 80%; animation-delay: 1s; }
-        @keyframes float { 0%,100%{transform:translateY(0) translateX(0);}50%{transform:translateY(-20px) translateX(15px);} }
+/* Screens */
+.screen { width:100%; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px; transition:opacity 0.5s ease-in-out; position:absolute; top:0; left:0; }
+.hidden { display:none; overflow-y:auto; }
 
-        .welcome-text { font-size: 4rem; font-weight:900; background: linear-gradient(90deg,#ffffff,#a0dfff,#ffffff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 20px #fff,0 0 40px #a0dfff,0 0 60px #c0f0ff; margin-bottom:20px; animation: glowText 2s ease-in-out infinite alternate; }
-        @keyframes glowText { 0% {text-shadow:0 0 20px #fff,0 0 40px #a0dfff,0 0 60px #c0f0ff;} 100% {text-shadow:0 0 40px #fff,0 0 80px #a0e0ff,0 0 100px #b0f0ff;} }
-        .subtitle { font-size:1.3rem; color:#ffffffaa; margin-bottom:40px; }
-        .enter-btn { background: linear-gradient(135deg, #9fe8ff, #c0e7ff); border:none; padding:15px 50px; border-radius:50px; font-size:1.1rem; cursor:pointer; box-shadow:0 0 25px #a0dfff,0 0 50px #c0e7ff; transition:all 0.3s ease; }
-        .enter-btn:hover { transform:scale(1.1); box-shadow:0 0 35px #fff,0 0 70px #a0dfff; }
+/* Welcome Screen */
+.welcome-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; }
+.welcome-text { font-size:4rem; font-weight:900; background: linear-gradient(90deg,#fffb00,#ff6fff,#00fff0); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 20px #fff,0 0 40px #ff6fff; margin-bottom:20px; animation:glowText 2s ease-in-out infinite alternate, floatHeader 4s ease-in-out infinite alternate; }
+@keyframes glowText { 0% {text-shadow:0 0 20px #fff,0 0 40px #ff6fff;} 100% {text-shadow:0 0 40px #fff,0 0 80px #00fff0;} }
+@keyframes floatHeader { 0%{transform:translateY(0);}50%{transform:translateY(-10px);}100%{transform:translateY(0);} }
+.subtitle { font-size:1.3rem; color:#ffffffcc; margin-bottom:40px; }
+.enter-btn { background:linear-gradient(135deg,#ff6fff,#00fff0); border:none; padding:15px 50px; border-radius:50px; font-size:1.2rem; cursor:pointer; box-shadow:0 0 20px #00fff0,0 0 40px #ff6fff; transition:all 0.3s ease; }
+.enter-btn:hover { transform:scale(1.05); box-shadow:0 0 35px #fff,0 0 70px #00fff0; }
 
-        /* MindGrow Home Screen */
-        .home-screen { background: linear-gradient(135deg, #d0f0ff, #e0f8ff); color: #333; text-align: center; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .home-screen h2 { font-size: 3rem; color: #007acc; margin-bottom: 20px; }
+/* Home Screen */
+.home-screen { display:flex; flex-direction:column; align-items:center; width:100%; max-width:1200px; position:relative; }
 
-        /* Top bar */
-        .top-bar { width: 100%; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .top-bar button { background: #9fe8ffaa; border:none; padding:12px 20px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 0 15px #a0dfff,0 0 30px #c0e7ff; transition:all 0.3s ease; }
-        .top-bar button:hover { transform:scale(1.1); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
+/* Top bar */
+.top-bar { width:100%; display:flex; justify-content:space-around; flex-wrap:wrap; margin-bottom:30px; }
+.top-bar button { background:#fff; color:#1e2a78; font-weight:600; border:none; padding:12px 20px; border-radius:25px; box-shadow:0 2px 10px rgba(0,0,0,0.2); cursor:pointer; transition:all 0.3s ease; }
+.top-bar button:hover { transform:scale(1.05); box-shadow:0 4px 15px rgba(0,0,0,0.3); }
 
-        /* Feature buttons */
-        .feature-buttons { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 20px; }
-        .feature-buttons button { background: linear-gradient(135deg,#9fe8ff,#c0e7ff); border:none; padding:18px 30px; border-radius:40px; font-size:1rem; cursor:pointer; box-shadow:0 0 25px #a0dfff,0 0 50px #c0e7ff; transition:all 0.3s ease; }
-        .feature-buttons button:hover { transform:scale(1.1); box-shadow:0 0 35px #fff,0 0 70px #a0dfff; }
+/* Section title */
+.section-title { font-size:2rem; color:#fff; margin-bottom:20px; animation:glowText 3s ease-in-out infinite alternate; }
 
-        /* Categories */
-        .categories { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom:20px; }
-        .category { background:#ffffffaa; color:#007acc; padding:20px 25px; border-radius:30px; font-weight:600; cursor:pointer; box-shadow:0 0 15px #a0dfff,0 0 30px #c0e7ff; transition:all 0.3s ease; }
-        .category:hover { transform:scale(1.05); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
+/* Feature cards */
+.feature-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:20px; width:100%; margin-bottom:30px; }
+.card { background:#ffffff22; backdrop-filter:blur(10px); border-radius:15px; padding:20px; text-align:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); transition:all 0.3s ease, box-shadow 0.6s ease; }
+.card:hover { transform:scale(1.05); box-shadow:0 6px 25px rgba(255,255,255,0.6); animation:pulseGlow 1.5s infinite; }
+.card h3 { font-size:1.1rem; margin-bottom:10px; color:#fff; }
+@keyframes pulseGlow { 0%{box-shadow:0 6px 25px rgba(255,255,255,0.6);}50%{box-shadow:0 6px 35px rgba(255,255,255,0.9);}100%{box-shadow:0 6px 25px rgba(255,255,255,0.6);} }
 
-        /* Quick mini buttons */
-        .mini-buttons { display:flex; flex-wrap: wrap; gap:15px; justify-content:center; margin-bottom:30px; }
-        .mini-buttons button { background:#ffffffcc; color:#007acc; border:none; padding:12px 20px; border-radius:25px; font-weight:600; cursor:pointer; box-shadow:0 0 12px #a0dfff,0 0 24px #c0e7ff; transition:all 0.3s ease; }
-        .mini-buttons button:hover { transform:scale(1.05); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
+/* Categories grid */
+.categories { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:15px; width:100%; margin-bottom:30px; }
+.category { background:#ffffff44; color:#fff; padding:15px; border-radius:15px; font-weight:600; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.2); cursor:pointer; transition:all 0.3s ease; }
+.category:hover { transform:scale(1.05); box-shadow:0 4px 20px rgba(255,255,255,0.5); animation:pulseGlow 1.5s infinite; }
 
-    </style>
+/* Mini buttons */
+.mini-buttons { display:flex; flex-wrap:wrap; gap:15px; justify-content:center; width:100%; margin-bottom:30px; }
+.mini-buttons button { background:#ffffff33; color:#fff; border:none; padding:10px 15px; border-radius:20px; font-weight:600; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2); transition:all 0.3s ease; }
+.mini-buttons button:hover { transform:scale(1.05); box-shadow:0 4px 15px rgba(255,255,255,0.5); animation:pulseGlow 1.5s infinite; }
+
+/* Feature Detail Screens */
+.feature-screen { display:flex; flex-direction:column; align-items:center; width:100%; min-height:100vh; background:linear-gradient(180deg,#4a4fcf,#1e2a78); padding:20px; }
+.feature-screen h2 { font-size:2.5rem; margin-bottom:20px; color:#fff; animation:glowText 3s ease-in-out infinite alternate; }
+.back-btn { background:#fff; color:#1e2a78; border:none; padding:12px 25px; border-radius:25px; font-weight:600; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.3); transition:all 0.3s ease; margin-bottom:20px; }
+.back-btn:hover { transform:scale(1.05); box-shadow:0 4px 15px rgba(0,0,0,0.5); }
+
+/* Specific feature content */
+.feature-content { color:#fff; max-width:600px; text-align:center; }
+.feature-content p { margin-bottom:15px; }
+.quiz-option { background:#ffffff33; padding:10px; margin:5px 0; border-radius:15px; cursor:pointer; transition:0.3s; }
+.quiz-option:hover { background:#ffffff55; }
+input, textarea { width:100%; padding:10px; border-radius:10px; border:none; margin-bottom:10px; }
+button.submit-btn { background:linear-gradient(135deg,#ff6fff,#00fff0); border:none; padding:10px 25px; border-radius:25px; color:#fff; cursor:pointer; transition:0.3s; }
+button.submit-btn:hover { transform:scale(1.05); }
+</style>
 </head>
 <body>
 
-    <!-- Welcome Screen -->
-    <div class="screen welcome-screen" id="welcomeScreen">
-        <div class="floating-shapes">
-            <div class="shape shape1"></div>
-            <div class="shape shape2"></div>
-            <div class="shape shape3"></div>
-            <div class="shape shape4"></div>
-        </div>
-        <h1 class="welcome-text">MindGrow</h1>
-        <p class="subtitle">✨ Your magical journey to learning begins here ✨</p>
-        <button class="enter-btn" onclick="enterApp()">Enter</button>
+<div id="particles"></div>
+
+<!-- Welcome Screen -->
+<div class="screen welcome-screen" id="welcomeScreen">
+    <h1 class="welcome-text">MindGrow</h1>
+    <p class="subtitle">✨ Your ultimate learning journey starts here ✨</p>
+    <button class="enter-btn" onclick="enterApp()">Enter</button>
+</div>
+
+<!-- Home Screen -->
+<div class="screen home-screen hidden" id="homeScreen">
+    <div class="top-bar">
+        <button onclick="openFeatureScreen('Home')">Home</button>
+        <button onclick="openFeatureScreen('Messages')">Messages</button>
+        <button onclick="openFeatureScreen('Notifications')">Notifications</button>
+        <button onclick="openFeatureScreen('Profile')">Profile</button>
+        <button onclick="openFeatureScreen('Settings')">Settings</button>
+        <button onclick="openFeatureScreen('Search')">Search</button>
+        <button onclick="openFeatureScreen('Theme')">Dark/Light</button>
     </div>
 
-    <!-- Ultimate MindGrow Home Screen -->
-    <div class="screen home-screen hidden" id="homeScreen">
-
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <button onclick="openFeature('home')">Home</button>
-            <button onclick="openFeature('messages')">Messages</button>
-            <button onclick="openFeature('notifications')">Notifications</button>
-            <button onclick="openFeature('profile')">Profile</button>
-            <button onclick="openFeature('settings')">Settings</button>
-            <button onclick="openFeature('search')">Search</button>
-            <button onclick="openFeature('theme')">Dark/Light</button>
-        </div>
-
-        <!-- Main Feature Buttons -->
-        <div class="feature-buttons">
-            <button onclick="openFeature('story')">Story</button>
-            <button onclick="openFeature('quizzes')">Quizzes</button>
-            <button onclick="openFeature('clubs')">Clubs</button>
-            <button onclick="openFeature('daily')">Daily Challenge</button>
-            <button onclick="openFeature('leaderboard')">Leaderboard</button>
-            <button onclick="openFeature('joinclub')">Join Club</button>
-            <button onclick="openFeature('startquiz')">Start Quiz</button>
-            <button onclick="openFeature('readstory')">Read Story</button>
-            <button onclick="openFeature('achievements')">Achievements</button>
-            <button onclick="openFeature('favorites')">Favorites</button>
-            <button onclick="openFeature('notes')">Notes</button>
-            <button onclick="openFeature('chat')">AI Tutor</button>
-            <button onclick="openFeature('reminders')">Reminders</button>
-        </div>
-
-        <!-- Categories -->
-        <div class="categories">
-            <div class="category" onclick="openFeature('science')">Science</div>
-            <div class="category" onclick="openFeature('math')">Math</div>
-            <div class="category" onclick="openFeature('history')">History</div>
-            <div class="category" onclick="openFeature('languages')">Languages</div>
-            <div class="category" onclick="openFeature('arts')">Arts</div>
-            <div class="category" onclick="openFeature('technology')">Technology</div>
-            <div class="category" onclick="openFeature('lifeskills')">Life Skills</div>
-            <div class="category" onclick="openFeature('mindfulness')">Mindfulness</div>
-            <div class="category" onclick="openFeature('trivia')">Trivia</div>
-        </div>
-
-        <!-- Quick Mini Buttons -->
-        <div class="mini-buttons">
-            <button onclick="openFeature('events')">Events</button>
-            <button onclick="openFeature('contests')">Contests</button>
-            <button onclick="openFeature('minigames')">Mini Games</button>
-            <button onclick="openFeature('badges')">Badges</button>
-            <button onclick="openFeature('progress')">Progress Tracker</button>
-            <button onclick="openFeature('calendar')">Calendar</button>
-        </div>
-
+    <h2 class="section-title">Features</h2>
+    <div class="feature-cards">
+        <div class="card" onclick="openFeatureScreen('Story')"><h3>Story</h3></div>
+        <div class="card" onclick="openFeatureScreen('Quizzes')"><h3>Quizzes</h3></div>
+        <div class="card" onclick="openFeatureScreen('Clubs')"><h3>Clubs</h3></div>
+        <div class="card" onclick="openFeatureScreen('Daily Challenge')"><h3>Daily Challenge</h3></div>
+        <div class="card" onclick="openFeatureScreen('Leaderboard')"><h3>Leaderboard</h3></div>
+        <div class="card" onclick="openFeatureScreen('Join Club')"><h3>Join Club</h3></div>
+        <div class="card" onclick="openFeatureScreen('Start Quiz')"><h3>Start Quiz</h3></div>
+        <div class="card" onclick="openFeatureScreen('Read Story')"><h3>Read Story</h3></div>
+        <div class="card" onclick="openFeatureScreen('Achievements')"><h3>Achievements</h3></div>
+        <div class="card" onclick="openFeatureScreen('Favorites')"><h3>Favorites</h3></div>
+        <div class="card" onclick="openFeatureScreen('Notes')"><h3>Notes</h3></div>
+        <div class="card" onclick="openFeatureScreen('AI Tutor')"><h3>AI Tutor</h3></div>
+        <div class="card" onclick="openFeatureScreen('Reminders')"><h3>Reminders</h3></div>
     </div>
 
-    <script>
-        function enterApp() {
-            document.getElementById('welcomeScreen').classList.add('hidden');
-            document.getElementById('homeScreen').classList.remove('hidden');
-        }
+    <h2 class="section-title">Categories</h2>
+    <div class="categories">
+        <div class="category" onclick="openFeatureScreen('Science')">Science</div>
+        <div class="category" onclick="openFeatureScreen('Math')">Math</div>
+        <div class="category" onclick="openFeatureScreen('History')">History</div>
+        <div class="category" onclick="openFeatureScreen('Languages')">Languages</div>
+        <div class="category" onclick="openFeatureScreen('Arts')">Arts</div>
+        <div class="category" onclick="openFeatureScreen('Technology')">Technology</div>
+        <div class="category" onclick="openFeatureScreen('Life Skills')">Life Skills</div>
+        <div class="category" onclick="openFeatureScreen('Mindfulness')">Mindfulness</div>
+        <div class="category" onclick="openFeatureScreen('Trivia')">Trivia</div>
+    </div>
 
-        function openFeature(feature) {
-            alert(`Feature "${feature}" will open here! 🚀`);
-        }
-    </script>
+    <div class="mini-buttons">
+        <button onclick="openFeatureScreen('Events')">Events</button>
+        <button onclick="openFeatureScreen('Contests')">Contests</button>
+        <button onclick="openFeatureScreen('Mini Games')">Mini Games</button>
+        <button onclick="openFeatureScreen('Badges')">Badges</button>
+        <button onclick="openFeatureScreen('Progress Tracker')">Progress Tracker</button>
+        <button onclick="openFeatureScreen('Calendar')">Calendar</button>
+    </div>
+</div>
+
+<!-- Feature Screen -->
+<div class="screen feature-screen hidden" id="featureScreen">
+    <button class="back-btn" onclick="goBackHome()">← Back</button>
+    <h2 id="featureTitle"></h2>
+    <div class="feature-content" id="featureContent"></div>
+</div>
+
+<script>
+// Floating particles
+const particleCount = 40;
+for(let i=0;i<particleCount;i++){
+    const p=document.createElement('div');
+    p.classList.add('particle');
+    p.style.width=Math.random()*12+8+'px';
+    p.style.height=p.style.width;
+    p.style.top=Math.random()*100+'%';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(Math.random()*5+5)+'s';
+    p.style.animationDelay=(Math.random()*5)+'s';
+    document.body.appendChild(p);
+}
+
+// Screens
+function enterApp(){
+    document.getElementById('welcomeScreen').classList.add('hidden');
+    document.getElementById('homeScreen').classList.remove('hidden');
+}
+
+function openFeatureScreen(name){
+    document.getElementById('homeScreen').classList.add('hidden');
+    document.getElementById('featureTitle').innerText = name;
+    const content = document.getElementById('featureContent');
+    content.innerHTML = ''; // reset content
+
+    // Features content
+    if(name==='Quizzes'){
+        content.innerHTML = `
+            <p>Question: What is 5 × 6?</p>
+            <div class="quiz-option" onclick="alert('Correct! 🚀')">30</div>
+            <div class="quiz-option" onclick="alert('Wrong! ❌')">35</div>
+            <div class="quiz-option" onclick="alert('Wrong! ❌')">25</div>
+        `;
+    } else if(name==='Story'){
+        content.innerHTML = `<p>Once upon a time in the magical world of MindGrow...</p>
+        <p>Knowledge flowed like rivers, and learners explored endlessly.</p>
+        <p>Scroll down to read more exciting adventures!</p>`;
+    } else if(name==='AI Tutor'){
+        content.innerHTML = `<p>Ask me anything!</p>
+        <input type="text" id="aiQuestion" placeholder="Type your question...">
+        <button class="submit-btn" onclick="answerAI()">Ask</button>
+        <p id="aiAnswer"></p>`;
+    } else if(name==='Clubs'){
+        content.innerHTML = `<p>Available Clubs:</p><ul><li>Science Club</li><li>Math Wizards</li><li>History Buffs</li></ul>`;
+    } else if(name==='Leaderboard'){
+        content.innerHTML = `<p>Top Learners:</p><ol><li>Jane Doe - 120 pts</li><li>John Smith - 100 pts</li><li>Alice - 95 pts</li></ol>`;
+    } else if(name==='Notes' || name==='Favorites'){
+        content.innerHTML = `
+            <p>Add items:</p>
+            <input type="text" id="noteInput" placeholder="Type something...">
+            <button class="submit-btn" onclick="addNote()">Add</button>
+            <ul id="noteList"></ul>
+        `;
+    } else if(name==='Daily Challenge'){
+        const challenges = ["Solve 3 math problems", "Read a science story", "Learn 5 new words"];
+        const today = new Date().getDate();
+        content.innerHTML = `<p>Today's Challenge: <strong>${challenges[today % challenges.length]}</strong></p>`;
+    } else if(name==='Mini Games'){
+        content.innerHTML = `<p>Guess the number between 1 and 5</p>
+        <input type="number" id="guessInput" placeholder="1-5">
+        <button class="submit-btn" onclick="checkGuess()">Guess</button>
+        <p id="guessResult"></p>`;
+    } else{
+        content.innerHTML = `<p>Feature "${name}" content coming soon! 🚀</p>`;
+    }
+
+    document.getElementById('featureScreen').classList.remove('hidden');
+}
+
+function goBackHome(){
+    document.getElementById('featureScreen').classList.add('hidden');
+    document.getElementById('homeScreen').classList.remove('hidden');
+}
+
+// AI Tutor
+function answerAI(){
+    const question = document.getElementById('aiQuestion').value.toLowerCase();
+    const answer = document.getElementById('aiAnswer');
+    if(question.includes('hello')) answer.innerText = 'Hello! How can I help you today?';
+    else if(question.includes('time')) answer.innerText = 'It\'s learning time! ⏰';
+    else answer.innerText = 'Interesting question! Keep exploring 🌟';
+}
+
+// Notes/Favorites
+function addNote(){
+    const input = document.getElementById('noteInput');
+    const ul = document.getElementById('noteList');
+    if(input.value.trim() !== ''){
+        const li = document.createElement('li');
+        li.innerText = input.value;
+        ul.appendChild(li);
+        input.value='';
+    }
+}
+
+// Mini Game
+function checkGuess(){
+    const num = Math.floor(Math.random()*5)+1;
+    const guess = Number(document.getElementById('guessInput').value);
+    const result = document.getElementById('guessResult');
+    if(guess === num){
+        result.innerText = `🎉 Correct! The number was ${num}.`;
+    } else {
+        result.innerText = `❌ Wrong! The number was ${num}. Try again.`;
+    }
+}
+</script>
 
 </body>
 </html>
