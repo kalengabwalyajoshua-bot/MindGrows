@@ -233,3 +233,32 @@ input:focus, select:focus {
     opacity: 1;
     transform: translateX(-50%) translateY(-10px);
 }
+/* =================== DARK MODE =================== */
+body.dark-mode {
+    background-color: #121212;
+    color: #eaeaea;
+}
+
+body.dark-mode .screen {
+    background-color: #121212;
+}
+
+body.dark-mode .top-bar,
+body.dark-mode .bottom-nav {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .card,
+body.dark-mode .list-item,
+body.dark-mode .assignment-card,
+body.dark-mode .announcement-card {
+    background-color: #1f1f1f;
+    color: #eaeaea;
+}
+
+body.dark-mode input,
+body.dark-mode select {
+    background-color: #1f1f1f;
+    color: #eaeaea;
+    border: 1px solid #333;
+}
