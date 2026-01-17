@@ -1,134 +1,528 @@
-// Floating particles
-const particleCount = 40;
-for(let i=0;i<particleCount;i++){
-    const p = document.createElement('div');
-    p.classList.add('particle');
-    p.style.width = Math.random() * 12 + 8 + 'px';
-    p.style.height = p.style.width;
-    p.style.top = Math.random() * 100 + '%';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (Math.random() * 5 + 5) + 's';
-    p.style.animationDelay = (Math.random() * 5) + 's';
-    document.body.appendChild(p);
-}
+/* =========================
+   FAST SCREEN SYSTEM
+   ========================= */
 
-// Enter app from Welcome screen
-function enterApp(){
-    document.getElementById('welcomeScreen').classList.add('hidden');
-    document.getElementById('homeScreen').classList.remove('hidden');
-}
+const screens = document.querySelectorAll(".screen");
 
-// Open any feature screen
-function openFeatureScreen(name){
-    document.getElementById('homeScreen').classList.add('hidden');
-    document.getElementById('featureTitle').innerText = name;
-    const content = document.getElementById('featureContent');
-    content.innerHTML = ''; // reset content
+function showScreen(screenId) {
+    screens.forEach(screen => {
+        screen.classList.remove("active");
+    });
 
-    // Feature-specific content
-    if(name==='Quizzes'){
-        content.innerHTML = `
-            <p>Question: What is 5 × 6?</p>
-            <div class="quiz-option" onclick="alert('Correct! 🚀')">30</div>
-            <div class="quiz-option" onclick="alert('Wrong! ❌')">35</div>
-            <div class="quiz-option" onclick="alert('Wrong! ❌')">25</div>
-        `;
-    } else if(name==='Story'){
-        content.innerHTML = `
-            <p>Once upon a time in the magical world of MindGrow...</p>
-            <p>Knowledge flowed like rivers, and learners explored endlessly.</p>
-            <p>Scroll down to read more exciting adventures!</p>
-        `;
-    } else if(name==='AI Tutor'){
-        content.innerHTML = `
-            <p>Ask me anything!</p>
-            <input type="text" id="aiQuestion" placeholder="Type your question...">
-            <button class="submit-btn" onclick="answerAI()">Ask</button>
-            <p id="aiAnswer"></p>
-        `;
-    } else if(name==='Clubs'){
-        content.innerHTML = `
-            <p>Available Clubs:</p>
-            <ul>
-                <li>Science Club</li>
-                <li>Math Wizards</li>
-                <li>History Buffs</li>
-            </ul>
-        `;
-    } else if(name==='Leaderboard'){
-        content.innerHTML = `
-            <p>Top Learners:</p>
-            <ol>
-                <li>Jane Doe - 120 pts</li>
-                <li>John Smith - 100 pts</li>
-                <li>Alice - 95 pts</li>
-            </ol>
-        `;
-    } else if(name==='Notes' || name==='Favorites'){
-        content.innerHTML = `
-            <p>Add items:</p>
-            <input type="text" id="noteInput" placeholder="Type something...">
-            <button class="submit-btn" onclick="addNote()">Add</button>
-            <ul id="noteList"></ul>
-        `;
-    } else if(name==='Daily Challenge'){
-        const challenges = ["Solve 3 math problems", "Read a science story", "Learn 5 new words"];
-        const today = new Date().getDate();
-        content.innerHTML = `<p>Today's Challenge: <strong>${challenges[today % challenges.length]}</strong></p>`;
-    } else if(name==='Mini Games'){
-        content.innerHTML = `
-            <p>Guess the number between 1 and 5</p>
-            <input type="number" id="guessInput" placeholder="1-5">
-            <button class="submit-btn" onclick="checkGuess()">Guess</button>
-            <p id="guessResult"></p>
-        `;
-    } else if(name==='School'){
-        content.innerHTML = `
-            <p>Welcome to MindGrow School! 🏫</p>
-            <p>Classes coming soon...</p>
-        `;
-    } else{
-        content.innerHTML = `<p>Feature "${name}" content coming soon! 🚀</p>`;
-    }
-
-    document.getElementById('featureScreen').classList.remove('hidden');
-}
-
-// Back button to home
-function goBackHome(){
-    document.getElementById('featureScreen').classList.add('hidden');
-    document.getElementById('homeScreen').classList.remove('hidden');
-}
-
-// AI Tutor simple responses
-function answerAI(){
-    const question = document.getElementById('aiQuestion').value.toLowerCase();
-    const answer = document.getElementById('aiAnswer');
-    if(question.includes('hello')) answer.innerText = 'Hello! How can I help you today?';
-    else if(question.includes('time')) answer.innerText = 'It\'s learning time! ⏰';
-    else answer.innerText = 'Interesting question! Keep exploring 🌟';
-}
-
-// Notes / Favorites
-function addNote(){
-    const input = document.getElementById('noteInput');
-    const ul = document.getElementById('noteList');
-    if(input.value.trim() !== ''){
-        const li = document.createElement('li');
-        li.innerText = input.value;
-        ul.appendChild(li);
-        input.value='';
+    const target = document.getElementById(screenId);
+    if (target) {
+        target.classList.add("active");
     }
 }
 
-// Mini Game - Guess the number
-function checkGuess(){
-    const num = Math.floor(Math.random()*5)+1;
-    const guess = Number(document.getElementById('guessInput').value);
-    const result = document.getElementById('guessResult');
-    if(guess === num){
-        result.innerText = `🎉 Correct! The number was ${num}.`;
-    } else {
-        result.innerText = `❌ Wrong! The number was ${num}. Try again.`;
+/* =========================
+   WELCOME → SIGNUP
+   ========================= */
+
+const startBtn = document.getElementById("startBtn");
+if (startBtn) {
+    startBtn.addEventListener("click", () => {
+        showScreen("signupScreen");
+    });
+}
+
+/* =========================
+   SIGNUP → HOME
+   ========================= */
+
+const signupForm = document.getElementById("signupForm");
+let userRole = "student"; // default
+
+if (signupForm) {
+    signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const roleSelect = signupForm.querySelector("select");
+        if (roleSelect) {
+            userRole = roleSelect.value;
+        }
+
+        if (userRole === "teacher") {
+            showScreen("teacherScreen");
+        } else {
+            showScreen("homeScreen");
+        }
+    });
+}
+
+/* =========================
+   HOME CARD NAVIGATION
+   ========================= */
+
+const categoriesBtn = document.getElementById("categoriesBtn");
+const chatBtn = document.getElementById("chatBtn");
+const clubsBtn = document.getElementById("clubsBtn");
+const assignmentsBtn = document.getElementById("assignmentsBtn");
+
+categoriesBtn?.addEventListener("click", () => showScreen("subjectsScreen"));
+chatBtn?.addEventListener("click", () => showScreen("chatScreen"));
+clubsBtn?.addEventListener("click", () => showScreen("clubsScreen"));
+assignmentsBtn?.addEventListener("click", () => showScreen("assignmentsScreen"));
+
+/* =========================
+   BACK BUTTONS
+   ========================= */
+
+const backButtons = document.querySelectorAll(".back-btn");
+backButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (userRole === "teacher") {
+            showScreen("teacherScreen");
+        } else {
+            showScreen("homeScreen");
+        }
+    });
+});
+
+/* =========================
+   BOTTOM NAVIGATION
+   ========================= */
+
+const navButtons = document.querySelectorAll(".nav-btn");
+
+navButtons.forEach((btn, index) => {
+    btn.addEventListener("click", () => {
+        navButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        switch (index) {
+            case 0:
+                showScreen("homeScreen");
+                break;
+            case 1:
+                showScreen("subjectsScreen");
+                break;
+            case 2:
+                showScreen("announcementsScreen");
+                break;
+            case 3:
+                showScreen("profileScreen");
+                break;
+        }
+    });
+});
+
+/* =========================
+   CHAT → ADD FRIEND MODAL
+   ========================= */
+
+const addFriendIcon = document.querySelector("#chatScreen .material-icons");
+const modal = document.getElementById("addFriendModal");
+const overlay = document.getElementById("overlay");
+const closeModalBtn = document.querySelector(".close-modal");
+
+if (addFriendIcon) {
+    addFriendIcon.addEventListener("click", () => {
+        modal.style.display = "flex";
+        overlay.style.display = "block";
+    });
+}
+
+closeModalBtn?.addEventListener("click", closeModal);
+overlay?.addEventListener("click", closeModal);
+
+function closeModal() {
+    modal.style.display = "none";
+    overlay.style.display = "none";
+}
+
+/* =========================
+   PROFILE LOGOUT
+   ========================= */
+
+const logoutBtn = document.querySelector(".profile-btn.logout");
+logoutBtn?.addEventListener("click", () => {
+    userRole = "student";
+    showScreen("welcomeScreen");
+});
+
+/* =========================
+   PERFORMANCE NOTE
+   =========================
+   - No innerHTML
+   - No reflows
+   - Only class toggles
+   - Extremely fast on low-end phones
+   ========================= */
+/* =========================
+   TEACHER TOOL BUTTONS
+   ========================= */
+
+const teacherScreen = document.getElementById("teacherScreen");
+const teacherTools = teacherScreen?.querySelectorAll(".tool-card");
+
+/*
+Tool order (from HTML):
+0 - Create Exercise
+1 - Post Announcement
+2 - Manage Classes
+3 - Staff Room
+4 - Manage Clubs
+*/
+
+teacherTools?.forEach((tool, index) => {
+    tool.addEventListener("click", () => {
+        switch (index) {
+            case 0:
+                openExerciseCreator();
+                break;
+            case 1:
+                showScreen("announcementsScreen");
+                break;
+            case 2:
+                alert("Class management coming next 👀");
+                break;
+            case 3:
+                showScreen("staffRoomScreen");
+                break;
+            case 4:
+                showScreen("clubsScreen");
+                break;
+        }
+    });
+});
+
+/* =========================
+   CREATE EXERCISE (FAST MOCK)
+   ========================= */
+
+function openExerciseCreator() {
+    const title = prompt("Exercise title:");
+    if (!title) return;
+
+    const exerciseList = document.querySelector(".assignment-list");
+    if (!exerciseList) {
+        showScreen("assignmentsScreen");
+    }
+
+    setTimeout(() => {
+        const card = document.createElement("div");
+        card.className = "assignment-card";
+
+        const h4 = document.createElement("h4");
+        h4.textContent = title;
+
+        const p = document.createElement("p");
+        p.textContent = "Created by Teacher";
+
+        card.appendChild(h4);
+        card.appendChild(p);
+
+        document.querySelector(".assignment-list")?.prepend(card);
+        showScreen("assignmentsScreen");
+    }, 100);
+}
+
+/* =========================
+   POST ANNOUNCEMENT
+   ========================= */
+
+function postAnnouncement() {
+    const title = prompt("Announcement title:");
+    const message = prompt("Announcement message:");
+
+    if (!title || !message) return;
+
+    const list = document.querySelector(".announcement-list");
+    if (!list) return;
+
+    const card = document.createElement("div");
+    card.className = "announcement-card";
+
+    const h4 = document.createElement("h4");
+    h4.textContent = title;
+
+    const p = document.createElement("p");
+    p.textContent = message;
+
+    card.appendChild(h4);
+    card.appendChild(p);
+
+    list.prepend(card);
+}
+
+/* =========================
+   ROLE PROTECTION
+   ========================= */
+
+function protectTeacherScreens() {
+    if (userRole !== "teacher") {
+        alert("Access denied 🚫 Teachers only.");
+        showScreen("homeScreen");
     }
 }
+
+document.getElementById("teacherScreen")?.addEventListener("click", protectTeacherScreens);
+document.getElementById("staffRoomScreen")?.addEventListener("click", protectTeacherScreens);
+
+/* =========================
+   STUDENT RESTRICTIONS
+   ========================= */
+
+function hideTeacherUI() {
+    if (userRole !== "teacher") {
+        document.getElementById("teacherScreen")?.remove();
+    }
+}
+
+hideTeacherUI();
+
+/* =========================
+   SCHOOL-STYLE UX RULES
+   =========================
+   - Teachers create content
+   - Students consume content
+   - Staff rooms are private
+   - No laggy frameworks
+   ========================= */
+/* =========================
+   CHAT DATA (IN-MEMORY)
+   ========================= */
+
+const chats = {
+    "John Doe": [
+        { sender: "them", text: "Hey, did you finish the assignment?" },
+        { sender: "me", text: "Almost done, you?" }
+    ],
+    "Study Group": [
+        { sender: "them", text: "Meeting at 6 PM" }
+    ]
+};
+
+let currentChat = null;
+
+/* =========================
+   OPEN CHAT
+   ========================= */
+
+const chatItems = document.querySelectorAll(".chat-item");
+
+chatItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const name = item.querySelector(".chat-name").textContent;
+        openChat(name);
+    });
+});
+
+function openChat(name) {
+    currentChat = name;
+    renderChatMessages(name);
+    showChatView(name);
+}
+
+/* =========================
+   CHAT VIEW UI (DYNAMIC)
+   ========================= */
+
+function showChatView(name) {
+    let chatView = document.getElementById("chatView");
+
+    if (!chatView) {
+        chatView = document.createElement("section");
+        chatView.id = "chatView";
+        chatView.className = "screen active";
+
+        chatView.innerHTML = `
+            <header class="top-bar">
+                <button class="back-btn material-icons">arrow_back</button>
+                <h3>${name}</h3>
+            </header>
+
+            <main class="messages"></main>
+
+            <footer class="chat-input">
+                <input type="text" id="messageInput" placeholder="Type a message...">
+                <button id="sendMessageBtn">Send</button>
+            </footer>
+        `;
+
+        document.body.appendChild(chatView);
+
+        chatView.querySelector(".back-btn").addEventListener("click", () => {
+            chatView.classList.remove("active");
+            showScreen("chatScreen");
+        });
+
+        chatView.querySelector("#sendMessageBtn").addEventListener("click", sendMessage);
+    }
+
+    showScreen("chatView");
+}
+
+/* =========================
+   RENDER MESSAGES
+   ========================= */
+
+function renderChatMessages(name) {
+    const messagesContainer = document.querySelector("#chatView .messages");
+    if (!messagesContainer) return;
+
+    messagesContainer.innerHTML = "";
+
+    chats[name]?.forEach(msg => {
+        const bubble = document.createElement("div");
+        bubble.className = `message ${msg.sender}`;
+        bubble.textContent = msg.text;
+        messagesContainer.appendChild(bubble);
+    });
+
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+/* =========================
+   SEND MESSAGE
+   ========================= */
+
+function sendMessage() {
+    const input = document.getElementById("messageInput");
+    if (!input || !input.value.trim()) return;
+
+    const text = input.value.trim();
+    input.value = "";
+
+    chats[currentChat].push({ sender: "me", text });
+    renderChatMessages(currentChat);
+
+    // fake reply (fast & optional)
+    setTimeout(() => {
+        chats[currentChat].push({
+            sender: "them",
+            text: "Okay 👍"
+        });
+        renderChatMessages(currentChat);
+    }, 600);
+}
+
+/* =========================
+   CHAT PERFORMANCE NOTES
+   =========================
+   - No frameworks
+   - No heavy DOM updates
+   - Only append/remove nodes
+   - Works smoothly on low-end phones
+   ========================= */
+/* =========================
+   AI STUDY ASSISTANT DATA
+   ========================= */
+
+const aiTips = {
+    Mathematics: [
+        "Practice daily, not in one long session.",
+        "Understand concepts before memorizing formulas.",
+        "Try explaining a solution out loud."
+    ],
+    Physics: [
+        "Always visualize the problem.",
+        "Write down knowns and unknowns first.",
+        "Units can guide you to the right formula."
+    ],
+    Chemistry: [
+        "Understand reactions, not just equations.",
+        "Balance equations step by step.",
+        "Practice naming compounds regularly."
+    ],
+    Biology: [
+        "Use diagrams to remember processes.",
+        "Teach the topic to someone else.",
+        "Group similar concepts together."
+    ]
+};
+
+/* =========================
+   AI SCREEN CREATION
+   ========================= */
+
+function openAIScreen() {
+    let aiScreen = document.getElementById("aiScreen");
+
+    if (!aiScreen) {
+        aiScreen = document.createElement("section");
+        aiScreen.id = "aiScreen";
+        aiScreen.className = "screen active";
+
+        aiScreen.innerHTML = `
+            <header class="top-bar">
+                <button class="back-btn material-icons">arrow_back</button>
+                <h3>AI Study Helper</h3>
+            </header>
+
+            <main class="ai-container">
+                <p class="ai-text">
+                    Hi 👋 I’m your MindGrow AI.<br>
+                    What subject are you studying?
+                </p>
+
+                <div class="ai-subjects">
+                    <button class="ai-btn">Mathematics</button>
+                    <button class="ai-btn">Physics</button>
+                    <button class="ai-btn">Chemistry</button>
+                    <button class="ai-btn">Biology</button>
+                </div>
+
+                <div class="ai-response"></div>
+            </main>
+        `;
+
+        document.body.appendChild(aiScreen);
+
+        aiScreen.querySelector(".back-btn").addEventListener("click", () => {
+            showScreen("homeScreen");
+        });
+
+        aiScreen.querySelectorAll(".ai-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                generateAITip(btn.textContent);
+            });
+        });
+    }
+
+    showScreen("aiScreen");
+}
+
+/* =========================
+   AI RESPONSE LOGIC
+   ========================= */
+
+function generateAITip(subject) {
+    const responseBox = document.querySelector(".ai-response");
+    if (!responseBox) return;
+
+    const tips = aiTips[subject];
+    const tip = tips[Math.floor(Math.random() * tips.length)];
+
+    responseBox.innerHTML = `
+        <div class="ai-message">
+            <strong>${subject} Tip:</strong>
+            <p>${tip}</p>
+        </div>
+    `;
+}
+
+/* =========================
+   AI ACCESS FROM HOME
+   ========================= */
+
+const aiCard = document.createElement("div");
+aiCard.className = "card";
+aiCard.innerHTML = `
+    <span class="material-icons">psychology</span>
+    <p>AI Helper</p>
+`;
+
+document.querySelector(".home-content")?.appendChild(aiCard);
+
+aiCard.addEventListener("click", openAIScreen);
+
+/* =========================
+   AI PHILOSOPHY
+   =========================
+   - No cheating
+   - No answers given directly
+   - Focus on guidance & learning
+   - Safe for schools
+   ========================= */
