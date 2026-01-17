@@ -40,6 +40,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // -----------------------------
+    // HELPER: TOAST POPUPS
+    // -----------------------------
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerText = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add("show"), 100);
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 400);
+        }, 2500);
+    }
+
+    // -----------------------------
     // WELCOME → SIGNUP
     // -----------------------------
     startBtn.addEventListener("click", () => showScreen(screens.signup));
@@ -105,12 +121,13 @@ document.addEventListener("DOMContentLoaded", function() {
         // ---------- QUOTE REPLY ----------
         else if (transcript.startsWith("quote")) {
             const response = transcript.replace("quote", "").trim();
-            alert(`You said: "${response}"`);
+            showToast(`You said: "${response}"`);
         }
 
         // ---------- SUGGESTION MODE ----------
         else if (transcript.includes("tell me what should i do")) {
             const suggestion = "Focus on learning a new topic today! Maybe try Mathematics or Physics!";
+            showToast(suggestion); // shows toast
             const utter = new SpeechSynthesisUtterance(suggestion);
             synth.speak(utter);
         }
@@ -126,7 +143,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // Start voice recognition
     function startVoiceControl() {
         recognition.start();
-        alert("Voice control activated! Speak your command.");
+        voiceBtn.classList.add("active"); // Mic pulse
+        showToast("Voice control activated! Speak your command.");
+
+        recognition.onend = () => {
+            voiceBtn.classList.remove("active"); // Stop mic pulse
+        };
     }
 
     voiceBtn.addEventListener("click", startVoiceControl);
