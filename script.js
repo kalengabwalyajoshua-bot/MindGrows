@@ -284,3 +284,11 @@ if (darkModeToggle) {
         );
     });
 }
+// ===================== OPEN SETTINGS =====================
+const navButtons = document.querySelectorAll(".nav-btn");
+
+if (navButtons[3]) {
+    navButtons[3].addEventListener("click", () => {
+        showScreen(document.getElementById("settingsScreen"));
+    });
+}
