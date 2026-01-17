@@ -4,137 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindGrow</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
+        /* Reset */
+        * {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0a0a0a;
-            color: #fff;
-            overflow: hidden;
-        }
-
-        .screen {
-            display: none;
-            height: 100vh;
-            width: 100%;
-            text-align: center;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .active {
+        /* Body & background */
+        body {
+            height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-        }
-
-        /* Welcome Screen */
-        .welcome-container {
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-            animation: subtleGlow 3s infinite alternate;
-        }
-
-        .welcome-container h1 {
-            color: #e63946; /* deep red */
-            font-size: 3em;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px #e63946, 0 0 30px #fff;
-        }
-
-        #getStartedBtn {
-            padding: 15px 35px;
-            font-size: 18px;
-            color: #fff;
-            background-color: #1a1a1a;
-            border: 2px solid #e63946;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 0 10px #e63946;
-            transition: all 0.3s ease;
-        }
-
-        #getStartedBtn:hover {
-            background-color: #e63946;
-            color: #0a0a0a;
-            transform: scale(1.1);
-            box-shadow: 0 0 25px #e63946, 0 0 50px #fff inset;
-        }
-
-        @keyframes subtleGlow {
-            0% { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); }
-            100% { background: linear-gradient(135deg, #1a1a1a, #0a0a0a); }
-        }
-
-        /* Home Screen */
-        .home-container {
-            background: linear-gradient(135deg, #0a0a0a, #1f1f1f);
-            color: #fff;
-            padding-top: 50px;
-        }
-
-        .home-container h2 {
-            font-size: 2.5em;
-            margin-bottom: 40px;
-            color: #fff;
-            text-shadow: 0 0 15px #fff, 0 0 25px #e63946;
-        }
-
-        .home-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
             align-items: center;
+            background: linear-gradient(135deg, #c0e7ff, #f0faff);
+            overflow: hidden;
+            color: #ffffff;
         }
 
-        .home-buttons button {
+        /* Welcome screen */
+        .welcome-screen {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Floating shapes */
+        .floating-shapes .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape1 { width: 60px; height: 60px; top: 10%; left: 20%; animation-delay: 0s; }
+        .shape2 { width: 80px; height: 80px; top: 30%; left: 70%; animation-delay: 2s; }
+        .shape3 { width: 50px; height: 50px; top: 60%; left: 40%; animation-delay: 4s; }
+        .shape4 { width: 70px; height: 70px; top: 80%; left: 80%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(15px); }
+        }
+
+        /* Welcome text */
+        .welcome-text {
+            font-size: 3rem;
+            color: #e0f7ff;
+            text-shadow: 0 0 20px #ffffff, 0 0 40px #b0e0ff;
+            margin-bottom: 20px;
+            animation: glowText 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px #ffffff, 0 0 20px #b0e0ff; }
+            100% { text-shadow: 0 0 30px #ffffff, 0 0 60px #a0dfff; }
+        }
+
+        /* Subtitle */
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ffffffaa;
+            margin-bottom: 40px;
+        }
+
+        /* Button */
+        .enter-btn {
+            background: linear-gradient(135deg, #9fe8ff, #c0e7ff);
+            border: none;
             padding: 15px 40px;
-            font-size: 18px;
-            color: #fff;
-            background-color: #1a1a1a;
-            border: 2px solid #e63946;
-            border-radius: 10px;
+            border-radius: 50px;
+            font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 0 10px #e63946;
+            box-shadow: 0 0 20px #a0dfff, 0 0 40px #c0e7ff;
             transition: all 0.3s ease;
         }
 
-        .home-buttons button:hover {
-            background-color: #e63946;
-            color: #0a0a0a;
-            transform: scale(1.05);
-            box-shadow: 0 0 25px #e63946, 0 0 50px #fff inset;
+        .enter-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ffffff, 0 0 60px #a0dfff;
         }
-
     </style>
 </head>
 <body>
-    <!-- Welcome Screen -->
-    <div id="welcomeScreen" class="screen active welcome-container">
-        <h1>Welcome to MindGrow</h1>
-        <button id="getStartedBtn">Get Started</button>
-    </div>
-
-    <!-- Home/Dashboard Screen -->
-    <div id="homeScreen" class="screen home-container">
-        <h2>MindGrow Home</h2>
-        <div class="home-buttons">
-            <button id="storyBtn">Stories</button>
-            <button id="quizBtn">Quizzes</button>
-            <button id="messageBtn">Messages</button>
+    <div class="welcome-screen">
+        <div class="floating-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
         </div>
+        <h1 class="welcome-text">Welcome to MindGrow</h1>
+        <p class="subtitle">✨ Your magical journey to learning begins here ✨</p>
+        <button class="enter-btn" onclick="enterApp()">Enter</button>
     </div>
 
     <script>
-        const getStartedBtn = document.getElementById('getStartedBtn');
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const homeScreen = document.getElementById('homeScreen');
-
-        getStartedBtn.addEventListener('click', () => {
-            welcomeScreen.classList.remove('active');
-            homeScreen.classList.add('active');
-        });
+        function enterApp() {
+            alert("Welcome to your magical learning journey! 🌟");
+            // You can redirect to your home screen here later:
+            // window.location.href = "home.html";
+        }
     </script>
 </body>
 </html>
