@@ -72,7 +72,28 @@ h1, h2, h3, h4, p {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+.home-controls {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
 
+.home-controls .card {
+    flex: 1 1 30%;
+    max-width: 120px;
+    min-width: 100px;
+    padding: 15px;
+    font-size: 0.9rem;
+}
+
+.home-controls .card span.material-icons {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: #38a169;
+}
 /* =================== INPUTS =================== */
 input, select {
     width: 90%;
