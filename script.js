@@ -527,41 +527,42 @@ aiCard.addEventListener("click", openAIScreen);
    - Safe for schools
    ========================= */
 /* =========================
-   UNIVERSAL BACK BUTTON (DYNAMIC + STATIC)
+   UNIVERSAL BACK BUTTON FIX
    ========================= */
 
+function universalBack() {
+    // Find the currently active screen
+    const currentScreen = document.querySelector(".screen.active");
+    if (!currentScreen) return;
+
+    // Decide where to go
+    switch (currentScreen.id) {
+        case "homeScreen":
+        case "teacherScreen":
+            // Already at main dashboards — do nothing or keep on screen
+            break;
+        case "signupScreen":
+            showScreen("welcomeScreen");
+            break;
+        case "chatScreen":
+            showScreen(userRole === "teacher" ? "teacherScreen" : "homeScreen");
+            break;
+        case "chatView":
+            showScreen("chatScreen");
+            break;
+        case "aiScreen":
+            showScreen("homeScreen");
+            break;
+        default:
+            // Any other screen fallback
+            showScreen(userRole === "teacher" ? "teacherScreen" : "homeScreen");
+            break;
+    }
+}
+
+// Attach click listener to body (works for static + dynamic buttons)
 document.body.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("back-btn")) return;
-
-    const current = document.querySelector(".screen.active");
-    if (!current) return;
-
-    // Teacher dashboard
-    if (userRole === "teacher" && current.id === "teacherScreen") {
-        showScreen("teacherScreen");
-        return;
-    }
-
-    // Student dashboard
-    if (userRole === "student" && current.id === "homeScreen") {
-        showScreen("homeScreen");
-        return;
-    }
-
-    // Chat screen
-    if (current.id === "chatView") {
-        showScreen("chatScreen");
-        return;
-    }
-
-    // AI screen
-    if (current.id === "aiScreen") {
-        showScreen("homeScreen");
-        return;
-    }
-
-    // Fallback for any other screen
-    if (current.id.includes("Screen")) {
-        showScreen(userRole === "teacher" ? "teacherScreen" : "homeScreen");
+    if (e.target.classList.contains("back-btn") || e.target.closest(".back-btn")) {
+        universalBack();
     }
 });
