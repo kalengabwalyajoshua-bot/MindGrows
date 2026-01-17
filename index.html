@@ -8,297 +8,337 @@
     <!-- Main Styles -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Icons (fast & lightweight) -->
+    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* Quick inline polish for immediate design */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            overflow: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Welcome Screen */
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .app-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2f855a;
+            margin-bottom: 10px;
+        }
+
+        .app-tagline {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #4a5568;
+        }
+
+        .primary-btn {
+            padding: 15px 40px;
+            background-color: #2f855a;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            background-color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid #cbd5e0;
+            outline: none;
+        }
+
+        /* Cards */
+        .home-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .card p {
+            margin-top: 10px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 10px 0;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #4a5568;
+            transition: color 0.2s;
+        }
+
+        .nav-btn.active {
+            color: #2f855a;
+        }
+
+        /* General list items */
+        .list-container, .chat-list, .assignment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .list-item, .tool-card, .profile-btn, .assignment-card, .announcement-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .list-item:hover, .tool-card:hover, .profile-btn:hover, .assignment-card:hover, .announcement-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+            color: #4a5568;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            z-index: 200;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e0;
+            margin-bottom: 15px;
+        }
+
+        .secondary-btn {
+            background-color: #e2e8f0;
+            color: #2d3748;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ========================= -->
-<!-- WELCOME SCREEN -->
-<!-- ========================= -->
-<section id="welcomeScreen" class="screen active">
-    <div class="welcome-container">
-        <h1 class="app-title">MindGrow</h1>
-        <p class="app-tagline">
-            Learn • Connect • Grow
-        </p>
-        <button id="startBtn" class="primary-btn">
-            Get Started
-        </button>
+    <!-- ========================= -->
+    <!-- WELCOME SCREEN -->
+    <!-- ========================= -->
+    <section id="welcomeScreen" class="screen active">
+        <div class="welcome-container">
+            <h1 class="app-title">MindGrow</h1>
+            <p class="app-tagline">Learn • Connect • Grow</p>
+            <button id="startBtn" class="primary-btn">Get Started</button>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- SIGN UP SCREEN -->
+    <!-- ========================= -->
+    <section id="signupScreen" class="screen">
+        <div class="signup-container">
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <input type="text" placeholder="Full Name" required>
+                <input type="text" placeholder="School Name" required>
+                <select required>
+                    <option value="" disabled selected>Select Role</option>
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+                <button type="submit" class="primary-btn">Continue</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- HOME SCREEN -->
+    <!-- ========================= -->
+    <section id="homeScreen" class="screen">
+        <header class="top-bar">
+            <input type="text" placeholder="Search subjects, topics..." class="search-box">
+        </header>
+        <main class="home-content">
+            <div class="card" id="categoriesBtn">
+                <span class="material-icons">menu_book</span>
+                <p>Subjects</p>
+            </div>
+            <div class="card" id="chatBtn">
+                <span class="material-icons">chat</span>
+                <p>Chats</p>
+            </div>
+            <div class="card" id="clubsBtn">
+                <span class="material-icons">groups</span>
+                <p>Clubs</p>
+            </div>
+            <div class="card" id="assignmentsBtn">
+                <span class="material-icons">assignment</span>
+                <p>Exercises</p>
+            </div>
+        </main>
+        <nav class="bottom-nav">
+            <button class="nav-btn active"><span class="material-icons">home</span></button>
+            <button class="nav-btn"><span class="material-icons">search</span></button>
+            <button class="nav-btn"><span class="material-icons">notifications</span></button>
+            <button class="nav-btn"><span class="material-icons">person</span></button>
+        </nav>
+    </section>
+
+    <!-- ========================= -->
+    <!-- Other Screens -->
+    <!-- ========================= -->
+    <section id="subjectsScreen" class="screen">
+        <header class="top-bar">
+            <button class="back-btn material-icons">arrow_back</button>
+            <h3>Subjects</h3>
+        </header>
+        <main class="list-container">
+            <button class="list-item">Mathematics</button>
+            <button class="list-item">Physics</button>
+            <button class="list-item">Chemistry</button>
+            <button class="list-item">Biology</button>
+            <button class="list-item">Computer Science</button>
+            <button class="list-item">Geography</button>
+            <button class="list-item">History</button>
+        </main>
+    </section>
+
+    <section id="chatScreen" class="screen">
+        <header class="top-bar">
+            <button class="back-btn material-icons">arrow_back</button>
+            <h3>Chats</h3>
+            <span class="material-icons">person_add</span>
+        </header>
+        <main class="chat-list">
+            <div class="chat-item">
+                <p class="chat-name">John Doe</p>
+                <p class="chat-preview">Hey, did you finish the assignment?</p>
+            </div>
+            <div class="chat-item">
+                <p class="chat-name">Study Group</p>
+                <p class="chat-preview">Meeting at 6 PM</p>
+            </div>
+        </main>
+    </section>
+
+    <!-- Add all other screens here similarly... -->
+
+    <!-- Modal -->
+    <div id="addFriendModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Friend</h3>
+            <input type="text" placeholder="Search by name or ID">
+            <button class="primary-btn">Send Request</button>
+            <button class="secondary-btn close-modal">Cancel</button>
+        </div>
     </div>
-</section>
 
-<!-- ========================= -->
-<!-- SIGN UP SCREEN -->
-<!-- ========================= -->
-<section id="signupScreen" class="screen">
-    <div class="signup-container">
-        <h2>Create Account</h2>
+    <div id="overlay"></div>
 
-        <form id="signupForm">
-            <input type="text" placeholder="Full Name" required>
-            <input type="text" placeholder="School Name" required>
-
-            <select required>
-                <option value="" disabled selected>Select Role</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select>
-
-            <button type="submit" class="primary-btn">
-                Continue
-            </button>
-        </form>
-    </div>
-</section>
-
-<!-- ========================= -->
-<!-- HOME SCREEN -->
-<!-- ========================= -->
-<section id="homeScreen" class="screen">
-
-    <!-- Top Bar -->
-    <header class="top-bar">
-        <input type="text" placeholder="Search subjects, topics..." class="search-box">
-    </header>
-
-    <!-- Main Content -->
-    <main class="home-content">
-        <div class="card" id="categoriesBtn">
-            <span class="material-icons">menu_book</span>
-            <p>Subjects</p>
-        </div>
-
-        <div class="card" id="chatBtn">
-            <span class="material-icons">chat</span>
-            <p>Chats</p>
-        </div>
-
-        <div class="card" id="clubsBtn">
-            <span class="material-icons">groups</span>
-            <p>Clubs</p>
-        </div>
-
-        <div class="card" id="assignmentsBtn">
-            <span class="material-icons">assignment</span>
-            <p>Exercises</p>
-        </div>
-    </main>
-
-    <!-- Bottom Navigation (Like Instagram/TikTok) -->
-    <nav class="bottom-nav">
-        <button class="nav-btn active">
-            <span class="material-icons">home</span>
-        </button>
-
-        <button class="nav-btn">
-            <span class="material-icons">search</span>
-        </button>
-
-        <button class="nav-btn">
-            <span class="material-icons">notifications</span>
-        </button>
-
-        <button class="nav-btn">
-            <span class="material-icons">person</span>
-        </button>
-    </nav>
-
-</section>
-
-<!-- ========================= -->
-<!-- SCRIPT -->
-<!-- ========================= -->
-<script src="script.js"></script>
-
+    <!-- ========================= -->
+    <!-- SCRIPT -->
+    <!-- ========================= -->
+    <script src="script.js"></script>
 </body>
 </html>
-<!-- ========================= -->
-<!-- SUBJECTS SCREEN -->
-<!-- ========================= -->
-<section id="subjectsScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Subjects</h3>
-    </header>
-
-    <main class="list-container">
-        <button class="list-item">Mathematics</button>
-        <button class="list-item">Physics</button>
-        <button class="list-item">Chemistry</button>
-        <button class="list-item">Biology</button>
-        <button class="list-item">Computer Science</button>
-        <button class="list-item">Geography</button>
-        <button class="list-item">History</button>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- CHAT SCREEN -->
-<!-- ========================= -->
-<section id="chatScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Chats</h3>
-        <span class="material-icons">person_add</span>
-    </header>
-
-    <main class="chat-list">
-        <div class="chat-item">
-            <p class="chat-name">John Doe</p>
-            <p class="chat-preview">Hey, did you finish the assignment?</p>
-        </div>
-
-        <div class="chat-item">
-            <p class="chat-name">Study Group</p>
-            <p class="chat-preview">Meeting at 6 PM</p>
-        </div>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- PROFILE SCREEN -->
-<!-- ========================= -->
-<section id="profileScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Profile</h3>
-    </header>
-
-    <main class="profile-container">
-        <div class="profile-avatar material-icons">person</div>
-        <h2>User Name</h2>
-        <p>School Name</p>
-
-        <button class="profile-btn">Edit Profile</button>
-        <button class="profile-btn">Settings</button>
-        <button class="profile-btn logout">Log Out</button>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- TEACHER DASHBOARD -->
-<!-- ========================= -->
-<section id="teacherScreen" class="screen">
-
-    <header class="top-bar">
-        <h3>Teacher Panel</h3>
-    </header>
-
-    <main class="teacher-tools">
-        <button class="tool-card">Create Exercise</button>
-        <button class="tool-card">Post Announcement</button>
-        <button class="tool-card">Manage Classes</button>
-        <button class="tool-card">Staff Room</button>
-        <button class="tool-card">Manage Clubs</button>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- STAFF ROOM -->
-<!-- ========================= -->
-<section id="staffRoomScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Staff Room</h3>
-    </header>
-
-    <main class="staff-room">
-        <p>Private discussions for teachers and staff.</p>
-    </main>
-
-</section>
-<!-- ========================= -->
-<!-- ANNOUNCEMENTS SCREEN -->
-<!-- ========================= -->
-<section id="announcementsScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Announcements</h3>
-    </header>
-
-    <main class="announcement-list">
-        <div class="announcement-card">
-            <h4>School Assembly</h4>
-            <p>There will be a general assembly on Friday.</p>
-        </div>
-
-        <div class="announcement-card">
-            <h4>Club Registration</h4>
-            <p>Science club registration closes tomorrow.</p>
-        </div>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- CLUBS SCREEN -->
-<!-- ========================= -->
-<section id="clubsScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Clubs</h3>
-    </header>
-
-    <main class="list-container">
-        <button class="list-item">Science Club</button>
-        <button class="list-item">Math Club</button>
-        <button class="list-item">Debate Club</button>
-        <button class="list-item">ICT Club</button>
-        <button class="list-item">Sports Club</button>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- ASSIGNMENTS / EXERCISES -->
-<!-- ========================= -->
-<section id="assignmentsScreen" class="screen">
-
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Exercises</h3>
-    </header>
-
-    <main class="assignment-list">
-        <div class="assignment-card">
-            <h4>Algebra Homework</h4>
-            <p>Due: Tomorrow</p>
-        </div>
-
-        <div class="assignment-card">
-            <h4>Physics Quiz</h4>
-            <p>Due: Friday</p>
-        </div>
-    </main>
-
-</section>
-
-<!-- ========================= -->
-<!-- ADD FRIEND MODAL -->
-<!-- ========================= -->
-<div id="addFriendModal" class="modal">
-
-    <div class="modal-content">
-        <h3>Add Friend</h3>
-        <input type="text" placeholder="Search by name or ID">
-        <button class="primary-btn">Send Request</button>
-        <button class="secondary-btn close-modal">Cancel</button>
-    </div>
-
-</div>
-
-<!-- ========================= -->
-<!-- GLOBAL OVERLAY -->
-<!-- ========================= -->
-<div id="overlay"></div>
