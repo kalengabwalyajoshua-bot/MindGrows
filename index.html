@@ -13,21 +13,35 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Body & background */
         body {
             height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #c0e7ff, #f0faff);
+            color: #ffffff;
+        }
+
+        /* Common for screens */
+        .screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #c0e7ff, #f0faff);
-            overflow: hidden;
-            color: #ffffff;
+            flex-direction: column;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Welcome screen */
         .welcome-screen {
             text-align: center;
-            position: relative;
             z-index: 2;
         }
 
@@ -51,21 +65,24 @@
 
         /* Welcome text */
         .welcome-text {
-            font-size: 3rem;
-            color: #e0f7ff;
-            text-shadow: 0 0 20px #ffffff, 0 0 40px #b0e0ff;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ffffff, #a0dfff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px #ffffff, 0 0 40px #a0dfff, 0 0 60px #c0f0ff;
             margin-bottom: 20px;
             animation: glowText 2s ease-in-out infinite alternate;
         }
 
         @keyframes glowText {
-            0% { text-shadow: 0 0 10px #ffffff, 0 0 20px #b0e0ff; }
-            100% { text-shadow: 0 0 30px #ffffff, 0 0 60px #a0dfff; }
+            0% { text-shadow: 0 0 20px #ffffff, 0 0 40px #a0dfff, 0 0 60px #c0f0ff; }
+            100% { text-shadow: 0 0 40px #ffffff, 0 0 80px #a0e0ff, 0 0 100px #b0f0ff; }
         }
 
         /* Subtitle */
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #ffffffaa;
             margin-bottom: 40px;
         }
@@ -74,38 +91,64 @@
         .enter-btn {
             background: linear-gradient(135deg, #9fe8ff, #c0e7ff);
             border: none;
-            padding: 15px 40px;
+            padding: 15px 50px;
             border-radius: 50px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
-            box-shadow: 0 0 20px #a0dfff, 0 0 40px #c0e7ff;
+            box-shadow: 0 0 25px #a0dfff, 0 0 50px #c0e7ff;
             transition: all 0.3s ease;
         }
 
         .enter-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 30px #ffffff, 0 0 60px #a0dfff;
+            box-shadow: 0 0 35px #ffffff, 0 0 70px #a0dfff;
+        }
+
+        /* Second screen */
+        .second-screen {
+            background: linear-gradient(135deg, #d0f0ff, #e0f8ff);
+            color: #333;
+            text-align: center;
+        }
+
+        .second-screen h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .second-screen p {
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
-    <div class="welcome-screen">
+
+    <!-- Welcome Screen -->
+    <div class="screen welcome-screen" id="welcomeScreen">
         <div class="floating-shapes">
             <div class="shape shape1"></div>
             <div class="shape shape2"></div>
             <div class="shape shape3"></div>
             <div class="shape shape4"></div>
         </div>
-        <h1 class="welcome-text">Welcome to MindGrow</h1>
+        <h1 class="welcome-text">MindGrow</h1>
         <p class="subtitle">✨ Your magical journey to learning begins here ✨</p>
         <button class="enter-btn" onclick="enterApp()">Enter</button>
     </div>
 
+    <!-- Second Screen -->
+    <div class="screen second-screen hidden" id="secondScreen">
+        <h2>Welcome to MindGrow Home!</h2>
+        <p>This is your space to explore stories, quizzes, and clubs. More features coming soon! 🌟</p>
+    </div>
+
     <script>
         function enterApp() {
-            alert("Welcome to your magical learning journey! 🌟");
-            // You can redirect to your home screen here later:
-            // window.location.href = "home.html";
+            const welcome = document.getElementById('welcomeScreen');
+            const second = document.getElementById('secondScreen');
+            // Fade out welcome, fade in second
+            welcome.classList.add('hidden');
+            second.classList.remove('hidden');
         }
     </script>
 </body>
