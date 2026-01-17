@@ -1,22 +1,21 @@
-// Wait until the DOM is fully loaded
+// ===================== SCRIPT.JS =====================
 document.addEventListener("DOMContentLoaded", function() {
-    // -------------------------
-    // SCREEN ELEMENTS
-    // -------------------------
-    const welcomeScreen = document.getElementById("welcomeScreen");
-    const signupScreen = document.getElementById("signupScreen");
-    const homeScreen = document.getElementById("homeScreen");
-    const subjectsScreen = document.getElementById("subjectsScreen");
-    const chatScreen = document.getElementById("chatScreen");
-    const clubsScreen = document.getElementById("clubsScreen");
-    const assignmentsScreen = document.getElementById("assignmentsScreen");
+    // -----------------------------
+    // SCREENS
+    // -----------------------------
+    const screens = {
+        welcome: document.getElementById("welcomeScreen"),
+        signup: document.getElementById("signupScreen"),
+        home: document.getElementById("homeScreen"),
+        subjects: document.getElementById("subjectsScreen"),
+        chat: document.getElementById("chatScreen"),
+        clubs: document.getElementById("clubsScreen"),
+        assignments: document.getElementById("assignmentsScreen")
+    };
 
-    const overlay = document.getElementById("overlay");
-    const addFriendModal = document.getElementById("addFriendModal");
-
-    // -------------------------
+    // -----------------------------
     // BUTTONS
-    // -------------------------
+    // -----------------------------
     const startBtn = document.getElementById("startBtn");
     const signupForm = document.getElementById("signupForm");
 
@@ -24,97 +23,116 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatBtn = document.getElementById("chatBtn");
     const clubsBtn = document.getElementById("clubsBtn");
     const assignmentsBtn = document.getElementById("assignmentsBtn");
+    const voiceBtn = document.getElementById("voiceBtn");
 
     const backBtns = document.querySelectorAll(".back-btn");
+
+    const overlay = document.getElementById("overlay");
+    const addFriendModal = document.getElementById("addFriendModal");
     const modalCloseBtns = document.querySelectorAll(".close-modal");
 
-    // -------------------------
-    // HELPER FUNCTION
-    // -------------------------
+    // -----------------------------
+    // HELPER: SHOW SCREEN
+    // -----------------------------
     function showScreen(screen) {
-        // Hide all screens
-        const allScreens = document.querySelectorAll(".screen");
-        allScreens.forEach(s => s.classList.remove("active"));
-
-        // Show the target screen
+        Object.values(screens).forEach(s => s.classList.remove("active"));
         screen.classList.add("active");
     }
 
-    // -------------------------
-    // START BUTTON (WELCOME → SIGNUP)
-    // -------------------------
-    startBtn.addEventListener("click", function() {
-        showScreen(signupScreen);
-    });
+    // -----------------------------
+    // WELCOME → SIGNUP
+    // -----------------------------
+    startBtn.addEventListener("click", () => showScreen(screens.signup));
 
-    // -------------------------
-    // SIGNUP FORM SUBMIT (SIGNUP → HOME)
-    // -------------------------
+    // -----------------------------
+    // SIGNUP → HOME
+    // -----------------------------
     signupForm.addEventListener("submit", function(e) {
-        e.preventDefault(); // Prevent page reload
-        showScreen(homeScreen);
+        e.preventDefault();
+        showScreen(screens.home);
     });
 
-    // -------------------------
-    // HOME BUTTONS
-    // -------------------------
-    categoriesBtn.addEventListener("click", function() {
-        showScreen(subjectsScreen);
-    });
+    // -----------------------------
+    // HOME BUTTONS → SCREENS
+    // -----------------------------
+    categoriesBtn.addEventListener("click", () => showScreen(screens.subjects));
+    chatBtn.addEventListener("click", () => showScreen(screens.chat));
+    clubsBtn.addEventListener("click", () => showScreen(screens.clubs));
+    assignmentsBtn.addEventListener("click", () => showScreen(screens.assignments));
 
-    chatBtn.addEventListener("click", function() {
-        showScreen(chatScreen);
-    });
-
-    clubsBtn.addEventListener("click", function() {
-        showScreen(clubsScreen);
-    });
-
-    assignmentsBtn.addEventListener("click", function() {
-        showScreen(assignmentsScreen);
-    });
-
-    // -------------------------
-    // BACK BUTTONS
-    // -------------------------
+    // -----------------------------
+    // BACK BUTTONS → HOME
+    // -----------------------------
     backBtns.forEach(btn => {
-        btn.addEventListener("click", function() {
-            // Find parent screen of this button
-            const parentScreen = btn.closest(".screen");
-
-            // If it's home-screen-level, go back to home
-            if (parentScreen === homeScreen) return;
-
-            showScreen(homeScreen);
-        });
+        btn.addEventListener("click", () => showScreen(screens.home));
     });
 
-    // -------------------------
-    // MODAL CLOSE BUTTONS
-    // -------------------------
+    // -----------------------------
+    // MODALS
+    // -----------------------------
     modalCloseBtns.forEach(btn => {
-        btn.addEventListener("click", function() {
+        btn.addEventListener("click", () => {
             addFriendModal.style.display = "none";
             overlay.style.display = "none";
         });
     });
 
-    // -------------------------
-    // OVERLAY CLICK (close modal)
-    // -------------------------
-    overlay.addEventListener("click", function() {
+    overlay.addEventListener("click", () => {
         addFriendModal.style.display = "none";
         overlay.style.display = "none";
     });
 
-    // -------------------------
-    // EXAMPLE: OPEN ADD FRIEND MODAL
-    // -------------------------
-    // Later you can attach this to any button you want
-    // Example: open when chat screen is active
-    // const openModalBtn = document.getElementById("openModalBtn");
-    // openModalBtn.addEventListener("click", function() {
-    //     addFriendModal.style.display = "block";
-    //     overlay.style.display = "block";
-    // });
+    // -----------------------------
+    // VOICE CONTROL
+    // -----------------------------
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+
+    const synth = window.speechSynthesis;
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+        console.log("You said:", transcript);
+
+        // ---------- NAVIGATION ----------
+        if (transcript.includes("go to home")) showScreen(screens.home);
+        else if (transcript.includes("go to chat")) showScreen(screens.chat);
+        else if (transcript.includes("go to subjects")) showScreen(screens.subjects);
+        else if (transcript.includes("go to clubs")) showScreen(screens.clubs);
+        else if (transcript.includes("go to exercises") || transcript.includes("go to assignments")) showScreen(screens.assignments);
+
+        // ---------- QUOTE REPLY ----------
+        else if (transcript.startsWith("quote")) {
+            const response = transcript.replace("quote", "").trim();
+            alert(`You said: "${response}"`);
+        }
+
+        // ---------- SUGGESTION MODE ----------
+        else if (transcript.includes("tell me what should i do")) {
+            const suggestion = "Focus on learning a new topic today! Maybe try Mathematics or Physics!";
+            const utter = new SpeechSynthesisUtterance(suggestion);
+            synth.speak(utter);
+        }
+
+        // ---------- SAY SOMETHING ----------
+        else if (transcript.startsWith("say")) {
+            const textToSay = transcript.replace("say", "").trim();
+            const utter = new SpeechSynthesisUtterance(textToSay);
+            synth.speak(utter);
+        }
+    };
+
+    // Start voice recognition
+    function startVoiceControl() {
+        recognition.start();
+        alert("Voice control activated! Speak your command.");
+    }
+
+    voiceBtn.addEventListener("click", startVoiceControl);
+
+    // -----------------------------
+    // READY FOR FUTURE FEATURES
+    // -----------------------------
+    // You can paste additional code below this line without breaking anything.
 });
