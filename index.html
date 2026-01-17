@@ -8,9 +8,12 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d0d0d;
+            color: #fff;
+            overflow: hidden;
         }
+
         .screen {
             display: none;
             height: 100vh;
@@ -19,37 +22,84 @@
             padding: 20px;
             box-sizing: border-box;
         }
+
         .active {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+
+        /* Welcome Screen */
+        .welcome-container {
+            background: radial-gradient(circle, #0d0d0d 0%, #111 100%);
+            animation: pulse 2.5s infinite alternate;
+        }
+
         .welcome-container h1 {
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #28a745;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .home-container h2 {
-            color: #333;
+            color: #00ff66;
+            font-size: 3em;
             margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ff66, 0 0 40px #00ff66;
         }
+
+        #getStartedBtn {
+            padding: 15px 35px;
+            font-size: 18px;
+            color: #0d0d0d;
+            background-color: #00ff66;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66 inset;
+            transition: all 0.3s ease;
+        }
+
+        #getStartedBtn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #00ff66, 0 0 50px #00ff66 inset;
+        }
+
+        @keyframes pulse {
+            0% { background: radial-gradient(circle, #0d0d0d 0%, #111 100%); }
+            100% { background: radial-gradient(circle, #111 0%, #0d0d0d 100%); }
+        }
+
+        /* Home Screen */
+        .home-container {
+            background: linear-gradient(135deg, #0d0d0d, #111111);
+            color: #00ff66;
+            padding-top: 50px;
+        }
+
+        .home-container h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px #00ff66, 0 0 25px #00ff66;
+        }
+
         .home-buttons {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .home-buttons button {
+            padding: 15px 40px;
+            font-size: 18px;
+            color: #0d0d0d;
+            background-color: #00ff66;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66 inset;
+            transition: all 0.3s ease;
+        }
+
+        .home-buttons button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #00ff66, 0 0 50px #00ff66 inset;
         }
     </style>
 </head>
@@ -70,7 +120,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
     <script>
         const getStartedBtn = document.getElementById('getStartedBtn');
         const welcomeScreen = document.getElementById('welcomeScreen');
