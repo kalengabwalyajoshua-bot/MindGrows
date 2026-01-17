@@ -9,7 +9,7 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0d0d0d;
+            background: #0a0a0a;
             color: #fff;
             overflow: hidden;
         }
@@ -32,50 +32,53 @@
 
         /* Welcome Screen */
         .welcome-container {
-            background: radial-gradient(circle, #0d0d0d 0%, #111 100%);
-            animation: pulse 2.5s infinite alternate;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            animation: subtleGlow 3s infinite alternate;
         }
 
         .welcome-container h1 {
-            color: #00ff66;
+            color: #e63946; /* deep red */
             font-size: 3em;
             margin-bottom: 30px;
-            text-shadow: 0 0 20px #00ff66, 0 0 40px #00ff66;
+            text-shadow: 0 0 15px #e63946, 0 0 30px #fff;
         }
 
         #getStartedBtn {
             padding: 15px 35px;
             font-size: 18px;
-            color: #0d0d0d;
-            background-color: #00ff66;
-            border: none;
+            color: #fff;
+            background-color: #1a1a1a;
+            border: 2px solid #e63946;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66 inset;
+            box-shadow: 0 0 10px #e63946;
             transition: all 0.3s ease;
         }
 
         #getStartedBtn:hover {
+            background-color: #e63946;
+            color: #0a0a0a;
             transform: scale(1.1);
-            box-shadow: 0 0 25px #00ff66, 0 0 50px #00ff66 inset;
+            box-shadow: 0 0 25px #e63946, 0 0 50px #fff inset;
         }
 
-        @keyframes pulse {
-            0% { background: radial-gradient(circle, #0d0d0d 0%, #111 100%); }
-            100% { background: radial-gradient(circle, #111 0%, #0d0d0d 100%); }
+        @keyframes subtleGlow {
+            0% { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); }
+            100% { background: linear-gradient(135deg, #1a1a1a, #0a0a0a); }
         }
 
         /* Home Screen */
         .home-container {
-            background: linear-gradient(135deg, #0d0d0d, #111111);
-            color: #00ff66;
+            background: linear-gradient(135deg, #0a0a0a, #1f1f1f);
+            color: #fff;
             padding-top: 50px;
         }
 
         .home-container h2 {
             font-size: 2.5em;
             margin-bottom: 40px;
-            text-shadow: 0 0 15px #00ff66, 0 0 25px #00ff66;
+            color: #fff;
+            text-shadow: 0 0 15px #fff, 0 0 25px #e63946;
         }
 
         .home-buttons {
@@ -88,19 +91,22 @@
         .home-buttons button {
             padding: 15px 40px;
             font-size: 18px;
-            color: #0d0d0d;
-            background-color: #00ff66;
-            border: none;
+            color: #fff;
+            background-color: #1a1a1a;
+            border: 2px solid #e63946;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66 inset;
+            box-shadow: 0 0 10px #e63946;
             transition: all 0.3s ease;
         }
 
         .home-buttons button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px #00ff66, 0 0 50px #00ff66 inset;
+            background-color: #e63946;
+            color: #0a0a0a;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #e63946, 0 0 50px #fff inset;
         }
+
     </style>
 </head>
 <body>
