@@ -1,3 +1,8 @@
+// ===================== SCREENS =====================
+const screens = {
+    welcome: document.getElementById("welcomeScreen"),
+    home: document.getElementById("homeScreen")
+};
 // ===================== SCRIPT.JS =====================
 document.addEventListener("DOMContentLoaded", function() {
     // -----------------------------
@@ -35,9 +40,11 @@ document.addEventListener("DOMContentLoaded", function() {
     // HELPER: SHOW SCREEN
     // -----------------------------
     function showScreen(screen) {
-        Object.values(screens).forEach(s => s.classList.remove("active"));
-        screen.classList.add("active");
-    }
+    document.querySelectorAll(".screen").forEach(s => {
+        s.classList.remove("active");
+    });
+    screen.classList.add("active");
+}
 
     // -----------------------------
     // HELPER: TOAST POPUPS
@@ -290,5 +297,13 @@ const navButtons = document.querySelectorAll(".nav-btn");
 if (navButtons[3]) {
     navButtons[3].addEventListener("click", () => {
         showScreen(document.getElementById("settingsScreen"));
+    });
+}
+// ===================== GET STARTED BUTTON =====================
+const getStartedBtn = document.getElementById("getStartedBtn");
+
+if (getStartedBtn) {
+    getStartedBtn.addEventListener("click", () => {
+        showScreen(screens.home);
     });
 }
