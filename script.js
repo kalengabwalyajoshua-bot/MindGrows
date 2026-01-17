@@ -526,3 +526,38 @@ aiCard.addEventListener("click", openAIScreen);
    - Focus on guidance & learning
    - Safe for schools
    ========================= */
+/* =========================
+   UNIVERSAL BACK BUTTON FIX
+   ========================= */
+function setupBackButtons() {
+    document.querySelectorAll(".back-btn").forEach(btn => {
+        btn.onclick = () => {
+            // Determine current screen
+            const current = document.querySelector(".screen.active");
+            
+            if (!current) return;
+
+            // For teacher/student dashboards
+            if (userRole === "teacher" && current.id === "teacherScreen") {
+                showScreen("teacherScreen");
+                return;
+            } else if (userRole === "student" && current.id === "homeScreen") {
+                showScreen("homeScreen");
+                return;
+            }
+
+            // For dynamic screens like chatView or AI
+            if (current.id === "chatView") {
+                showScreen("chatScreen");
+            } else if (current.id === "aiScreen") {
+                showScreen("homeScreen");
+            } else if (current.id.includes("Screen")) {
+                // Default fallback: student goes home, teacher goes dashboard
+                showScreen(userRole === "teacher" ? "teacherScreen" : "homeScreen");
+            }
+        };
+    });
+}
+
+// Call it once after DOM loads
+setupBackButtons();
