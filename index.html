@@ -3,122 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindGrow</title>
+    <title>MindGrow Ultimate</title>
     <style>
         /* Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { height: 100vh; overflow: hidden; background: linear-gradient(135deg, #c0e7ff, #f0faff); color: #ffffff; }
 
-        body {
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(135deg, #c0e7ff, #f0faff);
-            color: #ffffff;
-        }
+        /* Screens */
+        .screen { width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.8s ease-in-out; overflow-y: auto; }
+        .hidden { opacity: 0; pointer-events: none; }
 
-        /* Common for screens */
-        .screen {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 0.8s ease-in-out;
-        }
-
-        .hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Welcome screen */
-        .welcome-screen {
-            text-align: center;
-            z-index: 2;
-        }
-
-        /* Floating shapes */
-        .floating-shapes .shape {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            animation: float 6s ease-in-out infinite;
-        }
-
+        /* Welcome Screen */
+        .welcome-screen { text-align: center; z-index: 2; }
+        .floating-shapes .shape { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3); animation: float 6s ease-in-out infinite; }
         .shape1 { width: 60px; height: 60px; top: 10%; left: 20%; animation-delay: 0s; }
         .shape2 { width: 80px; height: 80px; top: 30%; left: 70%; animation-delay: 2s; }
         .shape3 { width: 50px; height: 50px; top: 60%; left: 40%; animation-delay: 4s; }
         .shape4 { width: 70px; height: 70px; top: 80%; left: 80%; animation-delay: 1s; }
+        @keyframes float { 0%,100%{transform:translateY(0) translateX(0);}50%{transform:translateY(-20px) translateX(15px);} }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-20px) translateX(15px); }
-        }
+        .welcome-text { font-size: 4rem; font-weight:900; background: linear-gradient(90deg,#ffffff,#a0dfff,#ffffff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 20px #fff,0 0 40px #a0dfff,0 0 60px #c0f0ff; margin-bottom:20px; animation: glowText 2s ease-in-out infinite alternate; }
+        @keyframes glowText { 0% {text-shadow:0 0 20px #fff,0 0 40px #a0dfff,0 0 60px #c0f0ff;} 100% {text-shadow:0 0 40px #fff,0 0 80px #a0e0ff,0 0 100px #b0f0ff;} }
+        .subtitle { font-size:1.3rem; color:#ffffffaa; margin-bottom:40px; }
+        .enter-btn { background: linear-gradient(135deg, #9fe8ff, #c0e7ff); border:none; padding:15px 50px; border-radius:50px; font-size:1.1rem; cursor:pointer; box-shadow:0 0 25px #a0dfff,0 0 50px #c0e7ff; transition:all 0.3s ease; }
+        .enter-btn:hover { transform:scale(1.1); box-shadow:0 0 35px #fff,0 0 70px #a0dfff; }
 
-        /* Welcome text */
-        .welcome-text {
-            font-size: 4rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #ffffff, #a0dfff, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px #ffffff, 0 0 40px #a0dfff, 0 0 60px #c0f0ff;
-            margin-bottom: 20px;
-            animation: glowText 2s ease-in-out infinite alternate;
-        }
+        /* MindGrow Home Screen */
+        .home-screen { background: linear-gradient(135deg, #d0f0ff, #e0f8ff); color: #333; text-align: center; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .home-screen h2 { font-size: 3rem; color: #007acc; margin-bottom: 20px; }
 
-        @keyframes glowText {
-            0% { text-shadow: 0 0 20px #ffffff, 0 0 40px #a0dfff, 0 0 60px #c0f0ff; }
-            100% { text-shadow: 0 0 40px #ffffff, 0 0 80px #a0e0ff, 0 0 100px #b0f0ff; }
-        }
+        /* Top bar */
+        .top-bar { width: 100%; display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .top-bar button { background: #9fe8ffaa; border:none; padding:12px 20px; border-radius:30px; cursor:pointer; font-weight:600; box-shadow:0 0 15px #a0dfff,0 0 30px #c0e7ff; transition:all 0.3s ease; }
+        .top-bar button:hover { transform:scale(1.1); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
 
-        /* Subtitle */
-        .subtitle {
-            font-size: 1.3rem;
-            color: #ffffffaa;
-            margin-bottom: 40px;
-        }
+        /* Feature buttons */
+        .feature-buttons { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 20px; }
+        .feature-buttons button { background: linear-gradient(135deg,#9fe8ff,#c0e7ff); border:none; padding:18px 30px; border-radius:40px; font-size:1rem; cursor:pointer; box-shadow:0 0 25px #a0dfff,0 0 50px #c0e7ff; transition:all 0.3s ease; }
+        .feature-buttons button:hover { transform:scale(1.1); box-shadow:0 0 35px #fff,0 0 70px #a0dfff; }
 
-        /* Button */
-        .enter-btn {
-            background: linear-gradient(135deg, #9fe8ff, #c0e7ff);
-            border: none;
-            padding: 15px 50px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 0 25px #a0dfff, 0 0 50px #c0e7ff;
-            transition: all 0.3s ease;
-        }
+        /* Categories */
+        .categories { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom:20px; }
+        .category { background:#ffffffaa; color:#007acc; padding:20px 25px; border-radius:30px; font-weight:600; cursor:pointer; box-shadow:0 0 15px #a0dfff,0 0 30px #c0e7ff; transition:all 0.3s ease; }
+        .category:hover { transform:scale(1.05); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
 
-        .enter-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 35px #ffffff, 0 0 70px #a0dfff;
-        }
+        /* Quick mini buttons */
+        .mini-buttons { display:flex; flex-wrap: wrap; gap:15px; justify-content:center; margin-bottom:30px; }
+        .mini-buttons button { background:#ffffffcc; color:#007acc; border:none; padding:12px 20px; border-radius:25px; font-weight:600; cursor:pointer; box-shadow:0 0 12px #a0dfff,0 0 24px #c0e7ff; transition:all 0.3s ease; }
+        .mini-buttons button:hover { transform:scale(1.05); box-shadow:0 0 25px #fff,0 0 50px #a0dfff; }
 
-        /* Second screen */
-        .second-screen {
-            background: linear-gradient(135deg, #d0f0ff, #e0f8ff);
-            color: #333;
-            text-align: center;
-        }
-
-        .second-screen h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .second-screen p {
-            font-size: 1.2rem;
-        }
     </style>
 </head>
 <body>
@@ -136,20 +69,72 @@
         <button class="enter-btn" onclick="enterApp()">Enter</button>
     </div>
 
-    <!-- Second Screen -->
-    <div class="screen second-screen hidden" id="secondScreen">
-        <h2>Welcome to MindGrow Home!</h2>
-        <p>This is your space to explore stories, quizzes, and clubs. More features coming soon! 🌟</p>
+    <!-- Ultimate MindGrow Home Screen -->
+    <div class="screen home-screen hidden" id="homeScreen">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <button onclick="openFeature('home')">Home</button>
+            <button onclick="openFeature('messages')">Messages</button>
+            <button onclick="openFeature('notifications')">Notifications</button>
+            <button onclick="openFeature('profile')">Profile</button>
+            <button onclick="openFeature('settings')">Settings</button>
+            <button onclick="openFeature('search')">Search</button>
+            <button onclick="openFeature('theme')">Dark/Light</button>
+        </div>
+
+        <!-- Main Feature Buttons -->
+        <div class="feature-buttons">
+            <button onclick="openFeature('story')">Story</button>
+            <button onclick="openFeature('quizzes')">Quizzes</button>
+            <button onclick="openFeature('clubs')">Clubs</button>
+            <button onclick="openFeature('daily')">Daily Challenge</button>
+            <button onclick="openFeature('leaderboard')">Leaderboard</button>
+            <button onclick="openFeature('joinclub')">Join Club</button>
+            <button onclick="openFeature('startquiz')">Start Quiz</button>
+            <button onclick="openFeature('readstory')">Read Story</button>
+            <button onclick="openFeature('achievements')">Achievements</button>
+            <button onclick="openFeature('favorites')">Favorites</button>
+            <button onclick="openFeature('notes')">Notes</button>
+            <button onclick="openFeature('chat')">AI Tutor</button>
+            <button onclick="openFeature('reminders')">Reminders</button>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <div class="category" onclick="openFeature('science')">Science</div>
+            <div class="category" onclick="openFeature('math')">Math</div>
+            <div class="category" onclick="openFeature('history')">History</div>
+            <div class="category" onclick="openFeature('languages')">Languages</div>
+            <div class="category" onclick="openFeature('arts')">Arts</div>
+            <div class="category" onclick="openFeature('technology')">Technology</div>
+            <div class="category" onclick="openFeature('lifeskills')">Life Skills</div>
+            <div class="category" onclick="openFeature('mindfulness')">Mindfulness</div>
+            <div class="category" onclick="openFeature('trivia')">Trivia</div>
+        </div>
+
+        <!-- Quick Mini Buttons -->
+        <div class="mini-buttons">
+            <button onclick="openFeature('events')">Events</button>
+            <button onclick="openFeature('contests')">Contests</button>
+            <button onclick="openFeature('minigames')">Mini Games</button>
+            <button onclick="openFeature('badges')">Badges</button>
+            <button onclick="openFeature('progress')">Progress Tracker</button>
+            <button onclick="openFeature('calendar')">Calendar</button>
+        </div>
+
     </div>
 
     <script>
         function enterApp() {
-            const welcome = document.getElementById('welcomeScreen');
-            const second = document.getElementById('secondScreen');
-            // Fade out welcome, fade in second
-            welcome.classList.add('hidden');
-            second.classList.remove('hidden');
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('homeScreen').classList.remove('hidden');
+        }
+
+        function openFeature(feature) {
+            alert(`Feature "${feature}" will open here! 🚀`);
         }
     </script>
+
 </body>
 </html>
