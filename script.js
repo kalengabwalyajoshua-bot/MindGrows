@@ -229,3 +229,44 @@ chatItems.forEach(item => {
         }
     });
 });
+// ----------- LINK TO HOME SCREEN CARDS -----------
+const voiceBtn = document.getElementById("voiceBtn");
+const darkModeBtn = document.getElementById("darkModeBtn");
+const recordBtn = document.getElementById("recordBtn");
+
+// Voice Control
+voiceBtn.addEventListener("click", startVoiceControl);
+
+// Dark Mode
+darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    showToast(document.body.classList.contains("dark-mode") ? "Dark mode ON" : "Dark mode OFF");
+});
+
+// Record Note
+recordBtn.addEventListener("click", async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            };
+
+            mediaRecorder.start();
+            showToast("Recording started...");
+            setTimeout(() => {
+                mediaRecorder.stop();
+                showToast("Recording finished, playing back...");
+            }, 5000); // 5 sec note
+        } catch (err) {
+            showToast("Microphone access denied!");
+        }
+    }
+});
