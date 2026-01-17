@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGrow</title>
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons (fast & lightweight) -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+<!-- ========================= -->
+<!-- WELCOME SCREEN -->
+<!-- ========================= -->
+<section id="welcomeScreen" class="screen active">
+    <div class="welcome-container">
+        <h1 class="app-title">MindGrow</h1>
+        <p class="app-tagline">
+            Learn • Connect • Grow
+        </p>
+        <button id="startBtn" class="primary-btn">
+            Get Started
+        </button>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- SIGN UP SCREEN -->
+<!-- ========================= -->
+<section id="signupScreen" class="screen">
+    <div class="signup-container">
+        <h2>Create Account</h2>
+
+        <form id="signupForm">
+            <input type="text" placeholder="Full Name" required>
+            <input type="text" placeholder="School Name" required>
+
+            <select required>
+                <option value="" disabled selected>Select Role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+
+            <button type="submit" class="primary-btn">
+                Continue
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- ========================= -->
+<!-- HOME SCREEN -->
+<!-- ========================= -->
+<section id="homeScreen" class="screen">
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+        <input type="text" placeholder="Search subjects, topics..." class="search-box">
+    </header>
+
+    <!-- Main Content -->
+    <main class="home-content">
+        <div class="card" id="categoriesBtn">
+            <span class="material-icons">menu_book</span>
+            <p>Subjects</p>
+        </div>
+
+        <div class="card" id="chatBtn">
+            <span class="material-icons">chat</span>
+            <p>Chats</p>
+        </div>
+
+        <div class="card" id="clubsBtn">
+            <span class="material-icons">groups</span>
+            <p>Clubs</p>
+        </div>
+
+        <div class="card" id="assignmentsBtn">
+            <span class="material-icons">assignment</span>
+            <p>Exercises</p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation (Like Instagram/TikTok) -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active">
+            <span class="material-icons">home</span>
+        </button>
+
+        <button class="nav-btn">
+            <span class="material-icons">search</span>
+        </button>
+
+        <button class="nav-btn">
+            <span class="material-icons">notifications</span>
+        </button>
+
+        <button class="nav-btn">
+            <span class="material-icons">person</span>
+        </button>
+    </nav>
+
+</section>
+
+<!-- ========================= -->
+<!-- SCRIPT -->
+<!-- ========================= -->
+<script src="script.js"></script>
+
+</body>
+</html>
+<!-- ========================= -->
+<!-- SUBJECTS SCREEN -->
+<!-- ========================= -->
+<section id="subjectsScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Subjects</h3>
+    </header>
+
+    <main class="list-container">
+        <button class="list-item">Mathematics</button>
+        <button class="list-item">Physics</button>
+        <button class="list-item">Chemistry</button>
+        <button class="list-item">Biology</button>
+        <button class="list-item">Computer Science</button>
+        <button class="list-item">Geography</button>
+        <button class="list-item">History</button>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- CHAT SCREEN -->
+<!-- ========================= -->
+<section id="chatScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Chats</h3>
+        <span class="material-icons">person_add</span>
+    </header>
+
+    <main class="chat-list">
+        <div class="chat-item">
+            <p class="chat-name">John Doe</p>
+            <p class="chat-preview">Hey, did you finish the assignment?</p>
+        </div>
+
+        <div class="chat-item">
+            <p class="chat-name">Study Group</p>
+            <p class="chat-preview">Meeting at 6 PM</p>
+        </div>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- PROFILE SCREEN -->
+<!-- ========================= -->
+<section id="profileScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Profile</h3>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-avatar material-icons">person</div>
+        <h2>User Name</h2>
+        <p>School Name</p>
+
+        <button class="profile-btn">Edit Profile</button>
+        <button class="profile-btn">Settings</button>
+        <button class="profile-btn logout">Log Out</button>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- TEACHER DASHBOARD -->
+<!-- ========================= -->
+<section id="teacherScreen" class="screen">
+
+    <header class="top-bar">
+        <h3>Teacher Panel</h3>
+    </header>
+
+    <main class="teacher-tools">
+        <button class="tool-card">Create Exercise</button>
+        <button class="tool-card">Post Announcement</button>
+        <button class="tool-card">Manage Classes</button>
+        <button class="tool-card">Staff Room</button>
+        <button class="tool-card">Manage Clubs</button>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- STAFF ROOM -->
+<!-- ========================= -->
+<section id="staffRoomScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Staff Room</h3>
+    </header>
+
+    <main class="staff-room">
+        <p>Private discussions for teachers and staff.</p>
+    </main>
+
+</section>
+<!-- ========================= -->
+<!-- ANNOUNCEMENTS SCREEN -->
+<!-- ========================= -->
+<section id="announcementsScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Announcements</h3>
+    </header>
+
+    <main class="announcement-list">
+        <div class="announcement-card">
+            <h4>School Assembly</h4>
+            <p>There will be a general assembly on Friday.</p>
+        </div>
+
+        <div class="announcement-card">
+            <h4>Club Registration</h4>
+            <p>Science club registration closes tomorrow.</p>
+        </div>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- CLUBS SCREEN -->
+<!-- ========================= -->
+<section id="clubsScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Clubs</h3>
+    </header>
+
+    <main class="list-container">
+        <button class="list-item">Science Club</button>
+        <button class="list-item">Math Club</button>
+        <button class="list-item">Debate Club</button>
+        <button class="list-item">ICT Club</button>
+        <button class="list-item">Sports Club</button>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- ASSIGNMENTS / EXERCISES -->
+<!-- ========================= -->
+<section id="assignmentsScreen" class="screen">
+
+    <header class="top-bar">
+        <button class="back-btn material-icons">arrow_back</button>
+        <h3>Exercises</h3>
+    </header>
+
+    <main class="assignment-list">
+        <div class="assignment-card">
+            <h4>Algebra Homework</h4>
+            <p>Due: Tomorrow</p>
+        </div>
+
+        <div class="assignment-card">
+            <h4>Physics Quiz</h4>
+            <p>Due: Friday</p>
+        </div>
+    </main>
+
+</section>
+
+<!-- ========================= -->
+<!-- ADD FRIEND MODAL -->
+<!-- ========================= -->
+<div id="addFriendModal" class="modal">
+
+    <div class="modal-content">
+        <h3>Add Friend</h3>
+        <input type="text" placeholder="Search by name or ID">
+        <button class="primary-btn">Send Request</button>
+        <button class="secondary-btn close-modal">Cancel</button>
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- GLOBAL OVERLAY -->
+<!-- ========================= -->
+<div id="overlay"></div>
