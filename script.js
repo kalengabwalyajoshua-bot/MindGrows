@@ -158,3 +158,74 @@ document.addEventListener("DOMContentLoaded", function() {
     // -----------------------------
     // You can paste additional code below this line without breaking anything.
 });
+// ===================== NEW FEATURES =====================
+
+// ----------- 1️⃣ PROFILE CUSTOMIZATION -----------
+const profileName = document.querySelector("#profileScreen h2");
+const profileSchool = document.querySelector("#profileScreen p");
+const editProfileBtn = document.querySelector(".profile-btn");
+
+editProfileBtn.addEventListener("click", () => {
+    const newName = prompt("Enter your name:", profileName.innerText);
+    const newSchool = prompt("Enter your school:", profileSchool.innerText);
+    if(newName) profileName.innerText = newName;
+    if(newSchool) profileSchool.innerText = newSchool;
+});
+
+// ----------- 2️⃣ DARK MODE TOGGLE -----------
+const darkModeBtn = document.createElement("button");
+darkModeBtn.innerText = "Dark Mode";
+darkModeBtn.classList.add("primary-btn");
+document.body.appendChild(darkModeBtn);
+
+darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    showToast(document.body.classList.contains("dark-mode") ? "Dark mode ON" : "Dark mode OFF");
+});
+
+// ----------- 3️⃣ QUICK VOICE NOTES -----------
+let mediaRecorder;
+let audioChunks = [];
+
+const recordBtn = document.createElement("button");
+recordBtn.innerText = "Record Note";
+recordBtn.classList.add("primary-btn");
+document.body.appendChild(recordBtn);
+
+recordBtn.addEventListener("click", async () => {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            };
+
+            mediaRecorder.start();
+            showToast("Recording started...");
+            setTimeout(() => {
+                mediaRecorder.stop();
+                showToast("Recording finished, playing back...");
+            }, 5000); // 5 sec note
+        } catch (err) {
+            showToast("Microphone access denied!");
+        }
+    }
+});
+
+// ----------- 4️⃣ QUICK CHAT REPLY -----------
+const chatItems = document.querySelectorAll(".chat-item");
+chatItems.forEach(item => {
+    item.addEventListener("click", () => {
+        const reply = prompt(`Reply to ${item.querySelector(".chat-name").innerText}:`);
+        if(reply) {
+            showToast(`You replied: "${reply}"`);
+        }
+    });
+});
