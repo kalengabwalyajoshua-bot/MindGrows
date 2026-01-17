@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to MindGrow</title>
+    <title>MindGrow</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -11,22 +11,25 @@
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
         }
-        .welcome-container {
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .active {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background-color: #ffffff;
-            text-align: center;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1 {
+        .welcome-container h1 {
             color: #28a745;
             margin-bottom: 20px;
         }
-        #get-started {
+        button {
             padding: 10px 20px;
             font-size: 16px;
             color: #fff;
@@ -36,16 +39,47 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        #get-started:hover {
+        button:hover {
             background-color: #218838;
+        }
+        .home-container h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .home-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="welcome-container">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="screen active welcome-container">
         <h1>Welcome to MindGrow</h1>
-        <button id="get-started">Get Started</button>
+        <button id="getStartedBtn">Get Started</button>
     </div>
+
+    <!-- Home/Dashboard Screen -->
+    <div id="homeScreen" class="screen home-container">
+        <h2>MindGrow Home</h2>
+        <div class="home-buttons">
+            <button id="storyBtn">Stories</button>
+            <button id="quizBtn">Quizzes</button>
+            <button id="messageBtn">Messages</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+        const getStartedBtn = document.getElementById('getStartedBtn');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const homeScreen = document.getElementById('homeScreen');
+
+        getStartedBtn.addEventListener('click', () => {
+            welcomeScreen.classList.remove('active');
+            homeScreen.classList.add('active');
+        });
+    </script>
 </body>
 </html>
