@@ -15,9 +15,9 @@ function showScreen(id) {
 // ============================
 const userData = JSON.parse(localStorage.getItem("mindglowUser")) || {
   visits: 0,
-  subjects: {},       // tracks clicks per category/subject
-  questionsAsked: 0,  // total questions asked
-  chatHistory: {}     // per subject chat
+  subjects: {},       // Tracks clicks per category/subject
+  questionsAsked: 0,  // Total questions asked
+  chatHistory: {}     // Chat per subject
 };
 
 function saveUserData() {
@@ -28,8 +28,19 @@ function saveUserData() {
 // START FLOW
 // ============================
 document.getElementById("startBtn").onclick = () => showScreen("signupScreen");
+
 document.getElementById("signupBtn").onclick = () => {
+  const fullName = document.getElementById("fullName").value.trim();
+  const schoolName = document.getElementById("schoolName").value.trim();
+  const className = document.getElementById("className").value.trim();
+  
+  if (!fullName || !schoolName || !className) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
   userData.visits++;
+  userData.profile = { fullName, schoolName, className };
   saveUserData();
   showScreen("homeScreen");
 };
@@ -72,7 +83,7 @@ document.querySelectorAll(".category-btn").forEach(btn => {
 document.querySelectorAll(".subject-btn").forEach(btn => {
   btn.onclick = () => {
     currentSubject = btn.textContent.trim();
-    // Initialize chat history if doesn't exist
+    // Initialize chat history if not exists
     if (!userData.chatHistory[currentSubject]) userData.chatHistory[currentSubject] = [];
     saveUserData();
     showScreen("aiChatScreen");
@@ -85,9 +96,9 @@ document.querySelectorAll(".subject-btn").forEach(btn => {
 // ============================
 function loadChatHistory() {
   const chatContainer = document.querySelector(".chat-container");
-  chatContainer.innerHTML = ""; // clear old messages
-
+  chatContainer.innerHTML = ""; // Clear old messages
   const history = userData.chatHistory[currentSubject] || [];
+  
   history.forEach(msg => {
     const bubble = document.createElement("div");
     bubble.className = "chat-message";
@@ -109,7 +120,6 @@ document.getElementById("sendChatBtn").onclick = () => {
 
   // Track questions asked
   userData.questionsAsked++;
-  saveUserData();
 
   // User message
   const userBubble = "You: " + msg;
@@ -120,7 +130,7 @@ document.getElementById("sendChatBtn").onclick = () => {
   userDiv.textContent = userBubble;
   chat.appendChild(userDiv);
 
-  // AI message (personalized)
+  // AI response
   const favSubject = Object.entries(userData.subjects)
     .sort((a,b)=>b[1]-a[1])[0]?.[0];
 
