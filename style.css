@@ -5,7 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  transition: all 0.3s ease; /* smooth transitions everywhere */
+  transition: all 0.3s ease;
 }
 
 body {
@@ -27,10 +27,12 @@ body {
 
 .screen {
   display: none;
+  flex-direction: column;
   width: 100%;
   height: 100%;
+  overflow-y: auto; /* scroll if content too tall */
   padding: 20px;
-  flex-direction: column;
+  padding-bottom: 80px; /* space for bottom nav */
 }
 
 .screen.active {
@@ -93,7 +95,7 @@ body {
 }
 
 .form-container {
-  width: 100%;
+  width: 90%;
   max-width: 380px;
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(14px);
@@ -172,7 +174,7 @@ body {
 .subject-list,
 .category-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 15px;
 }
 
@@ -206,6 +208,7 @@ body {
   padding: 10px;
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 160px);
 }
 
 .chat-message {
@@ -257,6 +260,7 @@ body {
   width: 100%;
   background: rgba(0,0,0,0.8);
   backdrop-filter: blur(10px);
+  z-index: 100;
 }
 
 .nav-btn {
@@ -281,17 +285,22 @@ body {
    ANIMATIONS
 ========================= */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 @keyframes fadeInScreen {
   0% {opacity: 0; transform: translateY(20px);}
   100% {opacity: 1; transform: translateY(0);}
+}
+
+/* =========================
+   MEDIA QUERIES
+========================= */
+@media (max-width: 400px) {
+  .app-title {font-size: 2.2rem;}
+  .category-btn,
+  .subject-btn {padding: 12px; font-size: 0.85rem;}
+  .primary-btn {padding: 12px 22px; font-size: 0.9rem;}
+  .chat-input input {font-size: 0.9rem;}
 }
