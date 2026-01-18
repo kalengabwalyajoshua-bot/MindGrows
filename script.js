@@ -1,166 +1,55 @@
-// ===================== SCREENS SYSTEM =====================
+// script.js
 
-// Get all screens
-const screens = document.querySelectorAll(".screen");
-
-/**
- * Show only one screen by ID
- * @param {string} id - screen element id
- */
-function showScreen(id) {
-    screens.forEach(screen => {
-        screen.style.display = "none";
-        screen.classList.remove("active");
-    });
-
-    const target = document.getElementById(id);
-    if (!target) {
-        console.error("Screen not found:", id);
-        return;
-    }
-
-    target.style.display = "block";
-    target.classList.add("active");
+// Function to handle screen navigation
+function showScreen(screenId) {
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(screen => {
+    screen.classList.remove('active');
+  });
+  const activeScreen = document.getElementById(screenId);
+  if (activeScreen) {
+    activeScreen.classList.add('active');
+  }
 }
 
-// Always start on Welcome Screen
-document.addEventListener("DOMContentLoaded", () => {
-    showScreen("welcomeScreen");
+// Event listener for 'Get Started' button
+document.getElementById('startBtn').addEventListener('click', () => {
+  showScreen('signupScreen');
 });
 
-// ===================== BUTTONS & NAVIGATION =====================
-
-// Get Started → Signup
-const startBtn = document.getElementById("startBtn");
-if (startBtn) {
-    startBtn.addEventListener("click", () => {
-        showScreen("signupScreen");
-    });
-}
-
-// Signup → Home
-const signupForm = document.getElementById("signupForm");
-if (signupForm) {
-    signupForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        showScreen("homeScreen");
-    });
-}
-
-// Home cards navigation (Subjects, Chats, Clubs, Exercises)
-const subjectsBtn = document.getElementById("categoriesBtn");
-if (subjectsBtn) {
-    subjectsBtn.addEventListener("click", () => {
-        showScreen("subjectsScreen");
-    });
-}
-
-const chatBtn = document.getElementById("chatBtn");
-if (chatBtn) {
-    chatBtn.addEventListener("click", () => {
-        showScreen("chatScreen");
-    });
-}
-
-const clubsBtn = document.getElementById("clubsBtn");
-if (clubsBtn) {
-    clubsBtn.addEventListener("click", () => {
-        showScreen("clubsScreen");
-    });
-}
-
-const assignmentsBtn = document.getElementById("assignmentsBtn");
-if (assignmentsBtn) {
-    assignmentsBtn.addEventListener("click", () => {
-        showScreen("assignmentsScreen");
-    });
-}
-
-// ===================== BACK BUTTONS =====================
-const backButtons = document.querySelectorAll(".back-btn");
-backButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        // Default: go back to home
-        showScreen("homeScreen");
-    });
+// Event listener for 'Continue' button on the signup screen
+document.getElementById('signupBtn').addEventListener('click', () => {
+  // Here you can add form validation and data handling
+  showScreen('homeScreen');
 });
 
-// ===================== MODAL HANDLING =====================
-const addFriendModal = document.getElementById("addFriendModal");
-const overlay = document.getElementById("overlay");
-
-const openModalBtns = document.querySelectorAll(".open-add-friend");
-openModalBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        if (addFriendModal && overlay) {
-            addFriendModal.style.display = "block";
-            overlay.style.display = "block";
-        }
-    });
+// Navigation for bottom nav buttons
+const navButtons = document.querySelectorAll('.nav-btn');
+navButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    navButtons.forEach(btn => btn.classList.remove('active'));
+    e.target.classList.add('active');
+    showScreen(e.target.textContent.trim() + 'Screen');
+  });
 });
 
-const closeModalBtns = document.querySelectorAll(".close-modal");
-closeModalBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        if (addFriendModal && overlay) {
-            addFriendModal.style.display = "none";
-            overlay.style.display = "none";
-        }
-    });
+// Voice command button (placeholder for future functionality)
+document.getElementById('voiceBtn').addEventListener('click', () => {
+  // Future implementation for voice commands
+  alert('Voice command feature coming soon!');
 });
 
-// ===================== TOAST MESSAGES =====================
-function showToast(message, duration = 2000) {
-    let toast = document.createElement("div");
-    toast.className = "toast-message";
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.add("show");
-    }, 50);
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-        setTimeout(() => document.body.removeChild(toast), 300);
-    }, duration);
-}
-
-// ===================== DARK MODE =====================
-const darkModeToggle = document.getElementById("darkModeToggle");
-
-if (darkModeToggle) {
-    darkModeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-
-        showToast(
-            document.body.classList.contains("dark-mode")
-                ? "Dark mode enabled 🌙"
-                : "Dark mode disabled ☀️"
-        );
-    });
-}
-
-// ===================== VOICE CONTROL PLACEHOLDER =====================
-function handleVoiceCommand(command) {
-    switch(command.toLowerCase()) {
-        case "go to home":
-            showScreen("homeScreen");
-            break;
-        case "go to chat":
-            showScreen("chatScreen");
-            break;
-        case "go to subjects":
-            showScreen("subjectsScreen");
-            break;
-        case "go to clubs":
-            showScreen("clubsScreen");
-            break;
-        case "go to exercises":
-            showScreen("assignmentsScreen");
-            break;
-        default:
-            console.log("Voice command not recognized:", command);
-            showToast("Command not recognized: " + command);
-    }
-}
+// AI Chat 'Send' button functionality (placeholder)
+document.getElementById('sendChatBtn').addEventListener('click', () => {
+  const chatInput = document.querySelector('.chat-input input');
+  const message = chatInput.value.trim();
+  if (message) {
+    // Here you can add code to send the message to the AI and display the response
+    const chatContainer = document.querySelector('.chat-container');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message');
+    messageElement.textContent = message;
+    chatContainer.appendChild(messageElement);
+    chatInput.value = '';
+  }
+});
