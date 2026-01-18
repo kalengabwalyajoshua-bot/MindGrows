@@ -191,12 +191,26 @@ body {
   cursor: pointer;
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,255,136,0.2);
+  position: relative;
 }
 
 .category-btn:hover,
 .subject-btn:hover {
   transform: scale(1.05) rotate(-1deg);
   box-shadow: 0 12px 25px rgba(0,255,136,0.35);
+}
+
+/* =========================
+   SUBJECT CHAT BADGES
+========================= */
+.chat-badge {
+  background: #00ff88;
+  color: #000;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: 8px;
+  font-weight: 600;
 }
 
 /* =========================
