@@ -1,414 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindGrow</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindGlow</title>
 
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Main Styles -->
-    <link rel="stylesheet" href="style.css">
-
-    <style>
-        /* ================== GENERAL ================== */
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
-            color: #333;
-        }
-
-        .screen {
-            display: none;
-            height: 100vh;
-            width: 100%;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
-            transition: opacity 0.4s ease-in-out;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        h1, h2, h3, h4 {
-            margin: 0;
-        }
-
-        /* ================== WELCOME SCREEN ================== */
-        .welcome-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            text-align: center;
-        }
-
-        .app-title {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #38a169, #68d391);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .app-tagline {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            color: #4a5568;
-        }
-
-        .primary-btn {
-            padding: 16px 50px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #38a169, #68d391);
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-        }
-
-        /* ================== TOP BAR ================== */
-        .top-bar {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            background-color: white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: 1px solid #cbd5e0;
-            outline: none;
-        }
-
-        /* ================== CARDS ================== */
-        .home-content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .card p {
-            margin-top: 10px;
-            font-weight: 600;
-            color: #2d3748;
-        }
-
-        /* ================== BOTTOM NAV ================== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            background-color: white;
-            padding: 10px 0;
-            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #4a5568;
-            transition: color 0.2s;
-        }
-
-        .nav-btn.active {
-            color: #2f855a;
-        }
-
-        /* ================== LIST ITEMS ================== */
-        .list-container, .chat-list, .assignment-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .list-item, .tool-card, .profile-btn, .assignment-card, .announcement-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .list-item:hover, .tool-card:hover, .profile-btn:hover, .assignment-card:hover, .announcement-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        }
-
-        /* ================== BACK BUTTON ================== */
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            margin-right: 10px;
-            color: #4a5568;
-        }
-
-        /* ================== MODALS ================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            z-index: 200;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e0;
-            margin-bottom: 15px;
-        }
-
-        .secondary-btn {
-            background-color: #e2e8f0;
-            color: #2d3748;
-        }
-
-        #overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 100;
-        }
-    </style>
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- ================= WELCOME SCREEN ================= -->
+
+  <!-- APP CONTAINER -->
+  <div id="app">
+
+    <!-- WELCOME SCREEN -->
     <section id="welcomeScreen" class="screen active">
-    <div class="welcome-content">
-        <h1>Welcome to MindGrow</h1>
-        <p>Learn. Connect. Grow.</p>
+      <div class="welcome-content">
+        <h1 class="app-title">Welcome to MindGlow</h1>
+        <p class="tagline">Learn smarter. Grow brighter.</p>
+        <button id="startBtn" class="primary-btn">Get Started</button>
+      </div>
+    </section>
 
-        <button id="getStartedBtn" class="primary-btn">
-            Get Started
-        </button>
-    </div>
-</section>
-    <!-- ================= SIGNUP SCREEN ================= -->
+    <!-- SIGN UP SCREEN -->
     <section id="signupScreen" class="screen">
-        <div class="signup-container">
-            <h2>Create Account</h2>
-            <form id="signupForm">
-                <input type="text" placeholder="Full Name" required>
-                <input type="text" placeholder="School Name" required>
-                <select required>
-                    <option value="" disabled selected>Select Role</option>
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                </select>
-                <button type="submit" class="primary-btn">Continue</button>
-            </form>
-        </div>
+      <div class="form-container">
+        <h2>Create Your Account</h2>
+        <input type="text" id="fullName" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email Address">
+        <input type="tel" id="phone" placeholder="Phone Number">
+        <select id="school">
+          <option value="">Select School</option>
+          <option value="school1">School 1</option>
+          <option value="school2">School 2</option>
+        </select>
+        <select id="grade">
+          <option value="">Select Grade/Class</option>
+          <option value="grade7">Grade 7</option>
+          <option value="grade8">Grade 8</option>
+          <option value="grade9">Grade 9</option>
+          <option value="grade10">Grade 10</option>
+          <option value="grade11">Grade 11</option>
+          <option value="grade12">Grade 12</option>
+        </select>
+        <select id="role">
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+          <option value="headteacher">Head Teacher</option>
+        </select>
+        <button id="signupBtn" class="primary-btn">Continue</button>
+      </div>
     </section>
 
-    <!-- ================= HOME SCREEN ================= -->
+    <!-- HOME SCREEN -->
     <section id="homeScreen" class="screen">
-        <header class="top-bar">
-            <input type="text" placeholder="Search subjects, topics..." class="search-box">
-        </header>
-        <main class="home-content">
-            <div class="card" id="categoriesBtn">
-                <span class="material-icons">menu_book</span>
-                <p>Subjects</p>
-            </div>
-            <div class="card" id="chatBtn">
-                <span class="material-icons">chat</span>
-                <p>Chats</p>
-            </div>
-            <div class="card" id="clubsBtn">
-                <span class="material-icons">groups</span>
-                <p>Clubs</p>
-            </div>
-            <div class="card" id="assignmentsBtn">
-                <span class="material-icons">assignment</span>
-                <p>Exercises</p>
-            </div>
-            <div class="card" id="voiceBtn">
-                <span class="material-icons">mic</span>
-                <p>Voice Control</p>
-            </div>
-        </<!-- Home Extra Controls -->
-<div class="home-controls">
-    <div class="card" id="voiceBtn">
-        <span class="material-icons">mic</span>
-        <p>Voice Control</p>
-    </div>
+      <header class="top-bar">
+        <h2>MindGlow</h2>
+        <button id="voiceBtn" class="icon-btn">🎤</button>
+      </header>
 
-    <div class="card" id="darkModeBtn">
-        <span class="material-icons">dark_mode</span>
-        <p>Dark Mode</p>
-    </div>
+      <div class="search-box">
+        <input type="text" placeholder="Search subjects,
+        <input type="text" placeholder="Search subjects, topics...">
+      </div>
 
-    <div class="card" id="recordBtn">
-        <span class="material-icons">keyboard_voice</span>
-        <p>Record Note</p>
-    </div>
-</div>>
-        <nav class="bottom-nav">
-            <button class="nav-btn active"><span class="material-icons">home</span></button>
-            <button class="nav-btn"><span class="material-icons">search</span></button>
-            <button class="nav-btn"><span class="material-icons">notifications</span></button>
-            <button class="nav-btn"><span class="material-icons">person</span></button>
-        </nav>
+      <div class="categories">
+        <button class="category-btn">Mathematics</button>
+        <button class="category-btn">Science</button>
+        <button class="category-btn">Languages</button>
+        <button class="category-btn">History</button>
+      </div>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn active">Home</button>
+        <button class="nav-btn">Explore</button>
+        <button class="nav-btn">Profile</button>
+        <button class="nav-btn">Friends</button>
+        <button class="nav-btn">Messages</button>
+      </nav>
     </section>
 
-    <!-- ================= SUBJECTS SCREEN ================= -->
-    <section id="subjectsScreen" class="screen">
-        <header class="top-bar">
-            <button class="back-btn material-icons">arrow_back</button>
-            <h3>Subjects</h3>
-        </header>
-        <main class="list-container">
-            <button class="list-item">Mathematics</button>
-            <button class="list-item">Physics</button>
-            <button class="list-item">Chemistry</button>
-            <button class="list-item">Biology</button>
-            <button class="list-item">Computer Science</button>
-            <button class="list-item">Geography</button>
-            <button class="list-item">History</button>
-        </main>
+    <!-- AI CHAT SCREEN -->
+    <section id="aiChatScreen" class="screen">
+      <header class="top-bar">
+        <h2>Chat with AI</h2>
+      </header>
+      <div class="chat-container">
+        <!-- Chat messages will appear here -->
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Ask me anything...">
+        <button id="sendChatBtn" class="primary-
+        <button id="sendChatBtn" class="primary-btn">Send</button>
+      </div>
     </section>
 
-    <!-- ================= CHAT SCREEN ================= -->
-    <section id="chatScreen" class="screen">
-        <header class="top-bar">
-            <button class="back-btn material-icons">arrow_back</button>
-            <h3>Chats</h3>
-            <span class="material-icons">person_add</span>
-        </header>
-        <main class="chat-list">
-            <div class="chat-item">
-                <p class="chat-name">John Doe</p>
-                <p class="chat-preview">Hey, did you finish the assignment?</p>
-            </div>
-            <div class="chat-item">
-                <p class="chat-name">Study Group</p>
-                <p class="chat-preview">Meeting at 6 PM</p>
-            </div>
-        </main>
+    <!-- SUBJECT SCREEN -->
+    <section id="subjectScreen" class="screen">
+      <header class="top-bar">
+        <h2>Subjects</h2>
+      </header>
+      <div class="subject-list">
+        <button class="subject-btn">Mathematics</button>
+        <button class="subject-btn">English</button>
+        <button class="subject-btn">Physics</button>
+        <button class="subject-btn">Chemistry</button>
+        <button class="subject-btn">Biology</button>
+      </div>
     </section>
 
-    <!-- ================= CLUBS SCREEN ================= -->
-    <section id="clubsScreen" class="screen">
-        <header class="top-bar">
-            <button class="back-btn material-icons">arrow_back</button>
-            <h3>Clubs</h3>
-        </header>
-        <main class="list-container">
-            <button class="list-item">Science Club</button>
-            <button class="list-item">Math Club</button>
-            <button class="list-item">Debate Club</button>
-            <button class="list-item">ICT Club</button>
-            <button class="list-item">Sports Club</button>
-        </main>
+    <!-- CATEGORY SCREEN -->
+    <section id="categoryScreen" class="screen">
+      <header class="top-bar">
+        <h2>Categories</h2>
+      </header>
+      <div class="category-list">
+        <button class="category-btn">Calendar</button>
+        <button class="category-btn">Trivia</button>
+        <button class="category-btn">Mind Games</button>
+        <button class="category-btn">Clubs</button>
+      </div>
     </section>
 
-    <!-- ================= ASSIGNMENTS SCREEN ================= -->
-    <section id="assignmentsScreen" class="screen">
-        <header class="top-bar">
-            <button class="back-btn material-icons">arrow_back</button>
-            <h3>Exercises</h3>
-        </header>
-        <main class="assignment-list">
-            <div class="assignment-card">
-                <h4>Algebra Homework</h4>
-                <p>Due: Tomorrow</p>
-            </div>
-            <div class="assignment-card">
-                <h4>Physics Quiz</h4>
-                <p>Due: Friday</p>
-            </div>
-        </main>
+    <!-- CLASSES SCREEN -->
+    <section id="classesScreen" class="screen">
+      <header class="top-bar">
+        <h2>Classes</h2>
+      </header>
+      <div class="classes-list">
+        <!-- Class posts, exercises, and announcements will appear here -->
+      </div>
     </section>
 
-    <!-- ================= MODAL & OVERLAY ================= -->
-    <div id="addFriendModal" class="modal">
-        <div class="modal-content">
-            <h3>Add Friend</h3>
-            <input type="text" placeholder="Search by name or ID">
-            <button class="primary-btn">Send Request</button>
-            <button class="secondary-btn close-modal">Cancel</button>
-        </div>
-    </div>
-    <div id="overlay"></div>
+    <!-- EVENTS SCREEN -->
+    <section id="eventsScreen" class="screen">
+      <header class="top-bar">
+        <h2>Events</h2>
+      </header>
+      <div class="events-list">
+        <!-- Events like school competitions, sports events will appear here -->
+      </div>
+    </section>
 
-    <!-- ================= SCRIPT ================= -->
-    <script src="script.js"></script>
-<!-- ========================= -->
-<!-- SETTINGS SCREEN -->
-<!-- ========================= -->
-<section id="settingsScreen" class="screen">
+    <!-- FRIENDS SCREEN -->
+    <section id="friendsScreen" class="screen">
+      <header class="top-bar">
+        <h2>Friends</h2>
+      </header>
+      <div class="friends-list">
+        <!-- Friend profiles and add friend options will appear here -->
+      </div>
+    </section>
 
-    <header class="top-bar">
-        <button class="back-btn material-icons">arrow_back</button>
-        <h3>Settings</h3>
-    </header>
+    <!-- PROFILE SCREEN -->
+    <section id="profileScreen" class="screen">
+      <header class="top-bar">
+        <h2>Your Profile</h2>
+      </header>
+      <div class="profile-container">
+        <!-- User profile information and edit options will appear here -->
+      </div>
+    </section>
 
-    <main class="list-container">
-        <button id="darkModeToggle" class="list-item">
-            🌙 Toggle Dark Mode
-        </button>
-    </main>
+  </div>
 
-</section>
-<script src="script.js"></script>
+  <!-- JS -->
+  <script src="script.js"></script>
 </body>
-</html>
+</html>    
