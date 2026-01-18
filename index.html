@@ -7,97 +7,126 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="app">
 
-<!-- ================== WELCOME SCREEN ================== -->
-<div class="screen active" id="welcomeScreen">
-  <h1>Welcome to MindGrow</h1>
-  <button id="startBtn" class="primary-btn">Get Started</button>
-  <button id="teacherBtn" class="primary-btn">I'm a Teacher</button>
-</div>
-
-<!-- ================== SIGNUP SCREEN ================== -->
-<div class="screen" id="signupScreen">
-  <button class="back-btn">Back</button>
-  <h2>Student Signup</h2>
-  <input type="text" id="fullName" placeholder="Full Name">
-  <input type="text" id="schoolName" placeholder="School Name">
-  <input type="text" id="className" placeholder="Class Name">
-  <button id="signupBtn" class="primary-btn">Continue</button>
-</div>
-
-<!-- ================== TEACHER LOGIN ================== -->
-<div class="screen" id="teacherLoginScreen">
-  <button class="back-btn">Back</button>
-  <h2>Teacher Login</h2>
-  <input type="text" id="teacherName" placeholder="Your Name">
-  <input type="text" id="teacherSchool" placeholder="School Name">
-  <button id="loginTeacherBtn" class="primary-btn">Login</button>
-</div>
-
-<!-- ================== HOME SCREEN ================== -->
-<div class="screen" id="homeScreen">
-  <button class="back-btn">Back</button>
-  <h2>Home</h2>
-  <div id="homeAssignments"></div>
-  <div class="categories">
-    <h3>Subjects</h3>
-    <button class="category-btn">Math</button>
-    <button class="category-btn">Science</button>
-    <button class="category-btn">English</button>
-    <button class="category-btn">History</button>
+  <!-- ================== WELCOME SCREEN ================== -->
+  <div class="screen active" id="welcomeScreen">
+    <h1 class="app-title">Welcome to MindGrow</h1>
+    <p class="tagline">Grow your mind, track learning, and chat with your AI tutor!</p>
+    <button id="startBtn" class="primary-btn">Get Started</button>
+    <button id="teacherBtn" class="primary-btn">I'm a Teacher</button>
   </div>
-</div>
 
-<!-- ================== SUBJECT SCREEN ================== -->
-<div class="screen" id="subjectScreen">
-  <button class="back-btn">Back</button>
-  <h2>Select Subject</h2>
-  <div class="subjects">
-    <button class="subject-btn">Math</button>
-    <button class="subject-btn">Science</button>
-    <button class="subject-btn">English</button>
-    <button class="subject-btn">History</button>
+  <!-- ================== STUDENT SIGNUP ================== -->
+  <div class="screen" id="signupScreen">
+    <button class="back-btn">Back</button>
+    <h2>Student Sign Up</h2>
+    <input type="text" id="fullName" placeholder="Full Name">
+    <input type="text" id="schoolName" placeholder="School Name">
+    <input type="text" id="className" placeholder="Class/Grade">
+    <button id="signupBtn" class="primary-btn">Continue</button>
   </div>
-</div>
 
-<!-- ================== AI CHAT SCREEN ================== -->
-<div class="screen" id="aiChatScreen">
-  <button class="back-btn">Back</button>
-  <h2>AI Chat</h2>
-  <div class="chat-container"></div>
-  <div class="chat-input">
-    <input type="text" placeholder="Type your question here...">
-    <button id="sendChatBtn">Send</button>
-    <button id="voiceBtn">🎤</button>
+  <!-- ================== TEACHER LOGIN ================== -->
+  <div class="screen" id="teacherLoginScreen">
+    <button class="back-btn">Back</button>
+    <h2>Teacher Login</h2>
+    <input type="text" id="teacherName" placeholder="Teacher Name">
+    <input type="text" id="teacherSchool" placeholder="School Name">
+    <button id="loginTeacherBtn" class="primary-btn">Login</button>
   </div>
-</div>
 
-<!-- ================== DASHBOARD SCREEN ================== -->
-<div class="screen" id="dashboardScreen">
-  <button class="back-btn">Back</button>
-  <h2>Learning Dashboard</h2>
-  <!-- Progress graphs and stats will be populated by JS -->
-</div>
+  <!-- ================== HOME SCREEN ================== -->
+  <div class="screen" id="homeScreen">
+    <button class="back-btn">Back</button>
+    <h2>Home</h2>
 
-<!-- ================== TEACHER DASHBOARD ================== -->
-<div class="screen" id="teacherDashboardScreen">
-  <button class="back-btn">Back</button>
-  <h2>Teacher Dashboard</h2>
-  <input type="text" id="newClassName" placeholder="New Class Name">
-  <button id="createClassBtn" class="primary-btn">Create Class</button>
-  <div id="classesList"></div>
-</div>
+    <!-- ASSIGNMENTS -->
+    <div id="homeAssignments">
+      <h3>Assignments from Teachers:</h3>
+      <ul></ul>
+    </div>
 
-<!-- ================== NAVIGATION ================== -->
-<div class="nav-bar">
-  <button class="nav-btn">Home</button>
-  <button class="nav-btn">Explore</button>
-  <button class="nav-btn">Profile</button>
-  <button class="nav-btn">Friends</button>
-  <button class="nav-btn">Messages</button>
-  <button class="nav-btn">Dashboard</button>
-</div>
+    <!-- SUBJECT CATEGORIES -->
+    <div class="categories">
+      <h3>Subjects</h3>
+      <button class="category-btn">Mathematics</button>
+      <button class="category-btn">Science</button>
+      <button class="category-btn">History</button>
+      <button class="category-btn">Languages</button>
+    </div>
+  </div>
 
+  <!-- ================== SUBJECT SCREEN ================== -->
+  <div class="screen" id="subjectScreen">
+    <button class="back-btn">Back</button>
+    <h2>Select Subject</h2>
+    <div class="subject-list">
+      <button class="subject-btn">Mathematics <span class="chat-badge">Start Chat</span></button>
+      <button class="subject-btn">Science <span class="chat-badge">Start Chat</span></button>
+      <button class="subject-btn">History <span class="chat-badge">Start Chat</span></button>
+      <button class="subject-btn">Languages <span class="chat-badge">Start Chat</span></button>
+    </div>
+  </div>
+
+  <!-- ================== AI CHAT SCREEN ================== -->
+  <div class="screen" id="aiChatScreen">
+    <button class="back-btn">Back</button>
+    <h2>AI Chat</h2>
+    <div class="chat-container"></div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type a message...">
+      <button id="sendChatBtn" class="primary-btn">Send</button>
+      <button id="voiceBtn" class="primary-btn">🎤</button>
+    </div>
+  </div>
+
+  <!-- ================== DASHBOARD SCREEN ================== -->
+  <div class="screen" id="dashboardScreen">
+    <button class="back-btn">Back</button>
+    <h2>Learning Dashboard</h2>
+    <div id="dashboardGraphs"></div>
+    <p>Progress, quiz scores, subject strengths & weaknesses will appear here.</p>
+  </div>
+
+  <!-- ================== TEACHER DASHBOARD ================== -->
+  <div class="screen" id="teacherDashboardScreen">
+    <button class="back-btn">Back</button>
+    <h2>Teacher Dashboard</h2>
+    <input type="text" id="newClassName" placeholder="Class Name">
+    <button id="createClassBtn" class="primary-btn">Create Class</button>
+    <div id="classesList"></div>
+  </div>
+
+  <!-- ================== PROFILE SCREEN ================== -->
+  <div class="screen" id="profileScreen">
+    <button class="back-btn">Back</button>
+    <h2>Profile</h2>
+    <p>Stats, achievements, and learning history.</p>
+  </div>
+
+  <!-- ================== FRIENDS SCREEN ================== -->
+  <div class="screen" id="friendsScreen">
+    <button class="back-btn">Back</button>
+    <h2>Friends</h2>
+    <div class="friends-list">
+      <div>Friend 1</div>
+      <div>Friend 2</div>
+      <div>Friend 3</div>
+    </div>
+  </div>
+
+  <!-- ================== NAVIGATION BAR ================== -->
+  <div class="bottom-nav">
+    <button class="nav-btn active">Home</button>
+    <button class="nav-btn">Explore</button>
+    <button class="nav-btn">Profile</button>
+    <button class="nav-btn">Friends</button>
+    <button class="nav-btn">Messages</button>
+    <button class="nav-btn">Dashboard</button>
+  </div>
+
+</div>
 <script src="script.js"></script>
 </body>
 </html>
