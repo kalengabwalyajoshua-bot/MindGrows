@@ -15,21 +15,51 @@
     <div class="screen active" id="welcomeScreen">
       <div class="welcome-content">
         <h1 class="app-title">Welcome to MindGrow</h1>
-        <p class="tagline">Grow your mind, track your learning, and chat with your AI tutor!</p>
+        <p class="tagline">Grow your mind, track learning, and chat with your AI tutor!</p>
         <button class="primary-btn" id="startBtn">Get Started</button>
+        <button class="primary-btn" id="teacherBtn">Teacher Login</button>
       </div>
     </div>
 
     <!-- =======================
-         SIGNUP SCREEN
+         STUDENT SIGNUP SCREEN
     ======================= -->
     <div class="screen" id="signupScreen">
       <div class="form-container">
-        <h2>Sign Up</h2>
+        <h2>Student Sign Up</h2>
         <input type="text" placeholder="Full Name" id="fullName">
         <input type="text" placeholder="School Name" id="schoolName">
         <input type="text" placeholder="Class/Grade" id="className">
         <button class="primary-btn" id="signupBtn">Continue</button>
+      </div>
+    </div>
+
+    <!-- =======================
+         TEACHER LOGIN SCREEN
+    ======================= -->
+    <div class="screen" id="teacherLoginScreen">
+      <div class="form-container">
+        <h2>Teacher Login</h2>
+        <input type="text" placeholder="Teacher Name" id="teacherName">
+        <input type="text" placeholder="School Name" id="teacherSchool">
+        <button class="primary-btn" id="loginTeacherBtn">Login</button>
+      </div>
+    </div>
+
+    <!-- =======================
+         TEACHER DASHBOARD
+    ======================= -->
+    <div class="screen" id="teacherDashboardScreen">
+      <div class="top-bar">
+        <h2>Teacher Dashboard</h2>
+      </div>
+      <div class="teacher-controls">
+        <h3>Create Class</h3>
+        <input type="text" id="newClassName" placeholder="Class Name">
+        <button class="primary-btn" id="createClassBtn">Create Class</button>
+
+        <h3>Classes</h3>
+        <div id="classesList"></div>
       </div>
     </div>
 
@@ -41,9 +71,16 @@
         <h2>Home</h2>
         <button class="icon-btn" id="voiceBtn">🎤</button>
       </div>
+
+      <!-- STUDENT ASSIGNMENTS -->
+      <div id="homeAssignments">
+        <h3>Assignments from Teachers:</h3>
+      </div>
+
       <div class="search-box">
         <input type="text" placeholder="Search subjects, categories...">
       </div>
+
       <h3>Categories</h3>
       <div class="categories">
         <button class="category-btn">Mathematics</button>
@@ -75,9 +112,7 @@
       <div class="top-bar">
         <h2>AI Chat</h2>
       </div>
-      <div class="chat-container">
-        <!-- Messages appear here -->
-      </div>
+      <div class="chat-container"></div>
       <div class="chat-input">
         <input type="text" placeholder="Type a message...">
         <button class="primary-btn" id="sendChatBtn">Send</button>
