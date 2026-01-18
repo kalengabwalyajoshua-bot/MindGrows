@@ -1,55 +1,101 @@
-// script.js
+// ============================
+// GLOBAL SCREEN HANDLER
+// ============================
 
-// Function to handle screen navigation
-function showScreen(screenId) {
-  const screens = document.querySelectorAll('.screen');
-  screens.forEach(screen => {
-    screen.classList.remove('active');
-  });
-  const activeScreen = document.getElementById(screenId);
-  if (activeScreen) {
-    activeScreen.classList.add('active');
-  }
+const screens = document.querySelectorAll(".screen");
+
+function showScreen(id) {
+  screens.forEach(screen => screen.classList.remove("active"));
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
 }
 
-// Event listener for 'Get Started' button
-document.getElementById('startBtn').addEventListener('click', () => {
-  showScreen('signupScreen');
+// ============================
+// START FLOW
+// ============================
+
+document.getElementById("startBtn").addEventListener("click", () => {
+  showScreen("signupScreen");
 });
 
-// Event listener for 'Continue' button on the signup screen
-document.getElementById('signupBtn').addEventListener('click', () => {
-  // Here you can add form validation and data handling
-  showScreen('homeScreen');
+document.getElementById("signupBtn").addEventListener("click", () => {
+  // later: validation + backend
+  showScreen("homeScreen");
 });
 
-// Navigation for bottom nav buttons
-const navButtons = document.querySelectorAll('.nav-btn');
-navButtons.forEach(button => {
-  button.addEventListener('click', (e) => {
-    navButtons.forEach(btn => btn.classList.remove('active'));
-    e.target.classList.add('active');
-    showScreen(e.target.textContent.trim() + 'Screen');
+// ============================
+// BOTTOM NAVIGATION
+// ============================
+
+const navMap = {
+  Home: "homeScreen",
+  Explore: "categoryScreen",
+  Profile: "profileScreen",
+  Friends: "friendsScreen",
+  Messages: "aiChatScreen"
+};
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    const targetScreen = navMap[btn.textContent.trim()];
+    if (targetScreen) showScreen(targetScreen);
   });
 });
 
-// Voice command button (placeholder for future functionality)
-document.getElementById('voiceBtn').addEventListener('click', () => {
-  // Future implementation for voice commands
-  alert('Voice command feature coming soon!');
+// ============================
+// CATEGORY BUTTONS → SUBJECTS
+// ============================
+
+document.querySelectorAll(".category-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    showScreen("subjectScreen");
+  });
 });
 
-// AI Chat 'Send' button functionality (placeholder)
-document.getElementById('sendChatBtn').addEventListener('click', () => {
-  const chatInput = document.querySelector('.chat-input input');
-  const message = chatInput.value.trim();
-  if (message) {
-    // Here you can add code to send the message to the AI and display the response
-    const chatContainer = document.querySelector('.chat-container');
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('chat-message');
-    messageElement.textContent = message;
-    chatContainer.appendChild(messageElement);
-    chatInput.value = '';
-  }
+// ============================
+// SUBJECT BUTTONS → AI CHAT
+// ============================
+
+document.querySelectorAll(".subject-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    showScreen("aiChatScreen");
+  });
+});
+
+// ============================
+// AI CHAT (LOCAL DEMO)
+// ============================
+
+document.getElementById("sendChatBtn").addEventListener("click", () => {
+  const input = document.querySelector(".chat-input input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  const chat = document.querySelector(".chat-container");
+
+  const userMsg = document.createElement("div");
+  userMsg.className = "chat-message";
+  userMsg.textContent = "You: " + message;
+
+  chat.appendChild(userMsg);
+
+  const aiMsg = document.createElement("div");
+  aiMsg.className = "chat-message";
+  aiMsg.textContent = "AI: I'm learning you. Real AI coming soon.";
+
+  setTimeout(() => chat.appendChild(aiMsg), 600);
+
+  input.value = "";
+  chat.scrollTop = chat.scrollHeight;
+});
+
+// ============================
+// VOICE BUTTON (PLACEHOLDER)
+// ============================
+
+document.getElementById("voiceBtn").addEventListener("click", () => {
+  alert("Voice AI will be added later.");
 });
