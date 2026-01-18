@@ -1,30 +1,44 @@
 // ============================
-// GLOBAL SCREEN HANDLER
+// SCREEN HANDLER
 // ============================
 
 const screens = document.querySelectorAll(".screen");
 
 function showScreen(id) {
-  screens.forEach(screen => screen.classList.remove("active"));
-  const target = document.getElementById(id);
-  if (target) target.classList.add("active");
+  screens.forEach(s => s.classList.remove("active"));
+  document.getElementById(id)?.classList.add("active");
+}
+
+// ============================
+// USER DATA (AI MEMORY)
+// ============================
+
+const userData = JSON.parse(localStorage.getItem("mindglowUser")) || {
+  visits: 0,
+  subjects: {},
+  questionsAsked: 0
+};
+
+function saveUserData() {
+  localStorage.setItem("mindglowUser", JSON.stringify(userData));
 }
 
 // ============================
 // START FLOW
 // ============================
 
-document.getElementById("startBtn").addEventListener("click", () => {
+document.getElementById("startBtn").onclick = () => {
   showScreen("signupScreen");
-});
+};
 
-document.getElementById("signupBtn").addEventListener("click", () => {
-  // later: validation + backend
+document.getElementById("signupBtn").onclick = () => {
+  userData.visits++;
+  saveUserData();
   showScreen("homeScreen");
-});
+};
 
 // ============================
-// BOTTOM NAVIGATION
+// NAVIGATION
 // ============================
 
 const navMap = {
@@ -36,66 +50,75 @@ const navMap = {
 };
 
 document.querySelectorAll(".nav-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
-
-    const targetScreen = navMap[btn.textContent.trim()];
-    if (targetScreen) showScreen(targetScreen);
-  });
+    showScreen(navMap[btn.textContent.trim()]);
+  };
 });
 
 // ============================
-// CATEGORY BUTTONS → SUBJECTS
+// CATEGORY → SUBJECT
 // ============================
 
 document.querySelectorAll(".category-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    showScreen("subjectScreen");
-  });
+  btn.onclick = () => showScreen("subjectScreen");
 });
 
 // ============================
-// SUBJECT BUTTONS → AI CHAT
+// SUBJECT TRACKING
 // ============================
 
 document.querySelectorAll(".subject-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
+    const subject = btn.textContent;
+
+    userData.subjects[subject] = (userData.subjects[subject] || 0) + 1;
+    saveUserData();
+
     showScreen("aiChatScreen");
-  });
+  };
 });
 
 // ============================
-// AI CHAT (LOCAL DEMO)
+// AI CHAT (SMART DEMO)
 // ============================
 
-document.getElementById("sendChatBtn").addEventListener("click", () => {
+document.getElementById("sendChatBtn").onclick = () => {
   const input = document.querySelector(".chat-input input");
-  const message = input.value.trim();
-  if (!message) return;
-
   const chat = document.querySelector(".chat-container");
+  const msg = input.value.trim();
+  if (!msg) return;
 
-  const userMsg = document.createElement("div");
-  userMsg.className = "chat-message";
-  userMsg.textContent = "You: " + message;
+  userData.questionsAsked++;
+  saveUserData();
 
-  chat.appendChild(userMsg);
+  const userBubble = document.createElement("div");
+  userBubble.className = "chat-message";
+  userBubble.textContent = "You: " + msg;
+  chat.appendChild(userBubble);
 
-  const aiMsg = document.createElement("div");
-  aiMsg.className = "chat-message";
-  aiMsg.textContent = "AI: I'm learning you. Real AI coming soon.";
+  const aiBubble = document.createElement("div");
+  aiBubble.className = "chat-message";
 
-  setTimeout(() => chat.appendChild(aiMsg), 600);
+  const favSubject = Object.entries(userData.subjects)
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+
+  aiBubble.textContent =
+    favSubject
+      ? `AI: I noticed you focus a lot on ${favSubject}. Want to practice it more?`
+      : "AI: I’m learning how you study. Ask me anything.";
+
+  setTimeout(() => chat.appendChild(aiBubble), 600);
 
   input.value = "";
   chat.scrollTop = chat.scrollHeight;
-});
+};
 
 // ============================
-// VOICE BUTTON (PLACEHOLDER)
+// VOICE PLACEHOLDER
 // ============================
 
-document.getElementById("voiceBtn").addEventListener("click", () => {
-  alert("Voice AI will be added later.");
-});
+document.getElementById("voiceBtn").onclick = () => {
+  alert("Voice AI coming soon.");
+};
