@@ -13,27 +13,33 @@
   <div class="screen active" id="welcomeScreen">
     <h1 class="app-title">Welcome to MindGrow</h1>
     <p class="tagline">Grow your mind, track learning, and chat with your AI tutor!</p>
-    <button id="startBtn" class="primary-btn">Get Started</button>
-    <button id="teacherBtn" class="primary-btn">I'm a Teacher</button>
+    <div class="welcome-buttons">
+      <button id="startBtn" class="primary-btn">Get Started</button>
+      <button id="teacherBtn" class="primary-btn">I'm a Teacher</button>
+    </div>
   </div>
 
-  <!-- ================== STUDENT SIGNUP ================== -->
+  <!-- ================== STUDENT SIGNUP SCREEN ================== -->
   <div class="screen" id="signupScreen">
     <button class="back-btn">Back</button>
     <h2>Student Sign Up</h2>
-    <input type="text" id="fullName" placeholder="Full Name">
-    <input type="text" id="schoolName" placeholder="School Name">
-    <input type="text" id="className" placeholder="Class/Grade">
-    <button id="signupBtn" class="primary-btn">Continue</button>
+    <form id="signupForm">
+      <input type="text" id="fullName" placeholder="Full Name" required>
+      <input type="text" id="schoolName" placeholder="School Name" required>
+      <input type="text" id="className" placeholder="Class/Grade" required>
+      <button type="submit" id="signupBtn" class="primary-btn">Continue</button>
+    </form>
   </div>
 
-  <!-- ================== TEACHER LOGIN ================== -->
+  <!-- ================== TEACHER LOGIN SCREEN ================== -->
   <div class="screen" id="teacherLoginScreen">
     <button class="back-btn">Back</button>
     <h2>Teacher Login</h2>
-    <input type="text" id="teacherName" placeholder="Teacher Name">
-    <input type="text" id="teacherSchool" placeholder="School Name">
-    <button id="loginTeacherBtn" class="primary-btn">Login</button>
+    <form id="teacherLoginForm">
+      <input type="text" id="teacherName" placeholder="Teacher Name" required>
+      <input type="text" id="teacherSchool" placeholder="School Name" required>
+      <button type="submit" id="loginTeacherBtn" class="primary-btn">Login</button>
+    </form>
   </div>
 
   <!-- ================== HOME SCREEN ================== -->
@@ -44,7 +50,9 @@
     <!-- ASSIGNMENTS -->
     <div id="homeAssignments">
       <h3>Assignments from Teachers:</h3>
-      <ul></ul>
+      <ul>
+        <!-- JS will populate assignments -->
+      </ul>
     </div>
 
     <!-- SUBJECT CATEGORIES -->
@@ -55,6 +63,16 @@
       <button class="category-btn">History</button>
       <button class="category-btn">Languages</button>
     </div>
+
+    <!-- NAVIGATION BAR -->
+    <div class="bottom-nav">
+      <button class="nav-btn active">Home</button>
+      <button class="nav-btn">Explore</button>
+      <button class="nav-btn">Profile</button>
+      <button class="nav-btn">Friends</button>
+      <button class="nav-btn">Messages</button>
+      <button class="nav-btn">Dashboard</button>
+    </div>
   </div>
 
   <!-- ================== SUBJECT SCREEN ================== -->
@@ -62,10 +80,10 @@
     <button class="back-btn">Back</button>
     <h2>Select Subject</h2>
     <div class="subject-list">
-      <button class="subject-btn">Mathematics <span class="chat-badge">Start Chat</span></button>
-      <button class="subject-btn">Science <span class="chat-badge">Start Chat</span></button>
-      <button class="subject-btn">History <span class="chat-badge">Start Chat</span></button>
-      <button class="subject-btn">Languages <span class="chat-badge">Start Chat</span></button>
+      <button class="subject-btn">Mathematics</button>
+      <button class="subject-btn">Science</button>
+      <button class="subject-btn">History</button>
+      <button class="subject-btn">Languages</button>
     </div>
   </div>
 
@@ -73,9 +91,11 @@
   <div class="screen" id="aiChatScreen">
     <button class="back-btn">Back</button>
     <h2>AI Chat</h2>
-    <div class="chat-container"></div>
+    <div class="chat-container">
+      <!-- JS will populate chat messages -->
+    </div>
     <div class="chat-input">
-      <input type="text" placeholder="Type a message...">
+      <input type="text" placeholder="Type a message..." id="chatInput">
       <button id="sendChatBtn" class="primary-btn">Send</button>
       <button id="voiceBtn" class="primary-btn">🎤</button>
     </div>
@@ -85,48 +105,96 @@
   <div class="screen" id="dashboardScreen">
     <button class="back-btn">Back</button>
     <h2>Learning Dashboard</h2>
-    <div id="dashboardGraphs"></div>
-    <p>Progress, quiz scores, subject strengths & weaknesses will appear here.</p>
+    <div id="dashboardGraphs">
+      <!-- JS will generate graphs -->
+    </div>
+    <div id="dashboardStats">
+      <p>Assignments Completed: <span id="completedAssignments">0</span></p>
+      <p>Assignments Pending: <span id="pendingAssignments">0</span></p>
+      <p>Subjects Strongest: <span id="strongSubjects">-</span></p>
+      <p>Subjects Weakest: <span id="weakSubjects">-</span></p>
+    </div>
   </div>
 
-  <!-- ================== TEACHER DASHBOARD ================== -->
+  <!-- ================== TEACHER DASHBOARD SCREEN ================== -->
   <div class="screen" id="teacherDashboardScreen">
     <button class="back-btn">Back</button>
     <h2>Teacher Dashboard</h2>
-    <input type="text" id="newClassName" placeholder="Class Name">
-    <button id="createClassBtn" class="primary-btn">Create Class</button>
-    <div id="classesList"></div>
+    <div class="create-class">
+      <input type="text" id="newClassName" placeholder="Class Name">
+      <button id="createClassBtn" class="primary-btn">Create Class</button>
+    </div>
+    <div id="classesList">
+      <!-- JS will list classes and assignments -->
+    </div>
   </div>
 
   <!-- ================== PROFILE SCREEN ================== -->
   <div class="screen" id="profileScreen">
     <button class="back-btn">Back</button>
     <h2>Profile</h2>
-    <p>Stats, achievements, and learning history.</p>
+    <div id="profileInfo">
+      <p>Name: <span id="profileName">Student</span></p>
+      <p>School: <span id="profileSchool">-</span></p>
+      <p>Class: <span id="profileClass">-</span></p>
+      <p>Achievements: <span id="profileAchievements">-</span></p>
+    </div>
   </div>
 
   <!-- ================== FRIENDS SCREEN ================== -->
   <div class="screen" id="friendsScreen">
     <button class="back-btn">Back</button>
     <h2>Friends</h2>
-    <div class="friends-list">
+    <div id="friendsList">
       <div>Friend 1</div>
       <div>Friend 2</div>
       <div>Friend 3</div>
     </div>
   </div>
 
-  <!-- ================== NAVIGATION BAR ================== -->
-  <div class="bottom-nav">
-    <button class="nav-btn active">Home</button>
-    <button class="nav-btn">Explore</button>
-    <button class="nav-btn">Profile</button>
-    <button class="nav-btn">Friends</button>
-    <button class="nav-btn">Messages</button>
-    <button class="nav-btn">Dashboard</button>
+  <!-- ================== MESSAGES SCREEN ================== -->
+  <div class="screen" id="messagesScreen">
+    <button class="back-btn">Back</button>
+    <h2>Messages</h2>
+    <div id="messagesContainer">
+      <!-- JS populates messages -->
+    </div>
+  </div>
+
+  <!-- ================== QUIZZES SCREEN ================== -->
+  <div class="screen" id="quizScreen">
+    <button class="back-btn">Back</button>
+    <h2>Quiz</h2>
+    <div id="quizContent">
+      <!-- JS generates questions -->
+    </div>
+    <button id="submitQuizBtn" class="primary-btn">Submit Quiz</button>
+  </div>
+
+  <!-- ================== NOTIFICATIONS SCREEN ================== -->
+  <div class="screen" id="notificationsScreen">
+    <button class="back-btn">Back</button>
+    <h2>Notifications</h2>
+    <ul id="notificationsList">
+      <!-- JS populates notifications -->
+    </ul>
+  </div>
+
+  <!-- ================== SETTINGS SCREEN ================== -->
+  <div class="screen" id="settingsScreen">
+    <button class="back-btn">Back</button>
+    <h2>Settings</h2>
+    <label>
+      <input type="checkbox" id="darkModeToggle"> Dark Mode
+    </label>
+    <label>
+      <input type="checkbox" id="notificationsToggle" checked> Notifications
+    </label>
   </div>
 
 </div>
+
+<!-- SCRIPT -->
 <script src="script.js"></script>
 </body>
 </html>
