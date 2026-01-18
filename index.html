@@ -1,174 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MindGlow</title>
-
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindGrow</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div id="app">
 
-    <!-- ================= WELCOME SCREEN ================= -->
-    <section id="welcomeScreen" class="screen active">
+    <!-- =======================
+         WELCOME SCREEN
+    ======================= -->
+    <div class="screen active" id="welcomeScreen">
       <div class="welcome-content">
-        <h1 class="app-title">Welcome to MindGlow</h1>
-        <p class="tagline">Learn smarter. Grow brighter.</p>
-        <button id="startBtn" class="primary-btn">Get Started</button>
+        <h1 class="app-title">Welcome to MindGrow</h1>
+        <p class="tagline">Grow your mind, track your learning, and chat with your AI tutor!</p>
+        <button class="primary-btn" id="startBtn">Get Started</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= SIGN UP SCREEN ================= -->
-    <section id="signupScreen" class="screen">
+    <!-- =======================
+         SIGNUP SCREEN
+    ======================= -->
+    <div class="screen" id="signupScreen">
       <div class="form-container">
-        <h2>Create Your Account</h2>
-
-        <input type="text" id="fullName" placeholder="Full Name" />
-        <input type="email" id="email" placeholder="Email Address" />
-        <input type="tel" id="phone" placeholder="Phone Number" />
-
-        <select id="school">
-          <option value="">Select School</option>
-          <option>School A</option>
-          <option>School B</option>
-        </select>
-
-        <select id="grade">
-          <option value="">Select Grade / Class</option>
-          <option>Grade 7</option>
-          <option>Grade 8</option>
-          <option>Grade 9</option>
-          <option>Grade 10</option>
-          <option>Grade 11</option>
-          <option>Grade 12</option>
-        </select>
-
-        <select id="role">
-          <option value="">Select Role</option>
-          <option>Student</option>
-          <option>Teacher</option>
-          <option>Head Teacher</option>
-        </select>
-
-        <button id="signupBtn" class="primary-btn">Continue</button>
+        <h2>Sign Up</h2>
+        <input type="text" placeholder="Full Name" id="fullName">
+        <input type="text" placeholder="School Name" id="schoolName">
+        <input type="text" placeholder="Class/Grade" id="className">
+        <button class="primary-btn" id="signupBtn">Continue</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= HOME SCREEN ================= -->
-    <section id="homeScreen" class="screen">
-      <header class="top-bar">
-        <h2>MindGlow</h2>
-        <button id="voiceBtn" class="icon-btn">🎤</button>
-      </header>
-
+    <!-- =======================
+         HOME SCREEN
+    ======================= -->
+    <div class="screen" id="homeScreen">
+      <div class="top-bar">
+        <h2>Home</h2>
+        <button class="icon-btn" id="voiceBtn">🎤</button>
+      </div>
       <div class="search-box">
-        <input type="text" placeholder="Search subjects, topics..." />
+        <input type="text" placeholder="Search subjects, categories...">
       </div>
-
+      <h3>Categories</h3>
       <div class="categories">
         <button class="category-btn">Mathematics</button>
         <button class="category-btn">Science</button>
-        <button class="category-btn">Languages</button>
         <button class="category-btn">History</button>
+        <button class="category-btn">Languages</button>
       </div>
+    </div>
 
-      <nav class="bottom-nav">
-        <button class="nav-btn active">Home</button>
-        <button class="nav-btn">Explore</button>
-        <button class="nav-btn">Profile</button>
-        <button class="nav-btn">Friends</button>
-        <button class="nav-btn">Messages</button>
-      </nav>
-    </section>
-
-    <!-- ================= AI CHAT SCREEN ================= -->
-    <section id="aiChatScreen" class="screen">
-      <header class="top-bar">
-        <h2>AI Tutor</h2>
-      </header>
-
-      <div class="chat-container"></div>
-
-      <div class="chat-input">
-        <input type="text" placeholder="Ask the AI anything..." />
-        <button id="sendChatBtn" class="primary-btn">Send</button>
-      </div>
-    </section>
-
-    <!-- ================= SUBJECTS SCREEN ================= -->
-    <section id="subjectScreen" class="screen">
-      <header class="top-bar">
+    <!-- =======================
+         CATEGORY SCREEN (SUBJECTS)
+    ======================= -->
+    <div class="screen" id="subjectScreen">
+      <div class="top-bar">
         <h2>Subjects</h2>
-      </header>
-
+      </div>
       <div class="subject-list">
-        <button class="subject-btn">Mathematics</button>
-        <button class="subject-btn">English</button>
-        <button class="subject-btn">Physics</button>
-        <button class="subject-btn">Chemistry</button>
-        <button class="subject-btn">Biology</button>
+        <button class="subject-btn">Mathematics <span class="chat-badge">Start Chat</span></button>
+        <button class="subject-btn">Science <span class="chat-badge">Start Chat</span></button>
+        <button class="subject-btn">History <span class="chat-badge">Start Chat</span></button>
+        <button class="subject-btn">Languages <span class="chat-badge">Start Chat</span></button>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= CATEGORIES SCREEN ================= -->
-    <section id="categoryScreen" class="screen">
-      <header class="top-bar">
-        <h2>Categories</h2>
-      </header>
-
-      <div class="category-list">
-        <button class="category-btn">Calendar</button>
-        <button class="category-btn">Trivia</button>
-        <button class="category-btn">Mind Games</button>
-        <button class="category-btn">Clubs</button>
+    <!-- =======================
+         AI CHAT SCREEN
+    ======================= -->
+    <div class="screen" id="aiChatScreen">
+      <div class="top-bar">
+        <h2>AI Chat</h2>
       </div>
-    </section>
-
-    <!-- ================= CLASSES SCREEN ================= -->
-    <section id="classesScreen" class="screen">
-      <header class="top-bar">
-        <h2>Classes</h2>
-      </header>
-      <div class="classes-list">
-        <!-- Assignments, announcements, exercises -->
+      <div class="chat-container">
+        <!-- Messages appear here -->
       </div>
-    </section>
-
-    <!-- ================= EVENTS SCREEN ================= -->
-    <section id="eventsScreen" class="screen">
-      <header class="top-bar">
-        <h2>Events</h2>
-      </header>
-      <div class="events-list">
-        <!-- School competitions & activities -->
+      <div class="chat-input">
+        <input type="text" placeholder="Type a message...">
+        <button class="primary-btn" id="sendChatBtn">Send</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= FRIENDS SCREEN ================= -->
-    <section id="friendsScreen" class="screen">
-      <header class="top-bar">
+    <!-- =======================
+         PROFILE SCREEN
+    ======================= -->
+    <div class="screen" id="profileScreen">
+      <div class="top-bar">
+        <h2>Profile</h2>
+      </div>
+      <p>Coming soon: Your stats, achievements, and learning history.</p>
+    </div>
+
+    <!-- =======================
+         FRIENDS SCREEN
+    ======================= -->
+    <div class="screen" id="friendsScreen">
+      <div class="top-bar">
         <h2>Friends</h2>
-      </header>
-      <div class="friends-list"></div>
-    </section>
+      </div>
+      <div class="friends-list">
+        <div>Friend 1</div>
+        <div>Friend 2</div>
+        <div>Friend 3</div>
+      </div>
+    </div>
 
-    <!-- ================= PROFILE SCREEN ================= -->
-    <section id="profileScreen" class="screen">
-      <header class="top-bar">
-        <h2>Your Profile</h2>
-      </header>
-      <div class="profile-container"></div>
-    </section>
+    <!-- =======================
+         BOTTOM NAVIGATION
+    ======================= -->
+    <div class="bottom-nav">
+      <button class="nav-btn active">Home</button>
+      <button class="nav-btn">Explore</button>
+      <button class="nav-btn">Profile</button>
+      <button class="nav-btn">Friends</button>
+      <button class="nav-btn">Messages</button>
+    </div>
 
   </div>
 
-  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
