@@ -1,198 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindGrow</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoAI - Your Empathy Engine</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script defer src="script.js"></script>
+  <style>
+    /* Fallback CSS in case style.css hasn't loaded yet */
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: radial-gradient(circle at top right, #0a0f2b, #000);
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(15, 20, 50, 0.85);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+    header h1 {
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      color: #00ffe1;
+      text-shadow: 0 0 10px #00ffe1, 0 0 20px #00ffe1;
+    }
+    header nav button {
+      background: none;
+      border: 1px solid #00ffe1;
+      color: #00ffe1;
+      padding: 0.5rem 1rem;
+      margin-left: 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    header nav button:hover {
+      background: #00ffe1;
+      color: #0a0f2b;
+      box-shadow: 0 0 20px #00ffe1, 0 0 40px #00ffe1 inset;
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 280px;
+      background: rgba(10, 15, 40, 0.95);
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      box-shadow: 2px 0 20px rgba(0,0,0,0.7);
+    }
+    .sidebar button {
+      background: rgba(0, 255, 225, 0.05);
+      border: none;
+      color: #00ffe1;
+      text-align: left;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .sidebar button:hover {
+      background: #00ffe1;
+      color: #0a0f2b;
+      box-shadow: 0 0 15px #00ffe1, 0 0 30px #00ffe1 inset;
+    }
+    .chat-area {
+      flex: 1;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      overflow-y: auto;
+      position: relative;
+    }
+    .chat-message {
+      margin-bottom: 1rem;
+      max-width: 70%;
+      padding: 1rem;
+      border-radius: 16px;
+      background: rgba(0,255,225,0.1);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0,255,225,0.3);
+      animation: fadeIn 0.5s ease;
+    }
+    .chat-message.user {
+      background: rgba(0,255,225,0.3);
+      align-self: flex-end;
+      color: #0a0f2b;
+    }
+    .chat-message.ai {
+      background: rgba(0,255,225,0.05);
+      align-self: flex-start;
+      color: #00ffe1;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+    .input-area {
+      display: flex;
+      padding: 1rem 0;
+      background: rgba(15,20,50,0.9);
+      border-top: 1px solid #00ffe1;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid #00ffe1;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-area button {
+      margin-left: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: none;
+      background: #00ffe1;
+      color: #0a0f2b;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffe1, 0 0 30px #00ffe1 inset;
+      transition: 0.3s;
+    }
+    .input-area button:hover {
+      background: #00d1b5;
+    }
+    /* Bedtime stories panel */
+    .stories-panel {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      display: none;
+      flex-direction: column;
+      padding: 2rem;
+      overflow-y: auto;
+      box-shadow: 0 0 50px rgba(0,255,225,0.7);
+      z-index: 100;
+    }
+    .stories-panel h2 {
+      color: #00ffe1;
+      margin-bottom: 1rem;
+    }
+    .stories-panel button.close {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      border: none;
+      background: #00ffe1;
+      color: #0a0f2b;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    /* Voice glowing effect */
+    .listening-glow {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00ffe1 0%, #0a0f2b 70%);
+      box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;
+      cursor: pointer;
+      transition: 0.3s;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;}
+      50% { transform: scale(1.2); box-shadow: 0 0 40px #00ffe1, 0 0 70px #00ffe1 inset;}
+      100% { transform: scale(1); box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;}
+    }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00ffe1;
+      border-radius: 12px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00d1b5;
+    }
+  </style>
 </head>
 <body>
-
-<div id="app">
-
-  <!-- ================== WELCOME SCREEN ================== -->
-  <div class="screen active" id="welcomeScreen">
-    <h1 class="app-title">Welcome to MindGrow</h1>
-    <p class="tagline">Grow your mind, track learning, and chat with your AI tutor!</p>
-    <div class="welcome-buttons">
-      <button id="startBtn" class="primary-btn">Get Started</button>
-      <button id="teacherBtn" class="primary-btn">I'm a Teacher</button>
+  <div class="container">
+    <header>
+      <h1>EchoAI</h1>
+      <nav>
+        <button id="homeBtn">Home</button>
+        <button id="storiesBtn">Bedtime Stories</button>
+        <button id="settingsBtn">Settings</button>
+      </nav>
+    </header>
+    <main>
+      <div class="sidebar">
+        <button class="tab-btn" data-tab="chat">Chat</button>
+        <button class="tab-btn" data-tab="music">Music</button>
+        <button class="tab-btn" data-tab="video">Video Analyzer</button>
+        <button class="tab-btn" data-tab="notifications">Notifications</button>
+      </div>
+      <div class="chat-area" id="chatArea">
+        <div class="chat-message ai">Hello Joshua! I’m EchoAI, your personal empathy engine. How can I help you today?</div>
+      </div>
+    </main>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type a message...">
+      <button id="sendBtn">Send</button>
     </div>
+    <div class="stories-panel" id="storiesPanel">
+      <button class="close" id="closeStories">Close</button>
+      <h2>Bedtime Stories</h2>
+      <div class="story" id="story1"><strong>Calmness:</strong> Once upon a time in a serene forest…</div>
+      <div class="story" id="story2"><strong>Adventure:</strong> High above the clouds, a young explorer…</div>
+      <div class="story" id="story3"><strong>Anger:</strong> In a land of fiery mountains…</div>
+      <div class="story" id="story4"><strong>Joy:</strong> On a sunny island where laughter never ends…</div>
+      <div class="story" id="story5"><strong>Wonder:</strong> Deep beneath the ocean waves, a hidden world…</div>
+    </div>
+    <div class="listening-glow" id="voiceGlow"></div>
   </div>
-
-  <!-- ================== STUDENT SIGNUP SCREEN ================== -->
-  <div class="screen" id="signupScreen">
-    <button class="back-btn">Back</button>
-    <h2>Student Sign Up</h2>
-    <form id="signupForm">
-      <input type="text" id="fullName" placeholder="Full Name" required>
-      <input type="text" id="schoolName" placeholder="School Name" required>
-      <input type="text" id="className" placeholder="Class/Grade" required>
-      <button type="submit" id="signupBtn" class="primary-btn">Continue</button>
-    </form>
-  </div>
-
-  <!-- ================== TEACHER LOGIN SCREEN ================== -->
-  <div class="screen" id="teacherLoginScreen">
-    <button class="back-btn">Back</button>
-    <h2>Teacher Login</h2>
-    <form id="teacherLoginForm">
-      <input type="text" id="teacherName" placeholder="Teacher Name" required>
-      <input type="text" id="teacherSchool" placeholder="School Name" required>
-      <button type="submit" id="loginTeacherBtn" class="primary-btn">Login</button>
-    </form>
-  </div>
-
-  <!-- ================== HOME SCREEN ================== -->
-  <div class="screen" id="homeScreen">
-    <button class="back-btn">Back</button>
-    <h2>Home</h2>
-
-    <!-- ASSIGNMENTS -->
-    <div id="homeAssignments">
-      <h3>Assignments from Teachers:</h3>
-      <ul></ul>
-    </div>
-
-    <!-- SUBJECT CATEGORIES -->
-    <div class="categories">
-      <h3>Subjects</h3>
-      <button class="category-btn">Mathematics</button>
-      <button class="category-btn">Science</button>
-      <button class="category-btn">History</button>
-      <button class="category-btn">Languages</button>
-    </div>
-
-    <!-- NAVIGATION BAR -->
-    <div class="bottom-nav">
-      <button class="nav-btn active">Home</button>
-      <button class="nav-btn">Explore</button>
-      <button class="nav-btn">Profile</button>
-      <button class="nav-btn">Friends</button>
-      <button class="nav-btn">Messages</button>
-      <button class="nav-btn">Dashboard</button>
-    </div>
-  </div>
-
-  <!-- ================== SUBJECT SCREEN ================== -->
-  <div class="screen" id="subjectScreen">
-    <button class="back-btn">Back</button>
-    <h2>Select Subject</h2>
-    <div class="subject-list">
-      <button class="subject-btn">Mathematics</button>
-      <button class="subject-btn">Science</button>
-      <button class="subject-btn">History</button>
-      <button class="subject-btn">Languages</button>
-    </div>
-  </div>
-
-  <!-- ================== AI CHAT SCREEN ================== -->
-  <div class="screen" id="aiChatScreen">
-    <button class="back-btn">Back</button>
-    <h2>AI Chat</h2>
-    <div class="chat-container">
-      <!-- JS populates chat messages -->
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Type a message..." id="chatInput">
-      <button id="sendChatBtn" class="primary-btn">Send</button>
-      <button id="voiceBtn" class="primary-btn">🎤</button>
-    </div>
-  </div>
-
-  <!-- ================== DASHBOARD SCREEN ================== -->
-  <div class="screen" id="dashboardScreen">
-    <button class="back-btn">Back</button>
-    <h2>Learning Dashboard</h2>
-    <div id="dashboardGraphs">
-      <!-- JS generates graphs -->
-    </div>
-    <div id="dashboardStats">
-      <p>Assignments Completed: <span id="completedAssignments">0</span></p>
-      <p>Assignments Pending: <span id="pendingAssignments">0</span></p>
-      <p>Subjects Strongest: <span id="strongSubjects">-</span></p>
-      <p>Subjects Weakest: <span id="weakSubjects">-</span></p>
-    </div>
-  </div>
-
-  <!-- ================== TEACHER DASHBOARD SCREEN ================== -->
-  <div class="screen" id="teacherDashboardScreen">
-    <button class="back-btn">Back</button>
-    <h2>Teacher Dashboard</h2>
-    <div class="create-class">
-      <input type="text" id="newClassName" placeholder="Class Name">
-      <button id="createClassBtn" class="primary-btn">Create Class</button>
-    </div>
-    <div id="classesList">
-      <!-- JS will list classes and assignments -->
-    </div>
-  </div>
-
-  <!-- ================== PROFILE SCREEN ================== -->
-  <div class="screen" id="profileScreen">
-    <button class="back-btn">Back</button>
-    <h2>Profile</h2>
-    <div id="profileInfo">
-      <p>Name: <span id="profileName">Student</span></p>
-      <p>School: <span id="profileSchool">-</span></p>
-      <p>Class: <span id="profileClass">-</span></p>
-      <p>Achievements: <span id="profileAchievements">-</span></p>
-    </div>
-  </div>
-
-  <!-- ================== FRIENDS SCREEN ================== -->
-  <div class="screen" id="friendsScreen">
-    <button class="back-btn">Back</button>
-    <h2>Friends</h2>
-    <div id="friendsList">
-      <div>Friend 1</div>
-      <div>Friend 2</div>
-      <div>Friend 3</div>
-    </div>
-  </div>
-
-  <!-- ================== MESSAGES SCREEN ================== -->
-  <div class="screen" id="messagesScreen">
-    <button class="back-btn">Back</button>
-    <h2>Messages</h2>
-    <div id="messagesContainer">
-      <!-- JS populates messages -->
-    </div>
-  </div>
-
-  <!-- ================== QUIZZES SCREEN ================== -->
-  <div class="screen" id="quizScreen">
-    <button class="back-btn">Back</button>
-    <h2>Quiz</h2>
-    <div id="quizContent">
-      <!-- JS generates questions -->
-    </div>
-    <button id="submitQuizBtn" class="primary-btn">Submit Quiz</button>
-  </div>
-
-  <!-- ================== NOTIFICATIONS SCREEN ================== -->
-  <div class="screen" id="notificationsScreen">
-    <button class="back-btn">Back</button>
-    <h2>Notifications</h2>
-    <ul id="notificationsList">
-      <!-- JS populates notifications -->
-    </ul>
-  </div>
-
-  <!-- ================== SETTINGS SCREEN ================== -->
-  <div class="screen" id="settingsScreen">
-    <button class="back-btn">Back</button>
-    <h2>Settings</h2>
-    <label>
-      <input type="checkbox" id="darkModeToggle"> Dark Mode
-    </label>
-    <label>
-      <input type="checkbox" id="notificationsToggle" checked> Notifications
-    </label>
-  </div>
-
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
