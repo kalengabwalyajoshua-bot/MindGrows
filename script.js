@@ -1,193 +1,127 @@
-// ================== GLOBAL DATA ==================
-const state = {
-  currentScreen: 'welcomeScreen',
-  previousScreen: null,
-  student: null,
-  teacher: null,
-  classes: [],
-  assignments: [],
-  chatHistory: []
-};
+// === EchoAI Script.js ===
 
-// ================== SCREEN NAVIGATION ==================
-function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const screen = document.getElementById(screenId);
-  if (!screen) return;
-  screen.classList.add('active');
-  state.previousScreen = state.currentScreen;
-  state.currentScreen = screenId;
+// Select elements
+const chatArea = document.getElementById('chatArea');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const storiesPanel = document.getElementById('storiesPanel');
+const storiesBtn = document.getElementById('storiesBtn');
+const closeStories = document.getElementById('closeStories');
+const voiceGlow = document.getElementById('voiceGlow');
+const tabButtons = document.querySelectorAll('.tab-btn');
+
+// === Chat Handling ===
+function appendMessage(text, sender='ai') {
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add('chat-message', sender);
+  msgDiv.innerText = text;
+  chatArea.appendChild(msgDiv);
+  chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// ================== BACK BUTTON ==================
-document.querySelectorAll('.back-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (state.previousScreen) showScreen(state.previousScreen);
-    else showScreen('welcomeScreen');
-  });
-});
-
-// ================== NAV BAR BUTTONS ==================
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const name = btn.textContent.toLowerCase();
-    switch (name) {
-      case 'home': showScreen('homeScreen'); break;
-      case 'explore': showScreen('subjectScreen'); break;
-      case 'profile': showScreen('profileScreen'); break;
-      case 'friends': showScreen('friendsScreen'); break;
-      case 'messages': showScreen('messagesScreen'); break;
-      case 'dashboard': showScreen('dashboardScreen'); break;
-    }
-  });
-});
-
-// ================== WELCOME SCREEN BUTTONS ==================
-const startBtn = document.getElementById('startBtn');
-const teacherBtn = document.getElementById('teacherBtn');
-
-startBtn.addEventListener('click', () => showScreen('signupScreen'));
-teacherBtn.addEventListener('click', () => showScreen('teacherLoginScreen'));
-
-// ================== STUDENT SIGNUP ==================
-document.getElementById('signupForm').addEventListener('submit', e => {
-  e.preventDefault();
-  state.student = {
-    name: document.getElementById('fullName').value,
-    school: document.getElementById('schoolName').value,
-    class: document.getElementById('className').value
-  };
-  alert(`Welcome ${state.student.name}!`);
-  showScreen('homeScreen');
-  updateHomeAssignments();
-});
-
-// ================== TEACHER LOGIN ==================
-document.getElementById('teacherLoginForm').addEventListener('submit', e => {
-  e.preventDefault();
-  state.teacher = {
-    name: document.getElementById('teacherName').value,
-    school: document.getElementById('teacherSchool').value
-  };
-  alert(`Welcome Teacher ${state.teacher.name}!`);
-  showScreen('teacherDashboardScreen');
-  updateTeacherClasses();
-});
-
-// ================== ASSIGNMENTS ==================
-function updateHomeAssignments() {
-  const ul = document.querySelector('#homeAssignments ul');
-  ul.innerHTML = '';
-  if (state.assignments.length === 0) {
-    ul.innerHTML = '<li>No assignments yet.</li>';
-    return;
+// === Simple AI Responses ===
+function getAIResponse(input) {
+  input = input.toLowerCase();
+  
+  if(input.includes('story')) {
+    storiesPanel.style.display = 'flex';
+    return "Opening bedtime stories for you!";
+  } 
+  else if(input.includes('hello') || input.includes('hi')) {
+    return "Hello Joshua! How are you feeling today?";
   }
-  state.assignments.forEach(a => {
-    const li = document.createElement('li');
-    li.textContent = a.title + (a.completed ? ' ✅' : '');
-    ul.appendChild(li);
-  });
+  else if(input.includes('music')) {
+    return "Playing relaxing music for you now...";
+  }
+  else if(input.includes('video') || input.includes('camera')) {
+    return "Activating video analyzer. Please allow camera access.";
+  }
+  else if(input.includes('how are you')) {
+    return "I’m always ready to assist you, Joshua!";
+  }
+  else {
+    return "I hear you, Joshua! Let's dive deeper into that...";
+  }
 }
 
-// ================== TEACHER DASHBOARD ==================
-document.getElementById('createClassBtn').addEventListener('click', () => {
-  const className = document.getElementById('newClassName').value;
-  if (!className) return alert('Enter class name');
-  state.classes.push({ name: className, assignments: [] });
-  updateTeacherClasses();
+// === Send Button & Enter Key ===
+sendBtn.addEventListener('click', () => {
+  const text = userInput.value.trim();
+  if(text) {
+    appendMessage(text, 'user');
+    const response = getAIResponse(text);
+    setTimeout(() => appendMessage(response, 'ai'), 500);
+    userInput.value = '';
+  }
 });
 
-function updateTeacherClasses() {
-  const div = document.getElementById('classesList');
-  div.innerHTML = '';
-  state.classes.forEach((cls, i) => {
-    const classDiv = document.createElement('div');
-    classDiv.innerHTML = `<h4>${cls.name}</h4><button onclick="addAssignment(${i})">Add Assignment</button>`;
-    div.appendChild(classDiv);
-  });
-}
+userInput.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') sendBtn.click();
+});
 
-function addAssignment(classIndex) {
-  const title = prompt('Enter assignment title:');
-  if (!title) return;
-  state.classes[classIndex].assignments.push({ title, completed: false });
-  state.assignments.push({ title, completed: false });
-  updateHomeAssignments();
-  updateTeacherClasses();
-}
+// === Bedtime Stories Panel ===
+storiesBtn.addEventListener('click', () => {
+  storiesPanel.style.display = 'flex';
+});
 
-// ================== AI CHAT ==================
-const sendBtn = document.getElementById('sendChatBtn');
-const chatInput = document.getElementById('chatInput');
-const chatContainer = document.querySelector('.chat-container');
+closeStories.addEventListener('click', () => {
+  storiesPanel.style.display = 'none';
+});
 
-sendBtn.addEventListener('click', sendMessage);
-chatInput.addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
-
-function sendMessage() {
-  const msg = chatInput.value.trim();
-  if (!msg) return;
-  addChatMessage('You', msg);
-  chatInput.value = '';
-  // Simulate AI response
+// === Voice Glow (Simulated Voice Command) ===
+voiceGlow.addEventListener('click', () => {
+  appendMessage("🎤 Listening for your voice command...", 'ai');
+  voiceGlow.style.animation = 'pulse 1s infinite alternate';
   setTimeout(() => {
-    addChatMessage('AI', `You said: ${msg}`);
-  }, 500);
-}
-
-function addChatMessage(sender, msg) {
-  const div = document.createElement('div');
-  div.textContent = `${sender}: ${msg}`;
-  chatContainer.appendChild(div);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
-// ================== VOICE COMMAND ==================
-const voiceBtn = document.getElementById('voiceBtn');
-
-voiceBtn.addEventListener('click', () => {
-  if (!('webkitSpeechRecognition' in window)) {
-    alert('Voice command not supported in this browser.');
-    return;
-  }
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  recognition.start();
-
-  recognition.onresult = event => {
-    const speech = event.results[0][0].transcript.toLowerCase();
-    handleVoiceCommand(speech);
-  };
-
-  recognition.onerror = event => alert('Voice recognition error: ' + event.error);
+    appendMessage("I understood your command! Processing...", 'ai');
+    voiceGlow.style.animation = 'pulse 2s infinite';
+  }, 2000);
 });
 
-function handleVoiceCommand(command) {
-  console.log('Voice command received:', command);
-  if (command.includes('open math')) showScreen('subjectScreen');
-  else if (command.includes('assignments')) showScreen('homeScreen');
-  else if (command.includes('dashboard')) showScreen('dashboardScreen');
-  else if (command.includes('profile')) showScreen('profileScreen');
-  else if (command.includes('friends')) showScreen('friendsScreen');
-  else if (command.includes('messages')) showScreen('messagesScreen');
-  else if (command.includes('back')) showScreen(state.previousScreen || 'homeScreen');
-  else alert('Command not recognized: ' + command);
+// === Tab Buttons Functionality ===
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    appendMessage(`Switched to ${tab} tab`, 'ai');
+    if(tab === 'music') appendMessage("Music player ready to play your favorite tracks!", 'ai');
+    if(tab === 'video') appendMessage("Video analyzer activated! Point your camera to start.", 'ai');
+    if(tab === 'notifications') appendMessage("Notifications panel opened.", 'ai');
+  });
+});
+
+// === Video Analyzer Skeleton (Placeholder) ===
+async function startVideoAnalyzer() {
+  appendMessage("Requesting camera access...", 'ai');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    appendMessage("Camera access granted! Analyzing...", 'ai');
+    // Placeholder for analysis logic
+  } catch (err) {
+    appendMessage("Camera access denied or not available.", 'ai');
+  }
 }
 
-// ================== DASHBOARD STATS ==================
-function updateDashboard() {
-  document.getElementById('completedAssignments').textContent =
-    state.assignments.filter(a => a.completed).length;
-  document.getElementById('pendingAssignments').textContent =
-    state.assignments.filter(a => !a.completed).length;
-  // Placeholder for strongest/weakest subjects
-  document.getElementById('strongSubjects').textContent = 'Math, Science';
-  document.getElementById('weakSubjects').textContent = 'History';
+// === Automatic Greetings on Load ===
+window.addEventListener('load', () => {
+  appendMessage("Welcome back, Joshua! EchoAI is online.", 'ai');
+  appendMessage("You can ask me to tell stories, play music, or analyze videos.", 'ai');
+});
+
+// === Smooth Scroll for Chat ===
+chatArea.addEventListener('DOMNodeInserted', (event) => {
+  chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' });
+});
+
+// === Example Bedtime Story Player (Simulated) ===
+function playStory(storyId) {
+  const storyText = document.getElementById(storyId).innerText;
+  appendMessage(`Playing story: ${storyText}`, 'ai');
+  // Simulated audio effect
+  setTimeout(() => appendMessage("✨ Story finished. Hope you enjoyed it!", 'ai'), 4000);
 }
 
-// Auto-update dashboard every 2s
-setInterval(() => {
-  if (state.currentScreen === 'dashboardScreen') updateDashboard();
-}, 2000);
+// === Optional: Keyboard Shortcuts ===
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'F1') storiesPanel.style.display = 'flex';
+  if(e.key === 'Escape') storiesPanel.style.display = 'none';
+});
