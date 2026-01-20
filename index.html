@@ -1,255 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoAI - Your Empathy Engine</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <script defer src="script.js"></script>
-  <style>
-    /* Fallback CSS in case style.css hasn't loaded yet */
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: radial-gradient(circle at top right, #0a0f2b, #000);
-      color: #fff;
-      overflow-x: hidden;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-      position: relative;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: rgba(15, 20, 50, 0.85);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
-    }
-    header h1 {
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-      color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1, 0 0 20px #00ffe1;
-    }
-    header nav button {
-      background: none;
-      border: 1px solid #00ffe1;
-      color: #00ffe1;
-      padding: 0.5rem 1rem;
-      margin-left: 1rem;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    header nav button:hover {
-      background: #00ffe1;
-      color: #0a0f2b;
-      box-shadow: 0 0 20px #00ffe1, 0 0 40px #00ffe1 inset;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: row;
-      overflow: hidden;
-    }
-    .sidebar {
-      width: 280px;
-      background: rgba(10, 15, 40, 0.95);
-      display: flex;
-      flex-direction: column;
-      padding: 1rem;
-      box-shadow: 2px 0 20px rgba(0,0,0,0.7);
-    }
-    .sidebar button {
-      background: rgba(0, 255, 225, 0.05);
-      border: none;
-      color: #00ffe1;
-      text-align: left;
-      padding: 1rem;
-      margin-bottom: 0.5rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .sidebar button:hover {
-      background: #00ffe1;
-      color: #0a0f2b;
-      box-shadow: 0 0 15px #00ffe1, 0 0 30px #00ffe1 inset;
-    }
-    .chat-area {
-      flex: 1;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      flex-direction: column;
-      padding: 2rem;
-      overflow-y: auto;
-      position: relative;
-    }
-    .chat-message {
-      margin-bottom: 1rem;
-      max-width: 70%;
-      padding: 1rem;
-      border-radius: 16px;
-      background: rgba(0,255,225,0.1);
-      color: #fff;
-      box-shadow: 0 0 10px rgba(0,255,225,0.3);
-      animation: fadeIn 0.5s ease;
-    }
-    .chat-message.user {
-      background: rgba(0,255,225,0.3);
-      align-self: flex-end;
-      color: #0a0f2b;
-    }
-    .chat-message.ai {
-      background: rgba(0,255,225,0.05);
-      align-self: flex-start;
-      color: #00ffe1;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity:1; transform: translateY(0);}
-    }
-    .input-area {
-      display: flex;
-      padding: 1rem 0;
-      background: rgba(15,20,50,0.9);
-      border-top: 1px solid #00ffe1;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 1rem;
-      border-radius: 12px;
-      border: 1px solid #00ffe1;
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      font-size: 1rem;
-      outline: none;
-    }
-    .input-area button {
-      margin-left: 1rem;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      border: none;
-      background: #00ffe1;
-      color: #0a0f2b;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 15px #00ffe1, 0 0 30px #00ffe1 inset;
-      transition: 0.3s;
-    }
-    .input-area button:hover {
-      background: #00d1b5;
-    }
-    /* Bedtime stories panel */
-    .stories-panel {
-      position: absolute;
-      top: 10%;
-      left: 10%;
-      width: 80%;
-      height: 80%;
-      background: rgba(0,0,0,0.95);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      display: none;
-      flex-direction: column;
-      padding: 2rem;
-      overflow-y: auto;
-      box-shadow: 0 0 50px rgba(0,255,225,0.7);
-      z-index: 100;
-    }
-    .stories-panel h2 {
-      color: #00ffe1;
-      margin-bottom: 1rem;
-    }
-    .stories-panel button.close {
-      position: absolute;
-      top: 1rem;
-      right: 2rem;
-      border: none;
-      background: #00ffe1;
-      color: #0a0f2b;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    /* Voice glowing effect */
-    .listening-glow {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #00ffe1 0%, #0a0f2b 70%);
-      box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;
-      cursor: pointer;
-      transition: 0.3s;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;}
-      50% { transform: scale(1.2); box-shadow: 0 0 40px #00ffe1, 0 0 70px #00ffe1 inset;}
-      100% { transform: scale(1); box-shadow: 0 0 20px #00ffe1, 0 0 50px #00ffe1 inset;}
-    }
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 12px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.3);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #00ffe1;
-      border-radius: 12px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #00d1b5;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EchoAI</title>
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
-  <div class="container">
-    <header>
-      <h1>EchoAI</h1>
-      <nav>
-        <button id="homeBtn">Home</button>
-        <button id="storiesBtn">Bedtime Stories</button>
-        <button id="settingsBtn">Settings</button>
-      </nav>
+
+<!-- ================= GLOBAL BACKGROUND ================= -->
+<div id="global-bg">
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-glow bg-glow-3"></div>
+</div>
+
+<!-- ================= APP CONTAINER ================= -->
+<div id="app">
+
+  <!-- 1️⃣ WELCOME SCREEN -->
+  <section class="screen active" id="screen-welcome">
+    <div class="centered">
+      <div class="logo-glow">
+        <h1>Echo<span>AI</span></h1>
+      </div>
+      <p class="tagline">An intelligent presence that listens.</p>
+      <button class="primary-btn" data-go="screen-setup">Get Started</button>
+    </div>
+  </section>
+
+  <!-- 2️⃣ SETUP -->
+  <section class="screen" id="screen-setup">
+    <h2>Quick Setup</h2>
+
+    <div class="card">
+      <h3>Microphone Access</h3>
+      <p>EchoAI needs your voice to respond naturally.</p>
+      <button class="secondary-btn">Allow Microphone</button>
+    </div>
+
+    <div class="card">
+      <h3>Audio Playback</h3>
+      <p>For music, bedtime stories, and audiobooks.</p>
+      <button class="secondary-btn">Enable Audio</button>
+    </div>
+
+    <button class="primary-btn" data-go="screen-home">Continue</button>
+  </section>
+
+  <!-- 3️⃣ HOME -->
+  <section class="screen" id="screen-home">
+    <header class="top-bar">
+      <h2>Hello 👋</h2>
+      <span class="status-dot active"></span>
     </header>
-    <main>
-      <div class="sidebar">
-        <button class="tab-btn" data-tab="chat">Chat</button>
-        <button class="tab-btn" data-tab="music">Music</button>
-        <button class="tab-btn" data-tab="video">Video Analyzer</button>
-        <button class="tab-btn" data-tab="notifications">Notifications</button>
-      </div>
-      <div class="chat-area" id="chatArea">
-        <div class="chat-message ai">Hello Joshua! I’m EchoAI, your personal empathy engine. How can I help you today?</div>
-      </div>
-    </main>
-    <div class="input-area">
-      <input type="text" id="userInput" placeholder="Type a message...">
-      <button id="sendBtn">Send</button>
+
+    <div class="voice-core">
+      <div class="voice-ring"></div>
+      <button class="voice-btn">🎙</button>
     </div>
-    <div class="stories-panel" id="storiesPanel">
-      <button class="close" id="closeStories">Close</button>
-      <h2>Bedtime Stories</h2>
-      <div class="story" id="story1"><strong>Calmness:</strong> Once upon a time in a serene forest…</div>
-      <div class="story" id="story2"><strong>Adventure:</strong> High above the clouds, a young explorer…</div>
-      <div class="story" id="story3"><strong>Anger:</strong> In a land of fiery mountains…</div>
-      <div class="story" id="story4"><strong>Joy:</strong> On a sunny island where laughter never ends…</div>
-      <div class="story" id="story5"><strong>Wonder:</strong> Deep beneath the ocean waves, a hidden world…</div>
+
+    <div class="grid">
+      <div class="grid-card" data-go="screen-music">🎵 Music</div>
+      <div class="grid-card" data-go="screen-stories">🌙 Bedtime Stories</div>
+      <div class="grid-card" data-go="screen-audiobooks">📖 Audiobooks</div>
+      <div class="grid-card" data-go="screen-chat">💬 Talk</div>
     </div>
-    <div class="listening-glow" id="voiceGlow"></div>
+  </section>
+
+  <!-- 4️⃣ VOICE -->
+  <section class="screen immersive" id="screen-voice">
+    <div class="waveform">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <p class="listening-text">Listening...</p>
+    <button class="danger-btn" data-go="screen-home">Stop</button>
+  </section>
+
+  <!-- 5️⃣ MUSIC -->
+  <section class="screen" id="screen-music">
+    <h2>Music for Every Mood</h2>
+    <div class="list">
+      <div class="list-item">Calm & Relax</div>
+      <div class="list-item">Deep Focus</div>
+      <div class="list-item">Sleep Sounds</div>
+      <div class="list-item">Emotional Reset</div>
+    </div>
+    <div class="player">
+      <button>⏮</button>
+      <button>▶</button>
+      <button>⏭</button>
+    </div>
+  </section>
+
+  <!-- 6️⃣ STORIES -->
+  <section class="screen" id="screen-stories">
+    <h2>Bedtime Stories</h2>
+    <div class="story-card">
+      <h3>The Quiet Forest</h3>
+      <p>10 min • Calm</p>
+      <button>Play</button>
+    </div>
+    <div class="story-card">
+      <h3>The Brave Little Star</h3>
+      <p>12 min • Comfort</p>
+      <button>Play</button>
+    </div>
+  </section>
+
+  <!-- 7️⃣ AUDIOBOOKS -->
+  <section class="screen" id="screen-audiobooks">
+    <h2>Audiobooks</h2>
+    <div class="book">
+      <h3>Mind & Focus</h3>
+      <progress value="30" max="100"></progress>
+    </div>
+    <div class="book">
+      <h3>The Future of AI</h3>
+      <progress value="65" max="100"></progress>
+    </div>
+  </section>
+
+  <!-- 8️⃣ CHAT -->
+  <section class="screen chat-screen" id="screen-chat">
+    <div class="chat-window">
+      <div class="bubble ai">Hello. How can I help you today?</div>
+      <div class="bubble user">Tell me a story.</div>
+    </div>
+    <div class="chat-input">
+      <input type="text" placeholder="Type or speak..." />
+      <button>➤</button>
+    </div>
+  </section>
+
+  <!-- 9️⃣ SETTINGS -->
+  <section class="screen" id="screen-settings">
+    <h2>Settings</h2>
+    <label>Voice Style
+      <select>
+        <option>Calm</option>
+        <option>Warm</option>
+        <option>Deep</option>
+      </select>
+    </label>
+    <label>Animations
+      <input type="checkbox" checked />
+    </label>
+  </section>
+
+  <!-- 🔟 ABOUT -->
+  <section class="screen" id="screen-about">
+    <h2>About EchoAI</h2>
+    <p>EchoAI is designed as a calm, intelligent companion.</p>
+    <p class="version">Version 1.0 — Built for the future.</p>
+  </section>
+
+</div>
+
+<!-- ================= EXTRA / EXPANDED UI ================= -->
+<div id="ui-noise-layer"></div>
+<div id="ui-light-scan"></div>
+<div id="ui-depth-grid"></div>
+
+<section class="screen" id="screen-profile">
+  <h2>Your Profile</h2>
+</section>
+
+<section class="screen" id="screen-system">
+  <h2>System Status</h2>
+</section>
+
+<section class="screen locked" id="screen-future">
+  <h2>Upcoming Capabilities</h2>
+</section>
+
+  <!-- ================= USER ACTIVITY DASHBOARD ================= -->
+<section class="screen" id="screen-activity">
+  <h2>Activity Overview</h2>
+
+  <div class="activity-grid">
+    <div class="activity-card">
+      <h3>Listening Time</h3>
+      <p class="big-number">92h</p>
+    </div>
+    <div class="activity-card">
+      <h3>Stories Completed</h3>
+      <p class="big-number">46</p>
+    </div>
+    <div class="activity-card">
+      <h3>Music Sessions</h3>
+      <p class="big-number">128</p>
+    </div>
   </div>
+</section>
+
+<!-- ================= AI MOOD DETECTION (UI ONLY) ================= -->
+<section class="screen" id="screen-mood">
+  <h2>Your Current Mood</h2>
+
+  <div class="mood-ring">
+    <span class="mood-label">Calm</span>
+  </div>
+
+  <p class="mood-description">
+    EchoAI senses a relaxed and focused state.
+    This is a good time for creative thinking or rest.
+  </p>
+</section>
+
+<!-- ================= SMART SUGGESTIONS ================= -->
+<section class="screen" id="screen-suggestions">
+  <h2>Smart Suggestions</h2>
+
+  <div class="suggestion-list">
+    <div class="suggestion-card">
+      <h3>🌙 Night Story</h3>
+      <p>A gentle story to help you sleep.</p>
+    </div>
+
+    <div class="suggestion-card">
+      <h3>🎧 Focus Music</h3>
+      <p>Minimal soundscape for concentration.</p>
+    </div>
+
+    <div class="suggestion-card">
+      <h3>🧠 Reflection</h3>
+      <p>Short guided thought session.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= IMMERSIVE SLEEP MODE ================= -->
+<section class="screen immersive" id="screen-sleep">
+  <h2>Sleep Mode</h2>
+
+  <p class="sleep-text">
+    Let EchoAI guide you into deep rest.
+    The screen will slowly dim.
+  </p>
+
+  <div class="sleep-controls">
+    <button class="primary-btn">Start Sleep</button>
+    <button class="secondary-btn">Cancel</button>
+  </div>
+</section>
+
+<!-- ================= AUDIO QUEUE MANAGER ================= -->
+<section class="screen" id="screen-queue">
+  <h2>Up Next</h2>
+
+  <ul class="queue-list">
+    <li>Floating Memories — Music</li>
+    <li>The Quiet Forest — Story</li>
+    <li>Deep Night Ambience — Sound</li>
+  </ul>
+</section>
+
+<!-- ================= AI MEMORY (UI ONLY) ================= -->
+<section class="screen" id="screen-memory">
+  <h2>EchoAI Memory</h2>
+
+  <p>
+    EchoAI remembers preferences to improve your experience.
+  </p>
+
+  <div class="memory-item">✔ Prefers calm voice</div>
+  <div class="memory-item">✔ Listens at night</div>
+  <div class="memory-item">✔ Enjoys short stories</div>
+</section>
+
+<!-- ================= OFFLINE MODE ================= -->
+<section class="screen" id="screen-offline">
+  <h2>Offline Mode</h2>
+
+  <p>
+    Some features are available offline.
+    Download content for uninterrupted listening.
+  </p>
+
+  <button class="primary-btn">Manage Downloads</button>
+</section>
+
+<!-- ================= ACCESSIBILITY ================= -->
+<section class="screen" id="screen-accessibility">
+  <h2>Accessibility</h2>
+
+  <label>
+    High Contrast Mode
+    <input type="checkbox">
+  </label>
+
+  <label>
+    Large Text
+    <input type="checkbox">
+  </label>
+
+  <label>
+    Reduced Motion
+    <input type="checkbox">
+  </label>
+</section>
+
+<!-- ================= LEGAL & PRIVACY ================= -->
+<section class="screen" id="screen-legal">
+  <h2>Privacy & Legal</h2>
+
+  <p>
+    Your conversations are handled responsibly.
+    EchoAI is designed with privacy in mind.
+  </p>
+
+  <ul class="legal-list">
+    <li>Privacy Policy</li>
+    <li>Terms of Service</li>
+    <li>Data Usage</li>
+  </ul>
+</section>
+
+<!-- ================= DEBUG / DEV PANEL ================= -->
+<section class="screen dev-only" id="screen-debug">
+  <h2>Developer Panel</h2>
+
+  <ul>
+    <li>UI State: OK</li>
+    <li>Audio Engine: Ready</li>
+    <li>Voice Input: Idle</li>
+    <li>Network: Online</li>
+  </ul>
+</section>
+<!-- ================= CORE SCRIPT ================= -->
+<script src="script.js"></script>
+
 </body>
 </html>
