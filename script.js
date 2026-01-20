@@ -1,16 +1,26 @@
-// === EchoAI Script.js ===
+// === EchoAI Full Stories & Audiobooks Script ===
 
-// Select elements
+// Elements
 const chatArea = document.getElementById('chatArea');
-const userInput = document.getElementById('userInput');
-const sendBtn = document.getElementById('sendBtn');
 const storiesPanel = document.getElementById('storiesPanel');
-const storiesBtn = document.getElementById('storiesBtn');
-const closeStories = document.getElementById('closeStories');
-const voiceGlow = document.getElementById('voiceGlow');
-const tabButtons = document.querySelectorAll('.tab-btn');
+const storyButtons = document.querySelectorAll('.story');
+const audioPlayer = new Audio();
+audioPlayer.volume = 0.7;
 
-// === Chat Handling ===
+// Story & Audiobook Files
+const stories = {
+  "Cinderella": "audio/stories/cinderella.mp3",
+  "Red Riding Hood": "audio/stories/red_riding_hood.mp3",
+  "Sleeping Beauty": "audio/stories/sleeping_beauty.mp3"
+};
+
+const audiobooks = {
+  "Biology - Cells": "audio/audiobooks/cells.mp3",
+  "Biology - Photosynthesis": "audio/audiobooks/photosynthesis.mp3",
+  "Biology - Human Anatomy": "audio/audiobooks/human_anatomy.mp3"
+};
+
+// Append AI message
 function appendMessage(text, sender='ai') {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('chat-message', sender);
@@ -19,109 +29,79 @@ function appendMessage(text, sender='ai') {
   chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// === Simple AI Responses ===
-function getAIResponse(input) {
-  input = input.toLowerCase();
-  
-  if(input.includes('story')) {
-    storiesPanel.style.display = 'flex';
-    return "Opening bedtime stories for you!";
-  } 
-  else if(input.includes('hello') || input.includes('hi')) {
-    return "Hello Joshua! How are you feeling today?";
-  }
-  else if(input.includes('music')) {
-    return "Playing relaxing music for you now...";
-  }
-  else if(input.includes('video') || input.includes('camera')) {
-    return "Activating video analyzer. Please allow camera access.";
-  }
-  else if(input.includes('how are you')) {
-    return "I’m always ready to assist you, Joshua!";
-  }
-  else {
-    return "I hear you, Joshua! Let's dive deeper into that...";
+// Play a story or audiobook
+function playAudio(name, type='story') {
+  let filePath = type === 'story' ? stories[name] : audiobooks[name];
+  if(!filePath) return appendMessage("Audio file not found.", 'ai');
+
+  audioPlayer.src = filePath;
+  audioPlayer.play();
+  appendMessage(`🎧 Now playing: ${name}`, 'ai');
+
+  audioPlayer.onended = () => {
+    appendMessage(`✅ Finished playing: ${name}`, 'ai');
   }
 }
 
-// === Send Button & Enter Key ===
+// Bind story buttons
+storyButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const storyName = btn.innerText.split(":")[1].trim();
+    playAudio(storyName, 'story');
+  });
+});
+
+// Video Analyzer Integration Example
+async function startVideoAnalyzer() {
+  appendMessage("Requesting camera access...", 'ai');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    appendMessage("Camera access granted! Analyzing...", 'ai');
+    // Placeholder: You could add object recognition here
+    // Example: Recognize a plant leaf and link to photosynthesis audiobook
+  } catch (err) {
+    appendMessage("Camera access denied or not available.", 'ai');
+  }
+}
+
+// Example: Chat Commands
+function handleInput(input) {
+  input = input.toLowerCase();
+  if(input.includes('play story')) {
+    appendMessage("Opening story panel...", 'ai');
+    storiesPanel.style.display = 'flex';
+  } else if(input.includes('play audiobook')) {
+    const topic = input.split('play audiobook ')[1];
+    playAudio(topic, 'audiobook');
+  } else if(input.includes('video') || input.includes('camera')) {
+    startVideoAnalyzer();
+  } else {
+    appendMessage("I hear you! Let's explore that...", 'ai');
+  }
+}
+
+// Example Send Button
+const sendBtn = document.getElementById('sendBtn');
+const userInput = document.getElementById('userInput');
+
 sendBtn.addEventListener('click', () => {
   const text = userInput.value.trim();
-  if(text) {
-    appendMessage(text, 'user');
-    const response = getAIResponse(text);
-    setTimeout(() => appendMessage(response, 'ai'), 500);
-    userInput.value = '';
-  }
+  if(!text) return;
+  appendMessage(text, 'user');
+  handleInput(text);
+  userInput.value = '';
 });
 
 userInput.addEventListener('keypress', (e) => {
   if(e.key === 'Enter') sendBtn.click();
 });
 
-// === Bedtime Stories Panel ===
-storiesBtn.addEventListener('click', () => {
-  storiesPanel.style.display = 'flex';
-});
-
-closeStories.addEventListener('click', () => {
-  storiesPanel.style.display = 'none';
-});
-
-// === Voice Glow (Simulated Voice Command) ===
-voiceGlow.addEventListener('click', () => {
-  appendMessage("🎤 Listening for your voice command...", 'ai');
-  voiceGlow.style.animation = 'pulse 1s infinite alternate';
-  setTimeout(() => {
-    appendMessage("I understood your command! Processing...", 'ai');
-    voiceGlow.style.animation = 'pulse 2s infinite';
-  }, 2000);
-});
-
-// === Tab Buttons Functionality ===
-tabButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
-    appendMessage(`Switched to ${tab} tab`, 'ai');
-    if(tab === 'music') appendMessage("Music player ready to play your favorite tracks!", 'ai');
-    if(tab === 'video') appendMessage("Video analyzer activated! Point your camera to start.", 'ai');
-    if(tab === 'notifications') appendMessage("Notifications panel opened.", 'ai');
-  });
-});
-
-// === Video Analyzer Skeleton (Placeholder) ===
-async function startVideoAnalyzer() {
-  appendMessage("Requesting camera access...", 'ai');
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    appendMessage("Camera access granted! Analyzing...", 'ai');
-    // Placeholder for analysis logic
-  } catch (err) {
-    appendMessage("Camera access denied or not available.", 'ai');
-  }
-}
-
-// === Automatic Greetings on Load ===
-window.addEventListener('load', () => {
-  appendMessage("Welcome back, Joshua! EchoAI is online.", 'ai');
-  appendMessage("You can ask me to tell stories, play music, or analyze videos.", 'ai');
-});
-
-// === Smooth Scroll for Chat ===
-chatArea.addEventListener('DOMNodeInserted', (event) => {
-  chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: 'smooth' });
-});
-
-// === Example Bedtime Story Player (Simulated) ===
-function playStory(storyId) {
-  const storyText = document.getElementById(storyId).innerText;
-  appendMessage(`Playing story: ${storyText}`, 'ai');
-  // Simulated audio effect
-  setTimeout(() => appendMessage("✨ Story finished. Hope you enjoyed it!", 'ai'), 4000);
-}
-
-// === Optional: Keyboard Shortcuts ===
-document.addEventListener('keydown', (e) => {
-  if(e.key === 'F1') storiesPanel.style.display = 'flex';
+// Optional: Keyboard shortcuts
+document.addEventListener('keydown', e => {
   if(e.key === 'Escape') storiesPanel.style.display = 'none';
+});
+
+// On Load
+window.addEventListener('load', () => {
+  appendMessage("Welcome Joshua! EchoAI is ready for stories, audiobooks, and video analysis.", 'ai');
 });
