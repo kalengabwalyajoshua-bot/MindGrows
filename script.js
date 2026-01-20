@@ -1,7 +1,3 @@
-// ==========================
-// ECHOAI FULLY FUNCTIONAL SCRIPT.JS
-// ==========================
-
 document.addEventListener("DOMContentLoaded", () => {
   const screens = document.querySelectorAll(".screen");
   const primaryButtons = document.querySelectorAll("[data-go]");
@@ -30,41 +26,45 @@ document.addEventListener("DOMContentLoaded", () => {
     audiobook2: "audio/audiobook2.mp3"
   };
 
-  // ================= SCREEN NAVIGATION =================
+  function switchScreen(id) {
+    screens.forEach(s => s.classList.remove("active"));
+    const target = document.getElementById(id);
+    if (target) target.classList.add("active");
+  }
+
+  // ================= SCREEN NAVIGATION FIXED =================
   primaryButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault(); // prevent default button behavior
       const targetId = btn.getAttribute("data-go");
-      screens.forEach(s => s.classList.remove("active"));
-      const targetScreen = document.getElementById(targetId);
-      if (targetScreen) targetScreen.classList.add("active");
+      if (targetId) switchScreen(targetId);
     });
   });
 
   // ================= VOICE INTERACTION =================
-  voiceBtn.addEventListener("click", () => {
+  voiceBtn?.addEventListener("click", () => {
     switchScreen("screen-voice");
-    thinkingState.classList.add("active");
+    thinkingState?.classList.add("active");
 
     setTimeout(() => {
-      thinkingState.classList.remove("active");
-      speakingState.classList.add("active");
+      thinkingState?.classList.remove("active");
+      speakingState?.classList.add("active");
 
-      // simulate spoken response
       const utterance = new SpeechSynthesisUtterance("Hello! I am EchoAI. How can I assist you today?");
       utterance.rate = 1;
       utterance.pitch = 1;
       speechSynthesis.speak(utterance);
 
       utterance.onend = () => {
-        speakingState.classList.remove("active");
+        speakingState?.classList.remove("active");
         switchScreen("screen-home");
       };
     }, 2000);
   });
 
   // ================= CHAT FUNCTION =================
-  chatBtn.addEventListener("click", sendMessage);
-  chatInput.addEventListener("keypress", (e) => {
+  chatBtn?.addEventListener("click", sendMessage);
+  chatInput?.addEventListener("keypress", (e) => {
     if (e.key === "Enter") sendMessage();
   });
 
@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addBubble(type, text) {
+    if (!chatWindow) return;
     const bubble = document.createElement("div");
     bubble.classList.add("bubble", type);
     bubble.textContent = text;
@@ -94,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (msg.includes("story")) return { text: "Starting your story...", audio: "story1" };
     if (msg.includes("music") || msg.includes("song")) return { text: "Playing relaxing music...", audio: "calm" };
     if (msg.includes("audiobook")) return { text: "Loading audiobook...", audio: "audiobook1" };
-    if (msg.includes("mood")) return { text: `Your mood is ${moodLabel.textContent}`, audio: null };
+    if (msg.includes("mood")) return { text: `Your mood is ${moodLabel?.textContent}`, audio: null };
     return { text: "I am here to help! You can ask for music, stories, or audiobooks.", audio: null };
   }
 
@@ -137,19 +138,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const moods = ["Calm", "Focused", "Energetic", "Sleepy", "Curious"];
   setInterval(() => {
     const randomMood = moods[Math.floor(Math.random() * moods.length)];
-    moodLabel.textContent = randomMood;
+    if (moodLabel) moodLabel.textContent = randomMood;
     if (randomMood === "Sleepy") playAudio("sleep");
   }, 7000);
 
   // ================= SLEEP MODE =================
-  sleepBtn.addEventListener("click", () => {
+  sleepBtn?.addEventListener("click", () => {
     switchScreen("screen-sleep");
     playAudio("sleep");
     document.body.style.transition = "background 5s";
     document.body.style.background = "#000";
   });
 
-  cancelSleepBtn.addEventListener("click", () => {
+  cancelSleepBtn?.addEventListener("click", () => {
     stopAudio();
     document.body.style.background = "#0a0a0a";
     switchScreen("screen-home");
@@ -178,13 +179,6 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio.pause();
       currentAudio = null;
     }
-  }
-
-  // ================= HELPERS =================
-  function switchScreen(id) {
-    screens.forEach(s => s.classList.remove("active"));
-    const target = document.getElementById(id);
-    if (target) target.classList.add("active");
   }
 
   // ================= INITIAL SCREEN =================
