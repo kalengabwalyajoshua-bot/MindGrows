@@ -31,7 +31,7 @@
         <h1>Echo<span>AI</span></h1>
       </div>
       <p class="tagline">An intelligent presence that listens.</p>
-      <button class="primary-btn" data-go="screen-setup">Get Started</button>
+      <button class="primary-btn" onclick="switchScreen('screen-setup')">Get Started</button>
     </div>
   </section>
 
@@ -51,7 +51,7 @@
       <button class="secondary-btn">Enable Audio</button>
     </div>
 
-    <button class="primary-btn" data-go="screen-home">Continue</button>
+    <button class="primary-btn" onclick="switchScreen('screen-home')">Continue</button>
   </section>
 
   <!-- 3️⃣ HOME -->
@@ -67,10 +67,10 @@
     </div>
 
     <div class="grid">
-      <div class="grid-card" data-go="screen-music">🎵 Music</div>
-      <div class="grid-card" data-go="screen-stories">🌙 Bedtime Stories</div>
-      <div class="grid-card" data-go="screen-audiobooks">📖 Audiobooks</div>
-      <div class="grid-card" data-go="screen-chat">💬 Talk</div>
+      <div class="grid-card" onclick="switchScreen('screen-music')">🎵 Music</div>
+      <div class="grid-card" onclick="switchScreen('screen-stories')">🌙 Bedtime Stories</div>
+      <div class="grid-card" onclick="switchScreen('screen-audiobooks')">📖 Audiobooks</div>
+      <div class="grid-card" onclick="switchScreen('screen-chat')">💬 Talk</div>
     </div>
   </section>
 
@@ -80,7 +80,7 @@
       <span></span><span></span><span></span><span></span>
     </div>
     <p class="listening-text">Listening...</p>
-    <button class="danger-btn" data-go="screen-home">Stop</button>
+    <button class="danger-btn" onclick="switchScreen('screen-home')">Stop</button>
   </section>
 
   <!-- 5️⃣ MUSIC -->
@@ -180,161 +180,55 @@
   <h2>Upcoming Capabilities</h2>
 </section>
 
-  <!-- ================= USER ACTIVITY DASHBOARD ================= -->
 <section class="screen" id="screen-activity">
   <h2>Activity Overview</h2>
-
-  <div class="activity-grid">
-    <div class="activity-card">
-      <h3>Listening Time</h3>
-      <p class="big-number">92h</p>
-    </div>
-    <div class="activity-card">
-      <h3>Stories Completed</h3>
-      <p class="big-number">46</p>
-    </div>
-    <div class="activity-card">
-      <h3>Music Sessions</h3>
-      <p class="big-number">128</p>
-    </div>
-  </div>
 </section>
 
-<!-- ================= AI MOOD DETECTION (UI ONLY) ================= -->
 <section class="screen" id="screen-mood">
   <h2>Your Current Mood</h2>
-
-  <div class="mood-ring">
-    <span class="mood-label">Calm</span>
-  </div>
-
-  <p class="mood-description">
-    EchoAI senses a relaxed and focused state.
-    This is a good time for creative thinking or rest.
-  </p>
 </section>
 
-<!-- ================= SMART SUGGESTIONS ================= -->
 <section class="screen" id="screen-suggestions">
   <h2>Smart Suggestions</h2>
-
-  <div class="suggestion-list">
-    <div class="suggestion-card">
-      <h3>🌙 Night Story</h3>
-      <p>A gentle story to help you sleep.</p>
-    </div>
-
-    <div class="suggestion-card">
-      <h3>🎧 Focus Music</h3>
-      <p>Minimal soundscape for concentration.</p>
-    </div>
-
-    <div class="suggestion-card">
-      <h3>🧠 Reflection</h3>
-      <p>Short guided thought session.</p>
-    </div>
-  </div>
 </section>
 
-<!-- ================= IMMERSIVE SLEEP MODE ================= -->
 <section class="screen immersive" id="screen-sleep">
   <h2>Sleep Mode</h2>
-
-  <p class="sleep-text">
-    Let EchoAI guide you into deep rest.
-    The screen will slowly dim.
-  </p>
-
-  <div class="sleep-controls">
-    <button class="primary-btn">Start Sleep</button>
-    <button class="secondary-btn">Cancel</button>
-  </div>
 </section>
 
-<!-- ================= AUDIO QUEUE MANAGER ================= -->
 <section class="screen" id="screen-queue">
   <h2>Up Next</h2>
-
-  <ul class="queue-list">
-    <li>Floating Memories — Music</li>
-    <li>The Quiet Forest — Story</li>
-    <li>Deep Night Ambience — Sound</li>
-  </ul>
 </section>
 
-<!-- ================= AI MEMORY (UI ONLY) ================= -->
 <section class="screen" id="screen-memory">
   <h2>EchoAI Memory</h2>
-
-  <p>
-    EchoAI remembers preferences to improve your experience.
-  </p>
-
-  <div class="memory-item">✔ Prefers calm voice</div>
-  <div class="memory-item">✔ Listens at night</div>
-  <div class="memory-item">✔ Enjoys short stories</div>
 </section>
 
-<!-- ================= OFFLINE MODE ================= -->
 <section class="screen" id="screen-offline">
   <h2>Offline Mode</h2>
-
-  <p>
-    Some features are available offline.
-    Download content for uninterrupted listening.
-  </p>
-
-  <button class="primary-btn">Manage Downloads</button>
 </section>
 
-<!-- ================= ACCESSIBILITY ================= -->
 <section class="screen" id="screen-accessibility">
   <h2>Accessibility</h2>
-
-  <label>
-    High Contrast Mode
-    <input type="checkbox">
-  </label>
-
-  <label>
-    Large Text
-    <input type="checkbox">
-  </label>
-
-  <label>
-    Reduced Motion
-    <input type="checkbox">
-  </label>
 </section>
 
-<!-- ================= LEGAL & PRIVACY ================= -->
 <section class="screen" id="screen-legal">
   <h2>Privacy & Legal</h2>
-
-  <p>
-    Your conversations are handled responsibly.
-    EchoAI is designed with privacy in mind.
-  </p>
-
-  <ul class="legal-list">
-    <li>Privacy Policy</li>
-    <li>Terms of Service</li>
-    <li>Data Usage</li>
-  </ul>
 </section>
 
-<!-- ================= DEBUG / DEV PANEL ================= -->
 <section class="screen dev-only" id="screen-debug">
   <h2>Developer Panel</h2>
-
-  <ul>
-    <li>UI State: OK</li>
-    <li>Audio Engine: Ready</li>
-    <li>Voice Input: Idle</li>
-    <li>Network: Online</li>
-  </ul>
 </section>
-<!-- ================= CORE SCRIPT ================= -->
+
+<script>
+function switchScreen(id) {
+  const screens = document.querySelectorAll(".screen");
+  screens.forEach(s => s.classList.remove("active"));
+  const target = document.getElementById(id);
+  if(target) target.classList.add("active");
+}
+</script>
+
 <script src="script.js"></script>
 
 </body>
