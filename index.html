@@ -1,235 +1,503 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EchoAI</title>
-
-  <!-- Core Styles -->
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Digital Twin – Future Simulator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<!-- ================= GLOBAL BACKGROUND ================= -->
-<div id="global-bg">
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
-  <div class="bg-glow bg-glow-3"></div>
-</div>
-
-<!-- ================= APP CONTAINER ================= -->
-<div id="app">
-
-  <!-- 1️⃣ WELCOME SCREEN -->
-  <section class="screen active" id="screen-welcome">
-    <div class="centered">
-      <div class="logo-glow">
-        <h1>Echo<span>AI</span></h1>
-      </div>
-      <p class="tagline">An intelligent presence that listens.</p>
-      <button class="primary-btn" onclick="switchScreen('screen-setup')">Get Started</button>
-    </div>
-  </section>
-
-  <!-- 2️⃣ SETUP -->
-  <section class="screen" id="screen-setup">
-    <h2>Quick Setup</h2>
-
-    <div class="card">
-      <h3>Microphone Access</h3>
-      <p>EchoAI needs your voice to respond naturally.</p>
-      <button class="secondary-btn">Allow Microphone</button>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
 
-    <div class="card">
-      <h3>Audio Playback</h3>
-      <p>For music, bedtime stories, and audiobooks.</p>
-      <button class="secondary-btn">Enable Audio</button>
+    <!-- Screen 1: Welcome / Landing -->
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <svg class="logo" viewBox="0 0 100 100" width="120" height="120">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#gradient1)" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="url(#gradient1)" stroke-width="1.5"/>
+                    <path d="M 30 50 Q 50 30, 70 50 T 70 50" fill="none" stroke="url(#gradient1)" stroke-width="2"/>
+                    <circle cx="40" cy="45" r="3" fill="#00d9ff"/>
+                    <circle cx="60" cy="45" r="3" fill="#00d9ff"/>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#7b2ff7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h1 class="main-title">Human Digital Twin</h1>
+            <p class="tagline">Simulate your future before you live it</p>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="navigateTo('login-screen')">
+                    Get Started
+                    <span class="btn-glow"></span>
+                </button>
+                <button class="btn btn-secondary" onclick="navigateTo('ethics-screen')">
+                    Learn How It Works
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <button class="primary-btn" onclick="switchScreen('screen-home')">Continue</button>
-  </section>
-
-  <!-- 3️⃣ HOME -->
-  <section class="screen" id="screen-home">
-    <header class="top-bar">
-      <h2>Hello 👋</h2>
-      <span class="status-dot active"></span>
-    </header>
-
-    <div class="voice-core">
-      <div class="voice-ring"></div>
-      <button class="voice-btn">🎙</button>
+    <!-- Screen 2: Login -->
+    <div id="login-screen" class="screen">
+        <div class="container">
+            <div class="card">
+                <h2 class="card-title">Welcome Back</h2>
+                <p class="card-subtitle">Sign in to access your digital twin</p>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Enter username" required>
+                        <div class="input-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter password" required>
+                        <div class="input-glow"></div>
+                    </div>
+                    <div class="validation-message" id="login-validation"></div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Login
+                        <span class="btn-glow"></span>
+                    </button>
+                </form>
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+                <button class="btn btn-secondary btn-full" onclick="demoLogin()">
+                    Try Demo Account
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="grid">
-      <div class="grid-card" onclick="switchScreen('screen-music')">🎵 Music</div>
-      <div class="grid-card" onclick="switchScreen('screen-stories')">🌙 Bedtime Stories</div>
-      <div class="grid-card" onclick="switchScreen('screen-audiobooks')">📖 Audiobooks</div>
-      <div class="grid-card" onclick="switchScreen('screen-chat')">💬 Talk</div>
+    <!-- Screen 3: Profile Setup -->
+    <div id="profile-screen" class="screen">
+        <div class="container">
+            <div class="card">
+                <h2 class="card-title">Build Your Digital Twin</h2>
+                <p class="card-subtitle">Tell us about your daily habits</p>
+                <form id="profile-form" onsubmit="saveProfile(event)">
+                    <div class="input-group">
+                        <label for="study-hours">Study Hours Per Day: <span id="study-value">4</span>h</label>
+                        <input type="range" id="study-hours" min="0" max="16" value="4" step="0.5" oninput="updateSliderValue('study', this.value)">
+                        <div class="slider-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="sleep-hours">Sleep Hours: <span id="sleep-value">7</span>h</label>
+                        <input type="range" id="sleep-hours" min="4" max="12" value="7" step="0.5" oninput="updateSliderValue('sleep', this.value)">
+                        <div class="slider-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="screen-time">Screen Time Per Day: <span id="screen-value">6</span>h</label>
+                        <input type="range" id="screen-time" min="0" max="16" value="6" step="0.5" oninput="updateSliderValue('screen', this.value)">
+                        <div class="slider-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="stress-level">Stress Level: <span id="stress-value">5</span>/10</label>
+                        <input type="range" id="stress-level" min="1" max="10" value="5" step="1" oninput="updateSliderValue('stress', this.value)">
+                        <div class="slider-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="exercise-freq">Exercise Frequency (days/week): <span id="exercise-value">3</span></label>
+                        <input type="range" id="exercise-freq" min="0" max="7" value="3" step="1" oninput="updateSliderValue('exercise', this.value)">
+                        <div class="slider-glow"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="goal">Personal Goal</label>
+                        <select id="goal">
+                            <option value="academic">Academic Excellence</option>
+                            <option value="balance">Work-Life Balance</option>
+                            <option value="health">Health & Wellness</option>
+                            <option value="career">Career Growth</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Create Digital Twin
+                        <span class="btn-glow"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- 4️⃣ VOICE -->
-  <section class="screen immersive" id="screen-voice">
-    <div class="waveform">
-      <span></span><span></span><span></span><span></span>
+    <!-- Screen 4: Simulation Dashboard -->
+    <div id="dashboard-screen" class="screen">
+        <div class="nav-header">
+            <h3>Digital Twin Dashboard</h3>
+            <div class="nav-buttons">
+                <button class="btn-icon" onclick="navigateTo('comparison-screen')" title="Compare">📊</button>
+                <button class="btn-icon" onclick="navigateTo('scenario-screen')" title="Scenarios">🔮</button>
+                <button class="btn-icon" onclick="navigateTo('settings-screen')" title="Settings">⚙️</button>
+            </div>
+        </div>
+        <div class="container dashboard-container">
+            <div class="profile-summary card">
+                <h3>Your Profile</h3>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Study</span>
+                        <span class="stat-value" id="dash-study">4h</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Sleep</span>
+                        <span class="stat-value" id="dash-sleep">7h</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Screen Time</span>
+                        <span class="stat-value" id="dash-screen">6h</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Stress</span>
+                        <span class="stat-value" id="dash-stress">5/10</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Exercise</span>
+                        <span class="stat-value" id="dash-exercise">3/wk</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary btn-full" onclick="navigateTo('profile-screen')">
+                    Edit Profile
+                </button>
+            </div>
+
+            <div class="simulation-controls card">
+                <h3>Run Simulation</h3>
+                <p class="card-subtitle">Analyze your future trajectory based on current habits</p>
+                <button class="btn btn-primary btn-full" onclick="runSimulation()">
+                    <span id="sim-btn-text">▶ Start Simulation</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+
+            <div id="results-container" class="results-grid" style="display:none;">
+                <div class="metric-card card">
+                    <div class="metric-icon">📈</div>
+                    <h4>Productivity Score</h4>
+                    <div class="metric-value" id="productivity-score">0</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="productivity-bar"></div>
+                    </div>
+                    <p class="metric-desc" id="productivity-desc"></p>
+                </div>
+
+                <div class="metric-card card">
+                    <div class="metric-icon">⚠️</div>
+                    <h4>Burnout Risk</h4>
+                    <div class="metric-value" id="burnout-score">0</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="burnout-bar"></div>
+                    </div>
+                    <p class="metric-desc" id="burnout-desc"></p>
+                </div>
+
+                <div class="metric-card card">
+                    <div class="metric-icon">🎓</div>
+                    <h4>Academic Trajectory</h4>
+                    <div class="metric-value" id="academic-score">0</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="academic-bar"></div>
+                    </div>
+                    <p class="metric-desc" id="academic-desc"></p>
+                </div>
+
+                <div class="metric-card card">
+                    <div class="metric-icon">🧠</div>
+                    <h4>Mental Well-being</h4>
+                    <div class="metric-value" id="wellbeing-score">0</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="wellbeing-bar"></div>
+                    </div>
+                    <p class="metric-desc" id="wellbeing-desc"></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <p class="listening-text">Listening...</p>
-    <button class="danger-btn" onclick="switchScreen('screen-home')">Stop</button>
-  </section>
 
-  <!-- 5️⃣ MUSIC -->
-  <section class="screen" id="screen-music">
-    <h2>Music for Every Mood</h2>
-    <div class="list">
-      <div class="list-item">Calm & Relax</div>
-      <div class="list-item">Deep Focus</div>
-      <div class="list-item">Sleep Sounds</div>
-      <div class="list-item">Emotional Reset</div>
+    <!-- Screen 5: Comparison -->
+    <div id="comparison-screen" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="navigateTo('dashboard-screen')">← Back</button>
+            <h3>Future Comparison</h3>
+        </div>
+        <div class="container">
+            <div class="comparison-grid">
+                <div class="card">
+                    <h3>Current Habits Future</h3>
+                    <div class="comparison-metrics" id="current-metrics"></div>
+                </div>
+                <div class="card">
+                    <h3>Improved Habits Future</h3>
+                    <p class="card-subtitle">Adjust habits to see better outcomes</p>
+                    <div class="input-group">
+                        <label>Study Hours: <span id="comp-study-value">6</span>h</label>
+                        <input type="range" id="comp-study" min="0" max="16" value="6" step="0.5" oninput="updateComparison()">
+                    </div>
+                    <div class="input-group">
+                        <label>Sleep Hours: <span id="comp-sleep-value">8</span>h</label>
+                        <input type="range" id="comp-sleep" min="4" max="12" value="8" step="0.5" oninput="updateComparison()">
+                    </div>
+                    <div class="input-group">
+                        <label>Screen Time: <span id="comp-screen-value">4</span>h</label>
+                        <input type="range" id="comp-screen" min="0" max="16" value="4" step="0.5" oninput="updateComparison()">
+                    </div>
+                    <div class="input-group">
+                        <label>Stress Level: <span id="comp-stress-value">3</span>/10</label>
+                        <input type="range" id="comp-stress" min="1" max="10" value="3" step="1" oninput="updateComparison()">
+                    </div>
+                    <div class="input-group">
+                        <label>Exercise: <span id="comp-exercise-value">5</span>/wk</label>
+                        <input type="range" id="comp-exercise" min="0" max="7" value="5" step="1" oninput="updateComparison()">
+                    </div>
+                    <div class="comparison-metrics" id="improved-metrics"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Visual Comparison</h3>
+                <canvas id="comparison-chart" width="800" height="300"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="player">
-      <button>⏮</button>
-      <button>▶</button>
-      <button>⏭</button>
+
+    <!-- Screen 6: Scenario Explorer -->
+    <div id="scenario-screen" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="navigateTo('dashboard-screen')">← Back</button>
+            <h3>Scenario Explorer</h3>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h3>What If...?</h3>
+                <p class="card-subtitle">Explore different scenarios and their outcomes</p>
+                <div class="scenario-buttons">
+                    <button class="btn btn-secondary" onclick="applyScenario('sleep')">
+                        💤 Increase Sleep by 2h
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="applyScenario('screen')">
+                        📱 Reduce Screen Time by 3h
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="applyScenario('consistency')">
+                        🎯 Improve Consistency
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="applyScenario('exercise')">
+                        🏃 Daily Exercise
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="applyScenario('reset')">
+                        🔄 Reset to Current
+                        <span class="btn-glow"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="timeline-container">
+                <div class="card">
+                    <h3>Timeline Projection</h3>
+                    <div class="timeline-buttons">
+                        <button class="btn btn-sm" onclick="setTimeline(3)" id="timeline-3">3 Months</button>
+                        <button class="btn btn-sm active" onclick="setTimeline(6)" id="timeline-6">6 Months</button>
+                    </div>
+                    <canvas id="timeline-chart" width="800" height="300"></canvas>
+                </div>
+                <div class="card scenario-results" id="scenario-results">
+                    <h3>Projected Outcomes</h3>
+                    <div id="scenario-outcome"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- 6️⃣ STORIES -->
-  <section class="screen" id="screen-stories">
-    <h2>Bedtime Stories</h2>
-    <div class="story-card">
-      <h3>The Quiet Forest</h3>
-      <p>10 min • Calm</p>
-      <button>Play</button>
+    <!-- Screen 7: Ethics / Transparency -->
+    <div id="ethics-screen" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="navigateTo('welcome-screen')">← Back</button>
+            <h3>How It Works</h3>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h3>🛡️ Important Disclaimer</h3>
+                <div class="ethics-content">
+                    <p><strong>This is a simulation tool, not medical or professional advice.</strong></p>
+                    <p>The Human Digital Twin Future Simulator uses rule-based algorithms to project potential outcomes based on your daily habits. It is designed for educational and self-reflection purposes only.</p>
+                    <div class="warning-box">
+                        <p>⚠️ Do not use this tool as a substitute for professional medical, psychological, or academic counseling.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔬 How Scores Are Calculated</h3>
+                <div class="calculation-breakdown">
+                    <div class="calc-item">
+                        <h4>📈 Productivity Score</h4>
+                        <p><strong>Formula:</strong></p>
+                        <code>Base = (Study Hours × 10)<br>
+                        Sleep Bonus = (Sleep Quality × 10)<br>
+                        Screen Penalty = -(Screen Time × 3)<br>
+                        Stress Penalty = -(Stress Level × 2)<br>
+                        Exercise Bonus = (Exercise Days × 3)<br>
+                        <br>Final = Base + Sleep Bonus + Screen Penalty + Stress Penalty + Exercise Bonus</code>
+                        <p class="calc-desc">Normalized to 0-100 scale. Higher study hours and better sleep increase productivity.</p>
+                    </div>
+
+                    <div class="calc-item">
+                        <h4>⚠️ Burnout Risk</h4>
+                        <p><strong>Formula:</strong></p>
+                        <code>Risk = (Stress Level × 10) + (Screen Time × 2)<br>
+                        Sleep Factor = -(Sleep Hours × 5)<br>
+                        Exercise Factor = -(Exercise Days × 3)<br>
+                        <br>Final = Risk + Sleep Factor + Exercise Factor</code>
+                        <p class="calc-desc">Normalized to 0-100 scale. High stress and screen time increase burnout risk. Better sleep and exercise reduce it.</p>
+                    </div>
+
+                    <div class="calc-item">
+                        <h4>🎓 Academic Trajectory</h4>
+                        <p><strong>Formula:</strong></p>
+                        <code>Base = (Study Hours × 8)<br>
+                        Focus Quality = (8 - Screen Time) × 5<br>
+                        Cognitive Health = (Sleep Hours × 6) - (Stress Level × 3)<br>
+                        Consistency = (Exercise Days × 2)<br>
+                        <br>Final = Base + Focus Quality + Cognitive Health + Consistency</code>
+                        <p class="calc-desc">Normalized to 0-100 scale. Balanced habits lead to better academic outcomes.</p>
+                    </div>
+
+                    <div class="calc-item">
+                        <h4>🧠 Mental Well-being</h4>
+                        <p><strong>Formula:</strong></p>
+                        <code>Base = 50<br>
+                        Sleep Quality = (Sleep Hours × 5)<br>
+                        Stress Impact = -(Stress Level × 5)<br>
+                        Exercise Benefit = (Exercise Days × 4)<br>
+                        Screen Impact = -(Screen Time × 2)<br>
+                        <br>Final = Base + Sleep Quality + Stress Impact + Exercise Benefit + Screen Impact</code>
+                        <p class="calc-desc">Normalized to 0-100 scale. Sleep, exercise, and low stress improve mental health.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🔒 Privacy & Data</h3>
+                <div class="ethics-content">
+                    <p>✓ All your data stays on your device</p>
+                    <p>✓ No information is sent to any server</p>
+                    <p>✓ Data is stored locally using browser storage</p>
+                    <p>✓ You can delete all data anytime from Settings</p>
+                    <p>✓ No tracking, no analytics, no third parties</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Best Use</h3>
+                <div class="ethics-content">
+                    <p>✓ Use as a tool for self-reflection and goal setting</p>
+                    <p>✓ Experiment with different habits to understand trade-offs</p>
+                    <p>✓ Track how small changes might impact your future</p>
+                    <p>✓ Combine with real professional guidance when needed</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="story-card">
-      <h3>The Brave Little Star</h3>
-      <p>12 min • Comfort</p>
-      <button>Play</button>
+
+    <!-- Screen 8: Settings -->
+    <div id="settings-screen" class="screen">
+        <div class="nav-header">
+            <button class="btn-back" onclick="navigateTo('dashboard-screen')">← Back</button>
+            <h3>Settings</h3>
+        </div>
+        <div class="container">
+            <div class="card">
+                <h3>⚙️ Preferences</h3>
+                <div class="settings-item">
+                    <div class="setting-info">
+                        <h4>Dark Mode</h4>
+                        <p>Currently enabled (default)</p>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="dark-mode-toggle" checked disabled>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <div class="setting-info">
+                        <h4>Animations</h4>
+                        <p>Enable smooth transitions and effects</p>
+                    </div>
+                    <label class="toggle">
+                        <input type="checkbox" id="animations-toggle" checked onchange="toggleAnimations()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>💾 Data Management</h3>
+                <div class="settings-actions">
+                    <button class="btn btn-secondary btn-full" onclick="exportData()">
+                        📥 Export My Data
+                        <span class="btn-glow"></span>
+                    </button>
+                    <button class="btn btn-danger btn-full" onclick="confirmReset()">
+                        🗑️ Reset All Data
+                        <span class="btn-glow"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>ℹ️ About</h3>
+                <div class="about-content">
+                    <p><strong>Human Digital Twin – Future Simulator</strong></p>
+                    <p>Version 1.0.0</p>
+                    <p>A privacy-first simulation tool that helps you visualize the potential impact of your daily habits on your future.</p>
+                    <br>
+                    <p><strong>Built with:</strong></p>
+                    <p>HTML5, CSS3, JavaScript (Vanilla)</p>
+                    <p>No frameworks, no external dependencies</p>
+                    <br>
+                    <p><strong>Project Goal:</strong></p>
+                    <p>Empower individuals to make informed decisions about their lifestyle habits through interactive simulation and visualization.</p>
+                    <br>
+                    <button class="btn btn-secondary" onclick="navigateTo('ethics-screen')">
+                        Learn More
+                        <span class="btn-glow"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- 7️⃣ AUDIOBOOKS -->
-  <section class="screen" id="screen-audiobooks">
-    <h2>Audiobooks</h2>
-    <div class="book">
-      <h3>Mind & Focus</h3>
-      <progress value="30" max="100"></progress>
+    <!-- Confirmation Modal -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>⚠️ Confirm Reset</h3>
+            <p>This will permanently delete all your data including profile information and simulation results.</p>
+            <p><strong>This action cannot be undone.</strong></p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="resetAllData()">Reset Everything</button>
+            </div>
+        </div>
     </div>
-    <div class="book">
-      <h3>The Future of AI</h3>
-      <progress value="65" max="100"></progress>
-    </div>
-  </section>
 
-  <!-- 8️⃣ CHAT -->
-  <section class="screen chat-screen" id="screen-chat">
-    <div class="chat-window">
-      <div class="bubble ai">Hello. How can I help you today?</div>
-      <div class="bubble user">Tell me a story.</div>
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Type or speak..." />
-      <button>➤</button>
-    </div>
-  </section>
-
-  <!-- 9️⃣ SETTINGS -->
-  <section class="screen" id="screen-settings">
-    <h2>Settings</h2>
-    <label>Voice Style
-      <select>
-        <option>Calm</option>
-        <option>Warm</option>
-        <option>Deep</option>
-      </select>
-    </label>
-    <label>Animations
-      <input type="checkbox" checked />
-    </label>
-  </section>
-
-  <!-- 🔟 ABOUT -->
-  <section class="screen" id="screen-about">
-    <h2>About EchoAI</h2>
-    <p>EchoAI is designed as a calm, intelligent companion.</p>
-    <p class="version">Version 1.0 — Built for the future.</p>
-  </section>
-
-</div>
-
-<!-- ================= EXTRA / EXPANDED UI ================= -->
-<div id="ui-noise-layer"></div>
-<div id="ui-light-scan"></div>
-<div id="ui-depth-grid"></div>
-
-<section class="screen" id="screen-profile">
-  <h2>Your Profile</h2>
-</section>
-
-<section class="screen" id="screen-system">
-  <h2>System Status</h2>
-</section>
-
-<section class="screen locked" id="screen-future">
-  <h2>Upcoming Capabilities</h2>
-</section>
-
-<section class="screen" id="screen-activity">
-  <h2>Activity Overview</h2>
-</section>
-
-<section class="screen" id="screen-mood">
-  <h2>Your Current Mood</h2>
-</section>
-
-<section class="screen" id="screen-suggestions">
-  <h2>Smart Suggestions</h2>
-</section>
-
-<section class="screen immersive" id="screen-sleep">
-  <h2>Sleep Mode</h2>
-</section>
-
-<section class="screen" id="screen-queue">
-  <h2>Up Next</h2>
-</section>
-
-<section class="screen" id="screen-memory">
-  <h2>EchoAI Memory</h2>
-</section>
-
-<section class="screen" id="screen-offline">
-  <h2>Offline Mode</h2>
-</section>
-
-<section class="screen" id="screen-accessibility">
-  <h2>Accessibility</h2>
-</section>
-
-<section class="screen" id="screen-legal">
-  <h2>Privacy & Legal</h2>
-</section>
-
-<section class="screen dev-only" id="screen-debug">
-  <h2>Developer Panel</h2>
-</section>
-
-<script>
-function switchScreen(id) {
-  const screens = document.querySelectorAll(".screen");
-  screens.forEach(s => s.classList.remove("active"));
-  const target = document.getElementById(id);
-  if(target) target.classList.add("active");
-}
-</script>
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </body>
 </html>
